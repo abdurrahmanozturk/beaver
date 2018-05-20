@@ -43,7 +43,6 @@ public:
   // std::vector<Point> _node_coordinates;
   // const MooseArray<Point> & _node_coordinates;
   // const MooseArray<Point> & _normals;
-
 };
 
 #endif // FINDVIEWFACTORS_H

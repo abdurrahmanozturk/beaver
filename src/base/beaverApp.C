@@ -4,6 +4,16 @@
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
 
+// UserObjects
+#include "FindViewFactors.h"
+
+// Materials
+#include "UO2Density.h"
+#include "UO2HeatCapacity.h"
+#include "UO2ThermalConductivity.h"
+#include "UO2ElectricalConductivity.h"
+
+
 template <>
 InputParameters
 validParams<beaverApp>()
@@ -39,6 +49,14 @@ void
 beaverApp::registerObjects(Factory & factory)
 {
     Registry::registerObjectsTo(factory, {"beaverApp"});
+
+    // UserObjects
+    registerUserObject(FindViewFactors);
+    // Materials
+    registerMaterial(UO2Density);
+    registerMaterial(UO2HeatCapacity);
+    registerMaterial(UO2ThermalConductivity);
+    registerMaterial(UO2ElectricalConductivity);
 }
 
 void

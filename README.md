@@ -1,6 +1,6 @@
-beaver
+Beaver
 =====
 
-"Fork beaver" to create a new MOOSE-based application.
+Beaver is a MOOSE based application to calculate radiation heat transfer by using monte carlo methods.
 
-For more information see: [http://mooseframework.org/create-an-app/](http://mooseframework.org/create-an-app/)
+Abdurrahman Ozturk

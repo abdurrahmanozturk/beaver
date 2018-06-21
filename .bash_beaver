@@ -1,34 +1,32 @@
-# -----------------------------------beaverCreatMesh--------------------------------------------------
-alias beavermesh="mpiexec -n 1 "$beaverPath"/beaver-opt --mesh-only -i"
-# -----------------------------------beaverCreatMesh--------------------------------------------------
-
-# -----------------------------------beaver--------------------------------------------------
-alias beaverfolder="cd "$beaverPath
-alias testfolder="cd "$beaverPath"/test/tests"
+# -----------------------------------beaver--------------------------------------------------------
 alias beaver=$beaverPath"/beaver-opt -i"
 alias beaver2="mpiexec -n 2 "$beaverPath"/beaver-opt -i"
 alias beaver3="mpiexec -n 3 "$beaverPath"/beaver-opt -i"
 alias beaver4="mpiexec -n 4 "$beaverPath"/beaver-opt -i"
 
-alias GetBlockInfo=$beaverPath"/beaver-opt --dump"
 
-# -----------------------------------beaver DBG--------------------------------------------------
+# -----------------------------------beaver DBG----------------------------------------------------
 alias beaverDBG=$beaverPath"/beaver-dbg -i"
 alias beaver2DBG="mpiexec -n 2 "$beaverPath"/beaver-dbg -i"
 alias beaver3DBG="mpiexec -n 3 "$beaverPath"/beaver-dbg -i"
 alias beaver4DBG="mpiexec -n 4 "$beaverPath"/beaver-dbg -i"
-# -----------------------------------beaver DBG--------------------------------------------------
 
-# ------------------------------------Makebeaver---------------------------------------------------
-Makebeaver() 
+# -----------------------------------beaverCreatMesh-----------------------------------------------
+alias beavermesh="mpiexec -n 1 "$beaverPath"/beaver-opt --mesh-only -i"
+
+# -----------------------------------Other Commands------------------------------------------------
+
+alias beaverfolder="cd "$beaverPath
+alias testfolder="cd "$beaverPath"/test/tests"
+alias bul="find . -name "*.C" | xargs grep"
+alias GetBlockInfo=$beaverPath"/beaver-opt --dump"
+
+# ------------------------------------makebeaver---------------------------------------------------
+makebeaver()
 {
   CURRENT=`pwd`
   cd "$beaverPath"
   make
   cd $CURRENT
-} 
-# ------------------------------------Makebeaver---------------------------------------------------
-
-# -------------------------------Test Input File Folder----------------------------------------
-
-
+}
+# -------------------------------------------------------------------------------------------------

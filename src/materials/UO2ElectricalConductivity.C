@@ -20,13 +20,15 @@ UO2ElectricalConductivity::UO2ElectricalConductivity(const InputParameters & par
     _sigma_0(getParam<Real>("sigma_0")),
     _T(coupledValue("temp")),
     _electric_conductivity(declareProperty<Real>("electrical_conductivity")),
-    _delectric_conductivity_dT(declarePropertyDerivative<Real>("electrical_conductivity", getVar("temp", 0)->name()))
+    _delectric_conductivity_dT(
+        declarePropertyDerivative<Real>("electrical_conductivity", getVar("temp", 0)->name()))
 {
 }
 
 void
 UO2ElectricalConductivity::computeQpProperties()
 {
-  _electric_conductivity[_qp] = (_sigma_0 * exp( (-_act_e) / (_k_const * _T[_qp]) ));
-  _delectric_conductivity_dT[_qp] = 0.;//(( (_sigma_0 * _act_e) / (_k_const * _T[_qp]) ) * exp( (-_act_e) / (_k_const * _T[_qp]) )) * 100.;
+  _electric_conductivity[_qp] = (_sigma_0 * exp((-_act_e) / (_k_const * _T[_qp])));
+  _delectric_conductivity_dT[_qp] = 0.; //(( (_sigma_0 * _act_e) / (_k_const * _T[_qp]) ) * exp(
+                                        //(-_act_e) / (_k_const * _T[_qp]) )) * 100.;
 }

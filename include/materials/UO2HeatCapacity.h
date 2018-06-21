@@ -6,7 +6,7 @@
 
 class UO2HeatCapacity;
 
-template<>
+template <>
 InputParameters validParams<UO2HeatCapacity>();
 
 /**
@@ -30,4 +30,4 @@ private:
   MaterialProperty<Real> & _dspecific_heat_dT;
 };
 
-#endif //UO2HEATCAPACITY_H
+#endif // UO2HEATCAPACITY_H

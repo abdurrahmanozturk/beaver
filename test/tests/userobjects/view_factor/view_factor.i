@@ -58,8 +58,8 @@
   [../]
 []
 [Materials]
-  [./UO2ThermalConductivity]
-    type = UO2ThermalConductivity
+  [./uo2_thermal]
+    type = UO2
     temp = temp
   [../]
 []
@@ -71,7 +71,7 @@
   [./ViewFactor]
     type = FindViewFactors
     #diffusivity = 1
-    # nodal_normal_x = nodal_normal_x
+    #nodal_normal_x = nodal_normal_x
     #nodal_normal_y = nodal_normal_y
     #nodal_normal_z = nodal_normal_z
     boundary = 2

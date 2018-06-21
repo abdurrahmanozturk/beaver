@@ -12,7 +12,8 @@ InputParameters validParams<UO2ElectricalConductivity>();
 
 /**
  * Calculates electrical conductivity as a function of temperature.
- * Equation from Bates et al, "Electrical Conductivity of Uranium Dioxide", PNNL, Journal of The American Ceramic Society, 1967
+ * Equation from Bates et al, "Electrical Conductivity of Uranium Dioxide", PNNL, Journal of The
+ * American Ceramic Society, 1967
  */
 class UO2ElectricalConductivity : public DerivativeMaterialInterface<Material>
 {

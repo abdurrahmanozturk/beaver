@@ -6,7 +6,7 @@
 
 class UO2Density;
 
-template<>
+template <>
 InputParameters validParams<UO2Density>();
 
 /**
@@ -29,4 +29,4 @@ private:
   MaterialProperty<Real> & _ddensity_dT;
 };
 
-#endif //UO2DENSITY_H
+#endif // UO2DENSITY_H

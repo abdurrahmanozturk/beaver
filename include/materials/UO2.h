@@ -11,7 +11,8 @@ InputParameters validParams<UO2>();
 
 /* Temperature dependent equations:
    -density equation is selected by IAEA, "Analysis of Reactor Fuel Rod Behaviour pg1528"
-   -specific heat capacity equation from Fink(2000) et al, "Analysis of Reactor Fuel Rod Behaviour pg1534"
+   -specific heat capacity equation from Fink(2000) et al, "Analysis of Reactor Fuel Rod Behaviour
+   pg1534"
 */
 class UO2 : public DerivativeMaterialInterface<Material>
 {
@@ -32,7 +33,6 @@ private:
   MaterialProperty<Real> & _dspecific_heat_dT;
   MaterialProperty<Real> & _ddensity_dT;
   MaterialProperty<Real> & _dthermal_conductivity_dT;
-
 };
 
 #endif // UO2_H

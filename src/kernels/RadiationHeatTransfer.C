@@ -2,8 +2,9 @@
 
 // registerMooseObject("", RadiationHeatTransfer);
 
-template<>
-InputParameters validParams<RadiationHeatTransfer>()
+template <>
+InputParameters
+validParams<RadiationHeatTransfer>()
 {
   InputParameters params = validParams<Kernel>();
   params.addClassDescription("Radiation Heat Transfer Model");
@@ -12,15 +13,14 @@ InputParameters validParams<RadiationHeatTransfer>()
 }
 
 RadiationHeatTransfer::RadiationHeatTransfer(const InputParameters & parameters)
-  : Kernel(parameters),
-    _view_factor(getParam<Real>("view_factor") !=0.0)
+  : Kernel(parameters), _view_factor(getParam<Real>("view_factor") != 0.0)
 {
 }
 
 Real
 RadiationHeatTransfer::computeQpResidual()
 {
-    return 0;
+  return 0;
 }
 
 Real

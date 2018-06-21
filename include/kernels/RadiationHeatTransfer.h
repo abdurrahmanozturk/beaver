@@ -5,7 +5,7 @@
 
 class RadiationHeatTransfer;
 
-template<>
+template <>
 InputParameters validParams<RadiationHeatTransfer>();
 
 /**

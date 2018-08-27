@@ -13,8 +13,7 @@ while [ $? = 0 ]; do
   beaverdir=`pwd`
   echo ${beaverdir} | grep --quiet "beaver/"
 done
-
-TOSET1="beaverPath=\"/home/ao/projects/beaver\""
+TOSET1="beaverPath=\"~/projects/beaver\""
 TOSET2="source "$beaverdir"/.bash_beaver"
 BASHNAME=$HOME"/.bashrc" # $HOME"/"
 if [ -f $BASHNAME ]; then

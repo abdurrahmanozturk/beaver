@@ -1,0 +1,42 @@
+#cubes
+reset
+brick x 0.5 y 2 z 2
+brick x 0.5 y 2 z 2
+move volume 2 x 1
+#subtract body 2 from body 1
+#volume 1 volume 2 size auto factor 16
+volume 1 volume 2 size 1
+mesh volume 1 2
+#rotate volume 1 angle 45 about x
+block 1 add volume 1
+block 1 name "block1"
+block 2 add volume 2
+block 2 name "block2"
+sideset 1 add surface 4
+sideset 1 name "block1_x1"
+sideset 2 add surface 6
+sideset 2 add surface 18
+sideset 2 name "block1_x2"
+sideset 3 add surface 3
+sideset 3 name "block1_y1"
+sideset 4 add surface 5
+sideset 4 name "block1_y2"
+sideset 5 add surface 2
+sideset 5 name "block1_z1"
+sideset 6 add surface 1
+sideset 6 name "block1_z2"
+sideset 7 add surface 10
+sideset 7 name "block2_x1"
+sideset 8 add surface 12
+sideset 8 name "block2_x2"
+sideset 9 add surface 9
+sideset 9 name "block2_y1"
+sideset 10 add surface 11
+sideset 10 name "block2_y2"
+sideset 11 add surface 8
+sideset 11 name "block2_z1"
+sideset 12 add surface 7
+sideset 12 name "block2_z2"
+export genesis "/home/ao/projects/TREX/ao/RHTModel/parallel_blocks.e" overwrite
+
+

@@ -91,6 +91,6 @@
 
 [Outputs]
   exodus = true
-  file_base = view_factor
+  file_base = viewfactor
   console = true
 []

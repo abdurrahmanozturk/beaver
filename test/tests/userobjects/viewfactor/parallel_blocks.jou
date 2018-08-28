@@ -37,6 +37,7 @@ sideset 11 add surface 8
 sideset 11 name "block2_z1"
 sideset 12 add surface 7
 sideset 12 name "block2_z2"
-export genesis "/home/ao/projects/TREX/ao/RHTModel/parallel_blocks.e" overwrite
+export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/parallel_blocks.e" overwrite
+
 
 

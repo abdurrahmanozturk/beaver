@@ -1,4 +1,5 @@
 # -----------------------------------beaver--------------------------------------------------------
+beaverPath="~/projects/beaver"
 alias beaver=$beaverPath"/beaver-opt -i"
 alias beaver2="mpiexec -n 2 "$beaverPath"/beaver-opt -i"
 alias beaver3="mpiexec -n 3 "$beaverPath"/beaver-opt -i"
@@ -17,16 +18,16 @@ alias beavermesh="mpiexec -n 1 "$beaverPath"/beaver-opt --mesh-only -i"
 # -----------------------------------Other Commands------------------------------------------------
 
 alias beaverfolder="cd "$beaverPath
-alias testfolder="cd "$beaverPath"/test/tests"
+alias beavertestfolder="cd "$beaverPath"/test/tests"
+alias beaverviewfactorfolder="cd "$beaverPath"/test/tests/userobjects/viewfactor"
 alias bul="find . -name "*.C" | xargs grep"
 alias GetBlockInfo=$beaverPath"/beaver-opt --dump"
 
 # ------------------------------------makebeaver---------------------------------------------------
 makebeaver()
 {
-  CURRENT=`pwd`
-  cd "$beaverPath"
+  beaverfolder
   make
-  cd $CURRENT
+  beaverviewfactorfolder
 }
 # -------------------------------------------------------------------------------------------------

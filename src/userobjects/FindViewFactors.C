@@ -8,8 +8,8 @@ validParams<FindViewFactors>()
   params.addCoupledVar("nodal_normal_x", "x component of normal");
   params.addCoupledVar("nodal_normal_y", "y component of normal");
   params.addCoupledVar("nodal_normal_z", "z component of normal");
-  params.addRequiredParam<std::vector<BoundaryName>>("master_boundary", "Master Boundary ID");
-  params.addRequiredParam<std::vector<BoundaryName>>("slave_boundary", "Slave Boundary ID");
+  // params.addRequiredParam<std::vector<BoundaryName>>("master_boundary", "Master Boundary ID");
+  // params.addRequiredParam<std::vector<BoundaryName>>("slave_boundary", "Slave Boundary ID");
   return params;
 }
 
@@ -33,11 +33,16 @@ FindViewFactors::initialize()
 
   // Retrieve the Element Boundary data structures from the mesh
   _mesh.buildSideList(elem_list, side_list, id_list);
-  std::cout << "-----------side list#: " << side_list[0] << std::endl;
-  std::cout << "-----------side list#: " << side_list[1] << std::endl;
-  std::cout << "-----------side list#: " << side_list[2] << std::endl;
-  std::cout << "-----------side list#: " << side_list[3] << std::endl;
-  std::cout << "-----------side list#: " << side_list[4] << std::endl;
+  std::cout << "-----------side list#: " << id_list.size() << std::endl;
+  std::cout << "-----------side list#: " << elem_list.size() << std::endl;
+  std::cout << "-----------side list#: " << side_list.size() << std::endl;
+  std::cout << "-----------side list#: " << id_list[0] << std::endl;
+  std::cout << "-----------side list#: " << id_list[1] << std::endl;
+  std::cout << "-----------side list#: " << id_list[2] << std::endl;
+  std::cout << "-----------side list#: " << id_list[1] << std::endl;
+  std::cout << "-----------side list#: " << id_list[2] << std::endl;
+  std::cout << "-----------side list#: " << id_list[3] << std::endl;
+  std::cout << "-----------side list#: " << id_list[4] << std::endl;
 }
 void
 FindViewFactors::execute()
@@ -57,7 +62,9 @@ FindViewFactors::execute()
   //   }
 
   // current_boundary_id = master_boundary   // ASK ABOUT THIS
-  // *********LOOP OVER ELEMENTS ON THE MASTER BOUNDARY AND FIND SOURCE POINTS
+
+  // LOOPING OVER ELEMENTS ON THE MASTER BOUNDARY
+  std::cout << "-----------side #: " << (_current_side) << std::endl;
   std::cout << "-----------elem #: " << (_current_elem->id()) << std::endl;
   unsigned int n = _current_side_elem->n_nodes();
   for (unsigned int i = 0; i < n; i++)
@@ -66,25 +73,25 @@ FindViewFactors::execute()
     Real x_coord = (*node)(0);
     Real y_coord = (*node)(1);
     Real z_coord = (*node)(2);
-    // Real n_x = _normals[0](0);
-    // Real n_y = _normals[0](1);
-    // Real n_z = _normals[0](2);
+
     std::cout << "-----------node #: " << i << std::endl;
+    // Nodal Coordinates
     std::cout << "x: " << x_coord << std::endl;
     std::cout << "y: " << y_coord << std::endl;
     std::cout << "z: " << z_coord << std::endl;
-    // const std::vector<Point> & _node_coordinates = fe->get_xyz();
-    // _node_coordinates[i] = (x_coord, y_coord, z_coord);
-    // _node_coordinates[i] = y_coord;
-    // _node_coordinates[i] = z_coord;
+    // Nodal Normal Components
     std::cout << "n_x: " << (_normals[i](0)) << std::endl;
     std::cout << "n_y: " << (_normals[i](1)) << std::endl;
     std::cout << "n_z: " << (_normals[i](2)) << std::endl;
   }
+
+  //  FINDING THE SOURCE POINT ON ELEMENT SURFACE AND SAMPLE DIRECTION
+  //Random Source Point
   const Node * node0 = _current_side_elem->node_ptr(0);
   const Node * node1 = _current_side_elem->node_ptr(1);
   const Node * noden = _current_side_elem->node_ptr(3);
-  for (unsigned int i = 0; i < 1; i++)
+  unsigned int nsrc = 1;
+  for (unsigned int i = 0; i < nsrc; i++)
   {
     rand_x = std::rand() / (1. * RAND_MAX);
     rand_y = std::rand() / (1. * RAND_MAX);
@@ -98,16 +105,29 @@ FindViewFactors::execute()
     px2 = rand_x * ((*noden)(0) - (*node0)(0));
     py2 = rand_y * ((*noden)(1) - (*node0)(1));
     pz2 = rand_z * ((*noden)(2) - (*node0)(2));
-    px = (*node0)(0) + px1 + px2; // DON DO THIS find surface equation plane equation
+    px = (*node0)(0) + px1 + px2; // DONT DO THIS find surface equation plane equation
     py = (*node0)(1) + py1 + py2;
     pz = (*node0)(2) + pz1 + pz2;
-    p = (px, py, pz);
+    std::vector<double> src_pt;
+    src_pt.push_back(px);
+    src_pt.push_back(py);
+    src_pt.push_back(pz);
     // std::cout << "source_point_x: " <<px<< std::endl;
     // std::cout << "source_point_y: " <<py<< std::endl;
     // std::cout << "source_point_z: " <<pz<< std::endl;
-    std::cout << px << std::endl;
-    std::cout << py << std::endl;
-    std::cout << pz << std::endl;
+    std::cout << src_pt[0] << std::endl;
+    std::cout << src_pt[1] << std::endl;
+    std::cout << src_pt[2] << std::endl;
+
+    //Sample Direction
+    const double rand_theta = std::rand() / (1. * RAND_MAX);
+    const double rand_phi = std::rand() / (1. * RAND_MAX);
+    const double piv = 3.141592653589793238462643383279502884;
+    const double theta = acos(1-2*rand_theta);
+    const double phi = 2*piv*rand_phi;
+    std::cout << theta << std::endl;
+    std::cout << phi << std::endl;
+
 
     // *********LOOP OVER ELEMENTS ON THE SLAVE BOUNDARY
 
@@ -137,7 +157,7 @@ FindViewFactors::execute()
 // FindViewFactors::getValue()
 // {
 //   // return _subproblem.mesh().nNodes();
-//   //return _nodal_normal_x[_qp];
+//   // return _nodal_normal_x[_qp];
 //   return (_normals[0](0));
 // }
 // Real

@@ -20,17 +20,17 @@
   [../]
 []
 [AuxVariables]
-  [./normals]
+  [./src_pt]
     order = FIRST
     family = LAGRANGE
   [../]
 []
 # [AuxKernels]
-#   [./norm]
+#   [./source_point]
 #     type = SpatialUserObjectAux
 #     user_object = ViewFactor
-#     variable = normals
-#     boundary = 9
+#     variable = src_pt
+#     boundary = 2
 #     #block = 1 2
 #   [../]
 # []
@@ -74,19 +74,19 @@
     #nodal_normal_x = nodal_normal_x
     #nodal_normal_y = nodal_normal_y
     #nodal_normal_z = nodal_normal_z
-    boundary = 2
+    boundary = '1 2'
     master_boundary = 2
     slave_boundary = 7
     #variable = temp
   [../]
 []
 [Postprocessors]
-  [./normal]
-    type = PointValue
-    point = '0 0 0'
-    variable = normals
-    execute_on = 'timestep_begin'
-  [../]
+  # [./source_point]
+  #   type = PointValue
+  #   point = '0 0 0'
+  #   variable = src_pt
+  #   execute_on = 'timestep_begin'
+  # [../]
 []
 
 [Outputs]

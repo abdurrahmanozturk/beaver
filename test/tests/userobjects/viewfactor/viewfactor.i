@@ -69,14 +69,14 @@
 []
 [UserObjects]
   [./ViewFactor]
-    type = FindViewFactors
+    type = ViewFactor
     #diffusivity = 1
     #nodal_normal_x = nodal_normal_x
     #nodal_normal_y = nodal_normal_y
     #nodal_normal_z = nodal_normal_z
     boundary = '1 2'
-    master_boundary = 2
-    slave_boundary = 7
+    # master_boundary = 2
+    # slave_boundary = 7
     #variable = temp
   [../]
 []

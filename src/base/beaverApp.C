@@ -9,6 +9,8 @@
 
 // UserObjects
 #include "FindViewFactors.h"
+#include "ViewFactor.h"
+
 
 // Materials
 #include "UO2.h"
@@ -57,6 +59,8 @@ beaverApp::registerObjects(Factory & factory)
     registerKernel(RadiationHeatTransfer);
     // UserObjects
     registerUserObject(FindViewFactors);
+    registerUserObject(ViewFactor);
+
     // Materials
     registerMaterial(UO2);
     registerMaterial(UO2Density);

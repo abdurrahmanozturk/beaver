@@ -70,14 +70,7 @@
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    #diffusivity = 1
-    #nodal_normal_x = nodal_normal_x
-    #nodal_normal_y = nodal_normal_y
-    #nodal_normal_z = nodal_normal_z
-    boundary = '1 2'
-    # master_boundary = 2
-    # slave_boundary = 7
-    #variable = temp
+    boundary = '1 2 3 4 5 6 7 8 9 10 11 12'
   [../]
 []
 [Postprocessors]

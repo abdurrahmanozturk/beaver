@@ -13,7 +13,8 @@ validParams<RadiationHeatTransfer>()
 }
 
 RadiationHeatTransfer::RadiationHeatTransfer(const InputParameters & parameters)
-  : Kernel(parameters), _view_factor(getParam<Real>("view_factor") != 0.0)
+  : Kernel(parameters),
+  _view_factor(getParam<Real>("view_factor") != 0.0)
 {
 }
 

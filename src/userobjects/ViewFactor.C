@@ -26,27 +26,19 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
     _current_normals(_assembly.normals()),
     _boundary_ids(boundaryIDs()),
     _boundary_list(getParam<std::vector<BoundaryName> >("boundary"))
-    // m_coord_index(0)
     // _nodal_normal_x(isParamValid("nodal_normal_x") ? coupledValue("nodal_normal_x") : _zero),
     // _nodal_normal_y(isParamValid("nodal_normal_y") ? coupledValue("nodal_normal_y") : _zero),
     // _nodal_normal_z(isParamValid("nodal_normal_z") ? coupledValue("nodal_normal_z") : _zero)
 {
 }
-//
-// std::vector<double> ViewFactor::x_coords;
-// std::vector<double> ViewFactor::y_coords;
-// std::vector<double> ViewFactor::z_coords;
 
 void
 ViewFactor::initialize()
 {
   std::srand(time(NULL));
   std::cout << "-------boundary_ids #: " << _boundary_ids.size() << std::endl;
-  // std::vector<std::vector<double>> coords_array[1][1];
-  // std::vector<std::vector<double>> normals_array[1][1];
-  // double coords_array[3*n+2][j];
-  // double normals_array[3*n+2][j];
 }
+
 void
 ViewFactor::execute()
 {
@@ -66,7 +58,7 @@ ViewFactor::execute()
   for (unsigned int i = 0; i < n; i++)
   {
     const Node * node = _element_side[current_boundary_id][current_element_id]->node_ptr(i);    //get nodes
-    Point normal = _normals[i];                             //get nodal normals
+    Point normal = _normals[i];                                                                 //get nodal normals
     // _node_coordinates[current_boundary_id][current_element_id][_current_side][i]=node;
     // _node_normals[current_boundary_id][current_element_id][_current_side][i]=normal;
     // _node_coordinates[current_boundary_id][current_element_id][i]=node;

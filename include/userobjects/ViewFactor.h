@@ -43,8 +43,6 @@ public:
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, const Node *> > > > _boundary_set;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, const Node * > > > _node_coordinates;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Point > > > _node_normals;
-// private:
-  // int m_coord_index;
 };
 
 #endif // VIEWFACTOR_H

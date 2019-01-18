@@ -33,22 +33,16 @@ public:
   Point p;
   Point q;
   MooseRandom _random;
-  // std::vector<Point> _node_coordinates;
-  // const MooseArray<Point> & _node_coordinates;
-  // const MooseArray<Point> & _normals;
+  const MooseArray<Point> & _current_normals;
   const std::set<BoundaryID> & _boundary_ids;
   const std::vector<BoundaryName> & _boundary_list;
   std::map<BoundaryID, std::vector<unsigned int>> _boundary_index_sets;
   std::map<unsigned int, const Node *> _node_set;
   std::map<unsigned int, std::map<unsigned int, const Node *> > _side_set;
-  std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, const Node *> > > _element_set;
+  std::map<BoundaryID, std::map<unsigned int, const Elem *> > _element_set;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, const Node *> > > > _boundary_set;
-  static std::vector<double> x_coords;
-  static std::vector<double> y_coords;
-  static std::vector<double> z_coords;
-  static std::vector<double> x_normals;
-  static std::vector<double> y_normals;
-  static std::vector<double> z_normals;
+  std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, const Node * > > > _node_coordinates;
+  std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Point > > > _node_normals;
 // private:
   // int m_coord_index;
 };

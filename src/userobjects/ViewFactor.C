@@ -51,28 +51,29 @@ void
 ViewFactor::execute()
 {
   // LOOPING OVER ELEMENTS ON THE MASTER BOUNDARY
+  // Define IDs
   BoundaryID current_boundary_id = _mesh.getBoundaryIDs(_current_elem, _current_side)[0];
   const auto current_boundary_name = _mesh.getBoundaryName(current_boundary_id);
-  unsigned int current_element_id=(_current_elem->id());    // const Elem *& _current_elem
-  //const Elem * elem = _current_side_elem;
-  _element_set[current_boundary_id][current_element_id] = _current_elem;
-  std::cout<<_element_set[current_boundary_id][current_element_id]->id()<<std::endl; //test
-  // unsigned int _current_surface_index{0};
+  unsigned int current_element_id =(_current_elem->id());
+  //Define Map for current boundary and current element and put Elem pointer for current element side
+  _element_side[current_boundary_id][current_element_id] = _current_side_elem;
   std::cout << "--------------------------------------------------------------------------"<< std::endl;
   std::cout << "-------boundary #: " << current_boundary_id << " : "<<current_boundary_name<< std::endl;
   std::cout << "-----------elem #: " << (_current_elem->id()) << std::endl;
-  std::cout << "-----------side #: " << (_current_side) << std::endl;
+  // std::cout << "-----------side #: " << (_current_side) << std::endl;
+  //Loop over nodes on current element side
   unsigned int n = _current_side_elem->n_nodes();
   for (unsigned int i = 0; i < n; i++)
   {
-    const Node * node = _element_set[current_boundary_id][current_element_id]->node_ptr(i);    //get nodes
-    // const Node * node1 = _current_side_elem->node_ptr(i);    //get nodes
+    const Node * node = _element_side[current_boundary_id][current_element_id]->node_ptr(i);    //get nodes
     Point normal = _normals[i];                             //get nodal normals
     // _node_coordinates[current_boundary_id][current_element_id][_current_side][i]=node;
     // _node_normals[current_boundary_id][current_element_id][_current_side][i]=normal;
-    _node_coordinates[current_boundary_id][current_element_id][i]=node;
-    _node_normals[current_boundary_id][current_element_id][i]=normal;
+    // _node_coordinates[current_boundary_id][current_element_id][i]=node;
     std::cout <<"Node #"<<i<<" : ("<<(*node)(0)<<","<<(*node)(1)<<","<<(*node)(2)<<")\t";
+
+    //Define node normals
+    _node_normals[current_boundary_id][current_element_id][i]=normal;
     std::cout <<" Normal : ("<<(normal)(0)<<","<<(normal)(1)<<","<<(normal)(2)<<")"<< std::endl;
   }
 }
@@ -81,42 +82,49 @@ ViewFactor::finalize()
 {
   for (auto master_bid : _boundary_ids)
   {
-    const auto master_elem = _element_set[master_bid];
+    const auto master_elem = _element_side[master_bid];
     for (auto slave_bid : _boundary_ids)
     {
-      const auto slave_elem = _element_set[slave_bid];
-      std::cout <<"bnd :"<<master_bid<< " -> "<<slave_bid<<std::endl;
+      const auto slave_elem = _element_side[slave_bid];
+      const auto master_bname = _mesh.getBoundaryName(master_bid);
+      const auto slave_bname = _mesh.getBoundaryName(master_bid);
+      std::cout <<"-------------------------------------------------"<<std::endl;
+      std::cout <<"bnd :"<<master_bname<< " -> "<<slave_bname<<std::endl;
       std::cout <<"-------------------------------------------------"<<std::endl;
       for (auto master_elem_map : master_elem)
       {
         for (auto slave_elem_map : slave_elem)
         {
-          std::cout <<"elem:"<< master_elem_map.second->id() <<" ->"<<slave_elem_map.second->id()<< std::endl;
+          std::cout <<"elem:"<< master_elem_map.first <<" ->"<<slave_elem_map.first<< std::endl;
         }
       }
     }
   }
-  // std::cout << "-------boundary #: " <<_boundary_ids<< std::endl;
-  // std::cout << "-------boundary #: " <<_boundary_ids<< std::endl;
-  // std::cout << "-----------elem #: " << std::endl;
-  // std::cout << "-----------side #: " << std::endl;
-  // std::cout << "-----------node #: " << std::endl;
-  // std::cout <<"("<<(*_node_coordinates[1][0][0][0])(0)<<","<<(*_node_coordinates[1][0][0][0])(1)<<","<<(*_node_coordinates[1][0][0][0])(2)<<")"<<'\n';
-  // for (unsigned int i = 0; i < x_coords.size(); i++)
-  // {
-  //   // std::cout<<"x="<<x_coords[i]<<'\n';
-  //   // std::cout<<y_coords[i]<<'\n';
-  //   // std::cout<<z_coords[i]<<'\n';
-  // }
-  // Nodal Coordinates
-  // std::cout << "x: " << coords_array[0][0] << std::endl;
-  // std::cout << "y: " << coords_array[1][0] << std::endl;
-  // std::cout << "z: " << coords_array[2][0] << std::endl;
-  // Nodal Normal Components
-  // std::cout << "n_x: " << normals_array[0][0] << std::endl;
-  // std::cout << "n_y: " << normals_array[1][0] << std::endl;
-  // std::cout << "n_z: " << normals_array[2][0] << std::endl;
-  // std::cout << "n_x: " << normals_array[0][3] << std::endl;
+  for (auto master_bid : _boundary_ids)
+  {
+    const auto master_elem = _element_side[master_bid];
+    const auto master_bname = _mesh.getBoundaryName(master_bid);
+    for (auto master_elem_map : master_elem)
+    {
+      std::cout << "--------------------------------------------------------------------------"<< std::endl;
+      std::cout << "-------boundary #: " << master_bid << " : "<<master_bname<< std::endl;
+      std::cout << "-----------elem #: " << master_elem_map.first << std::endl;
+      unsigned int n = master_elem_map.second->n_nodes();
+      for (unsigned int i = 0; i < n; i++)
+      {
+        const Node * node = master_elem_map.second->node_ptr(i);    //get nodes
+        Point normal = _normals[i];                             //get nodal normals
+        // _node_coordinates[current_boundary_id][current_element_id][_current_side][i]=node;
+        // _node_normals[current_boundary_id][current_element_id][_current_side][i]=normal;
+        // _node_coordinates[current_boundary_id][current_element_id][i]=node;
+        std::cout <<"Node #"<<i<<" : ("<<(*node)(0)<<","<<(*node)(1)<<","<<(*node)(2)<<")\t";
+
+        //Define node normals
+        _node_normals[master_bid][master_elem_map.first][i]=normal;
+        std::cout <<" Normal : ("<<(normal)(0)<<","<<(normal)(1)<<","<<(normal)(2)<<")"<< std::endl;
+      }
+    }
+  }
   // FINDING THE SOURCE POINT ON ELEMENT SURFACE AND SAMPLE DIRECTION
   // Random Source Point
   // const Node * node0 = _current_side_elem->node_ptr(0);

@@ -39,7 +39,7 @@ public:
   std::map<BoundaryID, std::vector<unsigned int>> _boundary_index_sets;
   std::map<unsigned int, const Node *> _node_set;
   std::map<unsigned int, std::map<unsigned int, const Node *> > _side_set;
-  std::map<BoundaryID, std::map<unsigned int, const Elem *> > _element_set;
+  std::map<BoundaryID, std::map<unsigned int, const Elem *> > _element_side;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, const Node *> > > > _boundary_set;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, const Node * > > > _node_coordinates;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Point > > > _node_normals;

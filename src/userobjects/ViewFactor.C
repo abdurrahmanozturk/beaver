@@ -26,10 +26,32 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
     _current_normals(_assembly.normals()),
     _boundary_ids(boundaryIDs()),
     _boundary_list(getParam<std::vector<BoundaryName> >("boundary"))
-    // _nodal_normal_x(isParamValid("nodal_normal_x") ? coupledValue("nodal_normal_x") : _zero),
-    // _nodal_normal_y(isParamValid("nodal_normal_y") ? coupledValue("nodal_normal_y") : _zero),
-    // _nodal_normal_z(isParamValid("nodal_normal_z") ? coupledValue("nodal_normal_z") : _zero)
 {
+}
+
+const std::vector<Real> ViewFactor::findNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map)
+{
+  std::vector<Real> v1 = map[0];
+  std::vector<Real> v2 = map[1];
+  std::vector<Real> v3 = map[2];
+  std::vector<Real> v12(v1.size());
+  std::vector<Real> v13(v1.size());
+  v12[0] = v2[0]-v1[0];
+  v12[1] = v2[1]-v1[1];
+  v12[2] = v2[2]-v1[2];
+  v13[0] = v3[0]-v1[0];
+  v13[1] = v3[1]-v1[1];
+  v13[2] = v3[2]-v1[2];
+  std::vector<Real> v(v1.size());
+  v[0] = v12[1]*v13[2]-v12[2]*v13[1];
+  v[1] = v12[2]*v13[0]-v12[0]*v13[2];
+  v[2] = v12[0]*v13[1]-v12[1]*v13[0];
+  //normalization
+  const Real norm = pow((v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),0.5);
+  v[0]/=norm;
+  v[1]/=norm;
+  v[2]/=norm;
+  return v;
 }
 
 void
@@ -49,7 +71,8 @@ ViewFactor::execute()
   unsigned int current_element_id =(_current_elem->id());
   //Define Map for current boundary and current element and put Elem pointer for current element side
   _element_side[current_boundary_id][current_element_id] = _current_side_elem;
-  std::cout << "--------------------------------------------------------------------------"<< std::endl;
+  _element_set[current_boundary_id][current_element_id] = _current_side_elem->n_nodes();
+  std::cout << "------------------------------"<< std::endl;
   std::cout << "-------boundary #: " << current_boundary_id << " : "<<current_boundary_name<< std::endl;
   std::cout << "-----------elem #: " << (_current_elem->id()) << std::endl;
   // std::cout << "-----------side #: " << (_current_side) << std::endl;
@@ -57,15 +80,18 @@ ViewFactor::execute()
   unsigned int n = _current_side_elem->n_nodes();
   for (unsigned int i = 0; i < n; i++)
   {
+    unsigned int _current_node_id = i;
     const Node * node = _element_side[current_boundary_id][current_element_id]->node_ptr(i);    //get nodes
     Point normal = _normals[i];                                                                 //get nodal normals
     // _node_coordinates[current_boundary_id][current_element_id][_current_side][i]=node;
     // _node_normals[current_boundary_id][current_element_id][_current_side][i]=normal;
-    // _node_coordinates[current_boundary_id][current_element_id][i]=node;
+    for (unsigned int j = 0; j < 3; j++)
+    {
+      // Define nodal coordinates and normals
+      _node_set[current_boundary_id][current_element_id][_current_node_id].push_back((*node)(j));
+      _normal_set[current_boundary_id][current_element_id][_current_node_id].push_back((normal)(j));
+    }
     std::cout <<"Node #"<<i<<" : ("<<(*node)(0)<<","<<(*node)(1)<<","<<(*node)(2)<<")\t";
-
-    //Define node normals
-    _node_normals[current_boundary_id][current_element_id][i]=normal;
     std::cout <<" Normal : ("<<(normal)(0)<<","<<(normal)(1)<<","<<(normal)(2)<<")"<< std::endl;
   }
 }
@@ -74,49 +100,45 @@ ViewFactor::finalize()
 {
   for (auto master_bid : _boundary_ids)
   {
-    const auto master_elem = _element_side[master_bid];
+    const auto master_elem_map = _node_set[master_bid];
     for (auto slave_bid : _boundary_ids)
     {
-      const auto slave_elem = _element_side[slave_bid];
+      const auto slave_elem_map = _node_set[slave_bid];
       const auto master_bname = _mesh.getBoundaryName(master_bid);
-      const auto slave_bname = _mesh.getBoundaryName(master_bid);
-      std::cout <<"-------------------------------------------------"<<std::endl;
-      std::cout <<"bnd :"<<master_bname<< " -> "<<slave_bname<<std::endl;
-      std::cout <<"-------------------------------------------------"<<std::endl;
-      for (auto master_elem_map : master_elem)
+      const auto slave_bname = _mesh.getBoundaryName(slave_bid);
+      std::cout <<"--------------------------------------------------------------"<<std::endl;
+      std::cout <<master_bid<<":"<<master_bname<< "  ->  "<<slave_bid<<":"<<slave_bname<<std::endl;
+      std::cout <<"--------------------------------------------------------------"<<std::endl;
+      for (auto master_elem : master_elem_map)
       {
-        for (auto slave_elem_map : slave_elem)
+        for (auto slave_elem : slave_elem_map)
         {
-          std::cout <<"elem:"<< master_elem_map.first <<" ->"<<slave_elem_map.first<< std::endl;
+          std::cout <<"Element #"<< master_elem.first <<" -> Element #"<<"."<<slave_elem.first<< std::endl;
         }
       }
     }
   }
-  for (auto master_bid : _boundary_ids)
+  for (auto master_bid : _boundary_ids)    //bid : bid
   {
-    const auto master_elem = _element_side[master_bid];
+    const auto master_elem_map = _node_set[master_bid];  //map[bid]
     const auto master_bname = _mesh.getBoundaryName(master_bid);
-    for (auto master_elem_map : master_elem)
+    for (auto master_elem : master_elem_map)  // map : map
     {
+      const auto master_node_map = _node_set[master_bid][master_elem.first];
       std::cout << "--------------------------------------------------------------------------"<< std::endl;
       std::cout << "-------boundary #: " << master_bid << " : "<<master_bname<< std::endl;
-      std::cout << "-----------elem #: " << master_elem_map.first << std::endl;
-      unsigned int n = master_elem_map.second->n_nodes();
-      for (unsigned int i = 0; i < n; i++)
+      std::cout << "-----------elem #: " << master_elem.first << std::endl;
+      for (auto master_node : master_node_map)
       {
-        const Node * node = master_elem_map.second->node_ptr(i);    //get nodes
-        Point normal = _normals[i];                             //get nodal normals
-        // _node_coordinates[current_boundary_id][current_element_id][_current_side][i]=node;
-        // _node_normals[current_boundary_id][current_element_id][_current_side][i]=normal;
-        // _node_coordinates[current_boundary_id][current_element_id][i]=node;
-        std::cout <<"Node #"<<i<<" : ("<<(*node)(0)<<","<<(*node)(1)<<","<<(*node)(2)<<")\t";
-
-        //Define node normals
-        _node_normals[master_bid][master_elem_map.first][i]=normal;
-        std::cout <<" Normal : ("<<(normal)(0)<<","<<(normal)(1)<<","<<(normal)(2)<<")"<< std::endl;
+        std::cout <<"Node #"<<master_node.first<<" : ("
+        <<(master_node.second)[0]<<","<<(master_node.second)[1]<<","<<(master_node.second)[2]<<")\t"
+        <<"Normal : ("<<findNormalFromNodeMap(master_node_map)[0]<<","
+        <<findNormalFromNodeMap(master_node_map)[1]<<","
+        <<findNormalFromNodeMap(master_node_map)[2]<<")"<<std::endl;
       }
     }
   }
+}
   // FINDING THE SOURCE POINT ON ELEMENT SURFACE AND SAMPLE DIRECTION
   // Random Source Point
   // const Node * node0 = _current_side_elem->node_ptr(0);
@@ -161,4 +183,3 @@ ViewFactor::finalize()
   //   std::cout << phi << std::endl;
   //
   // }
-}

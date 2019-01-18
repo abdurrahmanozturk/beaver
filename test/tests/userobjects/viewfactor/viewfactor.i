@@ -70,7 +70,7 @@
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '4'
+    boundary = '5'
   [../]
 []
 [Postprocessors]

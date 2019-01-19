@@ -23,7 +23,12 @@ public:
   const std::vector<Real> findNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map);
   const Real angleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
   const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map);
-  const bool isVisible(const std::map<unsigned int, std::vector<Real> > &master, const std::map<unsigned int, std::vector<Real> > &slave);
+  const std::vector<Real> getRandomDirection();
+  const bool isVisible(const std::map<unsigned int, std::vector<Real>> & master,
+                       const std::map<unsigned int, std::vector<Real>> & slave);
+  const bool isIntersected(const std::vector<Real> & p1,
+                           const std::vector<Real> & dir,
+                           const std::map<unsigned int, std::vector<Real>> & map);
   unsigned int _qp;
   const double _PI;
   unsigned int _samplingNumber;
@@ -33,7 +38,6 @@ public:
   const MooseArray<Point> & _current_normals;
   const std::set<BoundaryID> & _boundary_ids;
   const std::vector<BoundaryName> & _boundary_list;
-  // std::map<unsigned int, const Node *> _node_set;
   std::map<BoundaryID, std::map<unsigned int, const Elem *> > _element_side;
   std::map<BoundaryID, std::map<unsigned int, unsigned int> > _element_set;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _node_set;

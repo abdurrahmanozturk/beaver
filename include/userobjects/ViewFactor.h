@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "SideUserObject.h"
-#include "MooseRandom.h"
 #include "MooseMesh.h"
 
 // Forward Declarations
@@ -22,10 +21,12 @@ public:
   virtual void threadJoin(const UserObject & y) override {}
 
   const std::vector<Real> findNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map);
-
+  const Real angleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
+  const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map);
+  const bool isVisible(const std::map<unsigned int, std::vector<Real> > &master, const std::map<unsigned int, std::vector<Real> > &slave);
   unsigned int _qp;
-  Real rand_x, rand_y, rand_z;
-  Real px, px1, px2, py, py1, py2, pz, pz1, pz2;
+  const double _PI;
+  unsigned int _samplingNumber;
   Point p;
   Point q;
   MooseRandom _random;

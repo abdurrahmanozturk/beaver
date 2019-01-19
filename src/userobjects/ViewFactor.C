@@ -1,7 +1,8 @@
 #include <vector>
 #include "ViewFactor.h"
-#include "libmesh/boundary_info.h"
+#include "MooseRandom.h"
 // libMesh includes
+#include "libmesh/boundary_info.h"
 #include "libmesh/mesh_generation.h"
 #include "libmesh/mesh.h"
 #include "libmesh/string_to_enum.h"
@@ -13,9 +14,7 @@ InputParameters
 validParams<ViewFactor>()
 {
   InputParameters params = validParams<SideUserObject>();
-  // params.addCoupledVar("nodal_normal_x", "x component of normal");
-  // params.addCoupledVar("nodal_normal_y", "y component of normal");
-  // params.addCoupledVar("nodal_normal_z", "z component of normal");
+  params.addParam<unsigned int>("sampling_number",1, "Number of Sampling");
   // params.addRequiredParam<std::vector<BoundaryName>>("master_boundary", "Master Boundary ID");
   // params.addRequiredParam<std::vector<BoundaryName>>("slave_boundary", "Slave Boundary ID");
   return params;
@@ -23,6 +22,8 @@ validParams<ViewFactor>()
 
 ViewFactor::ViewFactor(const InputParameters & parameters)
   : SideUserObject(parameters),
+    _PI(acos(-1)),      //3.141592653589793238462643383279502884
+    _samplingNumber(getParam<unsigned int>("sampling_number")),
     _current_normals(_assembly.normals()),
     _boundary_ids(boundaryIDs()),
     _boundary_list(getParam<std::vector<BoundaryName> >("boundary"))
@@ -47,18 +48,78 @@ const std::vector<Real> ViewFactor::findNormalFromNodeMap(std::map<unsigned int,
   v[1] = v12[2]*v13[0]-v12[0]*v13[2];
   v[2] = v12[0]*v13[1]-v12[1]*v13[0];
   //normalization
-  const Real norm = pow((v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),0.5);
-  v[0]/=norm;
-  v[1]/=norm;
-  v[2]/=norm;
+  const Real v_length = pow((v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),0.5);
+  v[0]/=v_length;
+  v[1]/=v_length;
+  v[2]/=v_length;
   return v;
+}
+
+const std::vector<Real> ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real> > map)
+{
+  const std::vector<Real> normal = findNormalFromNodeMap(map);
+  const std::vector<Real> node0 = map[0];
+  const std::vector<Real> node1 = map[1];
+  const std::vector<Real> node2 = map[2];
+  const std::vector<Real> node3 = map[3];
+  std::vector<Real> p(node0.size());
+  Real px1, px2, py1, py2, pz1, pz2;
+  Real rand_x, rand_y, rand_z;
+  rand_x = std::rand() / (1. * RAND_MAX);
+  rand_y = std::rand() / (1. * RAND_MAX);
+  rand_z = std::rand() / (1. * RAND_MAX);
+  px1 = rand_x * (node1[0] - node0[0]);
+  py1 = rand_y * (node1[1] - node0[1]);
+  pz1 = rand_z * (node1[2] - node0[2]);
+  rand_x = std::rand() / (1. * RAND_MAX);
+  rand_y = std::rand() / (1. * RAND_MAX);
+  rand_z = std::rand() / (1. * RAND_MAX);
+  px2 = rand_x * (node3[0] - node0[0]);
+  py2 = rand_y * (node3[1] - node0[1]);
+  pz2 = rand_z * (node3[2] - node0[2]);
+  p[0] = node0[0] + px1 + px2;
+  p[1] = node0[1] + py1 + py2;
+  p[2] = node0[2] + pz1 + pz2;
+  return p;
+}
+const Real ViewFactor::angleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2)
+{
+  Real v1_length = pow((v1[0]*v1[0]+v1[1]*v1[1]+v1[2]*v1[2]),0.5);
+  Real v2_length = pow((v2[0]*v2[0]+v2[1]*v2[1]+v2[2]*v2[2]),0.5);
+  Real v12_dot = v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2];
+  Real theta = acos(v12_dot/(v1_length*v2_length));  //Radian
+  theta *= (180/_PI);   //Degree
+  return theta;
+}
+
+const bool ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real> > &master, const std::map<unsigned int, std::vector<Real> > &slave)
+{
+  const std::vector<Real> master_normal = findNormalFromNodeMap(master);
+  const std::vector<Real> slave_normal = findNormalFromNodeMap(slave);
+  for (size_t i=0; i<100; i++)    //check visibility for 100 different points
+  {
+    const std::vector<Real> master_point = getRandomPoint(master);
+    const std::vector<Real> slave_point = getRandomPoint(slave);
+    const std::vector<Real> master_slave = {(slave_point[0]-master_point[0]),(slave_point[1]-master_point[1]),(slave_point[2]-master_point[2])};
+    const std::vector<Real> slave_master = {(master_point[0]-slave_point[0]),(master_point[1]-slave_point[1]),(master_point[2]-slave_point[2])};
+    Real theta_master_slave = angleBetweenVectors(master_normal,master_slave);
+    Real theta_slave_master = angleBetweenVectors(slave_normal,slave_master);
+    if (theta_slave_master<90 && theta_master_slave<90)
+      return true;
+  }
+  return false;
 }
 
 void
 ViewFactor::initialize()
 {
   std::srand(time(NULL));
-  std::cout << "-------boundary_ids #: " << _boundary_ids.size() << std::endl;
+  std::cout << "---------------------- " <<std::endl;
+  std::cout << "Defined Boundaries   : " <<std::endl;
+  for (const auto bid : _boundary_ids)
+  {
+    std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
+  }
 }
 
 void
@@ -72,12 +133,14 @@ ViewFactor::execute()
   //Define Map for current boundary and current element and put Elem pointer for current element side
   _element_side[current_boundary_id][current_element_id] = _current_side_elem;
   _element_set[current_boundary_id][current_element_id] = _current_side_elem->n_nodes();
-  std::cout << "------------------------------"<< std::endl;
-  std::cout << "-------boundary #: " << current_boundary_id << " : "<<current_boundary_name<< std::endl;
-  std::cout << "-----------elem #: " << (_current_elem->id()) << std::endl;
+  // std::cout << "------------------------------"<< std::endl;
+  // std::cout << "-------boundary #: " << current_boundary_id << " : "<<current_boundary_name<< std::endl;
+  // std::cout << "-----------elem #: " << (_current_elem->id()) << std::endl;
   // std::cout << "-----------side #: " << (_current_side) << std::endl;
   //Loop over nodes on current element side
   unsigned int n = _current_side_elem->n_nodes();
+  if (n!=4)
+    mooseError("ViewFactor UserObject can only be used for 4-node Elements");
   for (unsigned int i = 0; i < n; i++)
   {
     unsigned int _current_node_id = i;
@@ -91,8 +154,8 @@ ViewFactor::execute()
       _node_set[current_boundary_id][current_element_id][_current_node_id].push_back((*node)(j));
       _normal_set[current_boundary_id][current_element_id][_current_node_id].push_back((normal)(j));
     }
-    std::cout <<"Node #"<<i<<" : ("<<(*node)(0)<<","<<(*node)(1)<<","<<(*node)(2)<<")\t";
-    std::cout <<" Normal : ("<<(normal)(0)<<","<<(normal)(1)<<","<<(normal)(2)<<")"<< std::endl;
+    // std::cout <<"Node #"<<i<<" : ("<<(*node)(0)<<","<<(*node)(1)<<","<<(*node)(2)<<")\t";
+    // std::cout <<" Normal : ("<<(normal)(0)<<","<<(normal)(1)<<","<<(normal)(2)<<")"<< std::endl;
   }
 }
 void
@@ -111,9 +174,23 @@ ViewFactor::finalize()
       std::cout <<"--------------------------------------------------------------"<<std::endl;
       for (auto master_elem : master_elem_map)
       {
+        const auto master_node_map = _node_set[master_bid][master_elem.first];
         for (auto slave_elem : slave_elem_map)
         {
-          std::cout <<"Element #"<< master_elem.first <<" -> Element #"<<"."<<slave_elem.first<< std::endl;
+          const auto slave_node_map = _node_set[slave_bid][slave_elem.first];
+          if (isVisible(master_node_map,slave_node_map))
+            {
+              std::cout <<"Element #"<< master_elem.first <<" -> Element #"<<slave_elem.first<< std::endl;
+              for (size_t i = 0; i < _samplingNumber; i++)
+              {
+                const std::vector<Real> source_point = getRandomPoint(master_node_map);
+                std::cout << "source_point: (" <<source_point[0]<<","<<source_point[1]<<","<<source_point[2]<<")"<<std::endl;
+              }
+            }
+          else
+            {
+              std::cout <<"Element #"<< master_elem.first <<" can't view Element #"<<slave_elem.first<< std::endl;
+            }
         }
       }
     }
@@ -176,7 +253,7 @@ ViewFactor::finalize()
   //   //Sample Direction
   //   const double rand_theta = std::rand() / (1. * RAND_MAX);
   //   const double rand_phi = std::rand() / (1. * RAND_MAX);
-  //   const double piv = 3.141592653589793238462643383279502884;
+  //   const double PI = 3.141592653589793238462643383279502884;
   //   const double theta = acos(1-2*rand_theta);
   //   const double phi = 2*piv*rand_phi;
   //   std::cout << theta << std::endl;

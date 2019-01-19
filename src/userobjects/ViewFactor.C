@@ -82,6 +82,20 @@ const std::vector<Real> ViewFactor::getRandomPoint(std::map<unsigned int, std::v
   p[2] = node0[2] + pz1 + pz2;
   return p;
 }
+
+const std::vector<Real>
+ViewFactor::getRandomDirection()
+{
+  //   Sample Direction
+  const Real rand_theta = std::rand() / (1. * RAND_MAX);
+  const Real rand_phi = std::rand() / (1. * RAND_MAX);
+  const Real theta = acos(1 - 2 * rand_theta);
+  const Real phi = 2 * _PI * rand_phi;
+  const std::vector<Real> direction{
+      sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta)}; // Radian
+  return direction;
+}
+
 const Real ViewFactor::angleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2)
 {
   Real v1_length = pow((v1[0]*v1[0]+v1[1]*v1[1]+v1[2]*v1[2]),0.5);
@@ -108,6 +122,22 @@ const bool ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real> 
       return true;
   }
   return false;
+}
+
+const bool
+ViewFactor::isIntersected(const std::vector<Real> & p1,
+                          const std::vector<Real> & dir,
+                          const std::map<unsigned int, std::vector<Real>> & map)
+{
+  const std::vector<Real> n = findNormalFromNodeMap(map);
+  const std::vector<Real> p2 = getRandomPoint(map);
+  Real d = (n[0] * (p2[0] - p1[0]) + n[1] * (p2[1] - p1[1]) + n[2] * (p2[2] - p1[2])) /
+           (n[0] * dir[0] + n[1] * dir[1] + n[2] * dir[2]);
+  std::cout << d << std::endl;
+  if (d > 0)
+    return true;
+  else
+    return false;
 }
 
 void
@@ -181,10 +211,26 @@ ViewFactor::finalize()
           if (isVisible(master_node_map,slave_node_map))
             {
               std::cout <<"Element #"<< master_elem.first <<" -> Element #"<<slave_elem.first<< std::endl;
+              const std::vector<Real> master_normal = findNormalFromNodeMap(master_node_map);
+              unsigned int counter{0};
               for (size_t i = 0; i < _samplingNumber; i++)
               {
                 const std::vector<Real> source_point = getRandomPoint(master_node_map);
+                const std::vector<Real> direction = getRandomDirection();
                 std::cout << "source_point: (" <<source_point[0]<<","<<source_point[1]<<","<<source_point[2]<<")"<<std::endl;
+                std::cout << "direction: (" << direction[0] << "," << direction[1] << ","
+                          << direction[2] << ")" << std::endl;
+                std::cout << "master_normal: (" << master_normal[0] << "," << master_normal[1]
+                          << "," << master_normal[2] << ")" << std::endl;
+                if (angleBetweenVectors(direction, master_normal) < 90) // check forward sampling
+                {
+                  if (isIntersected(source_point, direction, master_node_map))
+                  {
+                    counter++;
+                    std::cout << "!! Intersected !!" << std::endl;
+                    std::cout << "Total Count :" << counter << std::endl;
+                  }
+                }
               }
             }
           else
@@ -216,47 +262,3 @@ ViewFactor::finalize()
     }
   }
 }
-  // FINDING THE SOURCE POINT ON ELEMENT SURFACE AND SAMPLE DIRECTION
-  // Random Source Point
-  // const Node * node0 = _current_side_elem->node_ptr(0);
-  // const Node * node1 = _current_side_elem->node_ptr(1);
-  // const Node * noden = _current_side_elem->node_ptr(3);
-  // unsigned int nsrc = 1;
-  // for (unsigned int i = 0; i < nsrc; i++)
-  // {
-  //   rand_x = std::rand() / (1. * RAND_MAX);
-  //   rand_y = std::rand() / (1. * RAND_MAX);
-  //   rand_z = std::rand() / (1. * RAND_MAX);
-  //   px1 = rand_x * ((*node1)(0) - (*node0)(0));
-  //   py1 = rand_y * ((*node1)(1) - (*node0)(1));
-  //   pz1 = rand_z * ((*node1)(2) - (*node0)(2));
-  //   rand_x = std::rand() / (1. * RAND_MAX);
-  //   rand_y = std::rand() / (1. * RAND_MAX);
-  //   rand_z = std::rand() / (1. * RAND_MAX);
-  //   px2 = rand_x * ((*noden)(0) - (*node0)(0));
-  //   py2 = rand_y * ((*noden)(1) - (*node0)(1));
-  //   pz2 = rand_z * ((*noden)(2) - (*node0)(2));
-  //   px = (*node0)(0) + px1 + px2; // DONT DO THIS find surface equation plane equation
-  //   py = (*node0)(1) + py1 + py2;
-  //   pz = (*node0)(2) + pz1 + pz2;
-  //   std::vector<double> src_pt;
-  //   src_pt.push_back(px);
-  //   src_pt.push_back(py);
-  //   src_pt.push_back(pz);
-  //   // std::cout << "source_point_x: " <<px<< std::endl;
-  //   // std::cout << "source_point_y: " <<py<< std::endl;
-  //   // std::cout << "source_point_z: " <<pz<< std::endl;
-  //   std::cout << src_pt[0] << std::endl;
-  //   std::cout << src_pt[1] << std::endl;
-  //   std::cout << src_pt[2] << std::endl;
-  //
-  //   //Sample Direction
-  //   const double rand_theta = std::rand() / (1. * RAND_MAX);
-  //   const double rand_phi = std::rand() / (1. * RAND_MAX);
-  //   const double PI = 3.141592653589793238462643383279502884;
-  //   const double theta = acos(1-2*rand_theta);
-  //   const double phi = 2*piv*rand_phi;
-  //   std::cout << theta << std::endl;
-  //   std::cout << phi << std::endl;
-  //
-  // }

@@ -70,7 +70,9 @@
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '1 2 3 4'
+    boundary = '2 7'
+    sampling_number = 10000
+    parallel_planes = '2.0 2.0 0.5'
   [../]
 []
 [Postprocessors]

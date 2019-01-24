@@ -72,6 +72,7 @@
     type = ViewFactor
     boundary = '2 7'
     sampling_number = 10000
+    source_number = 100
     parallel_planes = '2.0 2.0 0.5'
   [../]
 []

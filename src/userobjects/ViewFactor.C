@@ -158,7 +158,7 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
   std::vector<Real> z;
   for (size_t i = 0; i < 4; i++)     //write nodes to test point is on surface or not
   {
-    // std::cout<<"Slave Node #"<<i<<" : ("<<map[i][0]<<","<<map[i][1]<<","<<map[i][2]<<")"<<std::endl;
+    std::cout<<"Slave Node #"<<i<<" : ("<<map[i][0]<<","<<map[i][1]<<","<<map[i][2]<<")"<<std::endl;
     x.push_back(map[i][0]);
     y.push_back(map[i][1]);
     z.push_back(map[i][2]);
@@ -176,7 +176,7 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
   }
   else
   {
-    // std::cout<<"not on surface"<<std::endl;
+    std::cout<<"not on surface"<<std::endl;
     return false;
   }
 }
@@ -189,12 +189,12 @@ ViewFactor::isIntersected(const std::vector<Real> & p1,
   const std::vector<Real> n = findNormalFromNodeMap(map);
   // const std::vector<Real> pR = getRandomPoint(map);
   const Real d = _parallel_planes_geometry[2]/dir[0];
-  // std::cout << "d : "<<d<< std::endl;
   const std::vector<Real> p2{(p1[0] + d * dir[0]),
                              (p1[1] + d * dir[1]),
                              (p1[2] + d * dir[2])};
-  // std::cout << "target    : (" << p2[0] <<","<< p2[1] <<","<< p2[2] <<")"<< std::endl;
-  // std::cout<<"Slave Normal #: ("<<n[0]<<","<<n[1]<<","<<n[2]<<")"<<std::endl;
+  std::cout << "d : "<<d<< std::endl;
+  std::cout << "target    : (" << p2[0] <<","<< p2[1] <<","<< p2[2] <<")"<< std::endl;
+  std::cout<<"Slave Normal #: ("<<n[0]<<","<<n[1]<<","<<n[2]<<")"<<std::endl;
 
   // //test in x direction
   // // const std::vector<Real> node0 = map[0];
@@ -374,11 +374,11 @@ ViewFactor::finalize()
                       << "...........done" << std::endl;
             for (auto master_node : master_node_map)
             {
-              // std::cout <<"Master Node #"<<master_node.first<<" : ("<<(master_node.second)[0]<<","
-              //           <<(master_node.second)[1]<<","<<(master_node.second)[2]<<")"<<std::endl;
+              std::cout <<"Master Node #"<<master_node.first<<" : ("<<(master_node.second)[0]<<","
+                        <<(master_node.second)[1]<<","<<(master_node.second)[2]<<")"<<std::endl;
             }
             const std::vector<Real> master_normal = findNormalFromNodeMap(master_node_map);
-            // std::cout <<"Master Normal : (" << master_normal[0]<<"," << master_normal[1] <<","<< master_normal[2]<<")" <<std::endl;
+            std::cout <<"Master Normal : (" << master_normal[0]<<"," << master_normal[1] <<","<< master_normal[2]<<")" <<std::endl;
             unsigned int counter{0};
             Real viewfactor{0};
             Real viewfactor_src{0};
@@ -386,27 +386,28 @@ ViewFactor::finalize()
             {
               viewfactor_src = 0;
               const std::vector<Real> source_point = getRandomPoint(master_node_map);
-              // std::cout << "source_point: ("
-              // <<source_point[0]<<","<<source_point[1]<<","<<source_point[2]<<")"<<std::endl;
+              std::cout << "source_point: ("
+              <<source_point[0]<<","<<source_point[1]<<","<<source_point[2]<<")"<<std::endl;
               counter = 0;
               for (size_t ray = 0; ray < _samplingNumber; ray++)
               {
                 const std::vector<Real> direction = getRandomDirection(master_normal);
-                // std::cout << "direction: (" << direction[0] << "," << direction[1] << ","
-                //           << direction[2] << ")" << std::endl;
                 const Real theta = angleBetweenVectors(direction, master_normal);   // in Degree
-                // std::cout <<"theta : "<< theta << std::endl;
+                std::cout << "direction: (" << direction[0] << "," << direction[1] << ","
+                          << direction[2] << ")" << std::endl;
+                std::cout <<"theta : "<< theta << std::endl;
                 if (theta < 90) // check forward sampling
                 {
                   if (isIntersected(source_point, direction, slave_node_map)) // check Intersecting
                   {
                     counter++;
-                    // std::cout << "!! Intersected !!" << std::endl;
+                    std::cout << "!! Intersected !!" << std::endl;
                     // std::cout <<" Count:"<<counter<<std::endl;
                   }
                 }
               }
               viewfactor_src = (counter * 1.0) / _samplingNumber;
+              std::cout<<viewfactor_src<<std::endl;
               viewfactor += viewfactor_src;
             }
             _element_viewfactors[master_bid][slave_bid][master_elem.first][slave_elem.first] = (viewfactor * 1.0) / _sourceNumber;

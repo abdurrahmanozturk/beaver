@@ -8,7 +8,6 @@
 #include "RadiationHeatTransfer.h"
 
 // UserObjects
-#include "FindViewFactors.h"
 #include "ViewFactor.h"
 
 
@@ -58,7 +57,6 @@ beaverApp::registerObjects(Factory & factory)
     // Kernels
     registerKernel(RadiationHeatTransfer);
     // UserObjects
-    registerUserObject(FindViewFactors);
     registerUserObject(ViewFactor);
 
     // Materials

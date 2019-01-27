@@ -10,21 +10,22 @@
   # zmax = 1
   # zmin = 0
   # dim = 3
-  # nx = 1
-  # ny = 1
-  # nz = 1
+  # nx = 2
+  # ny = 2
+  # nz = 2
+  # elem_type = HEX8
 []
 [Variables]
   [./temp]
     initial_condition = 300
   [../]
 []
-[AuxVariables]
-  [./src_pt]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
+# [AuxVariables]
+#   [./src_pt]
+#     order = FIRST
+#     family = LAGRANGE
+#   [../]
+# []
 # [AuxKernels]
 #   [./source_point]
 #     type = SpatialUserObjectAux

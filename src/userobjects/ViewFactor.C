@@ -1,5 +1,4 @@
 #include <vector>
-#include <fstream>
 #include "ViewFactor.h"
 #include "MooseRandom.h"
 // libMesh includes
@@ -187,30 +186,20 @@ ViewFactor::isIntersected(const std::vector<Real> & p1,
                           const std::map<unsigned int, std::vector<Real>> & map)
 {
   const std::vector<Real> n = findNormalFromNodeMap(map);
-  // const std::vector<Real> pR = getRandomPoint(map);
-  const Real d = _parallel_planes_geometry[2]/dir[0];
+  const std::vector<Real> pR = getRandomPoint(map);
+  // const Real d = _parallel_planes_geometry[2]/dir[0];
+  // //test in x direction
+  // // const std::vector<Real> node0 = map[0];
+  // Real w = (pR[0]-p1[0]);
+  Real d = (n[0] * (pR[0] - p1[0]) + n[1] * (pR[1] - p1[1]) + n[2] * (pR[2] - p1[2])) /
+           (n[0] * dir[0] + n[1] * dir[1] + n[2] * dir[2]);
+  std::cout<<"d = "<<d<<std::endl;
   const std::vector<Real> p2{(p1[0] + d * dir[0]),
                              (p1[1] + d * dir[1]),
                              (p1[2] + d * dir[2])};
   std::cout << "d : "<<d<< std::endl;
   std::cout << "target    : (" << p2[0] <<","<< p2[1] <<","<< p2[2] <<")"<< std::endl;
   std::cout<<"Slave Normal #: ("<<n[0]<<","<<n[1]<<","<<n[2]<<")"<<std::endl;
-
-  // //test in x direction
-  // // const std::vector<Real> node0 = map[0];
-  // Real w = (pR[0]-p1[0]);
-  // // Real w = (n[0] * (pR[0] - p1[0]) + n[1] * (pR[1] - p1[1]) + n[2] * (pR[2] - p1[2])) /
-  // //          (n[0] * dir[0] + n[1] * dir[1] + n[2] * dir[2]);
-  // std::cout<<"w = "<<w<<std::endl;
-  // const std::vector<Real> p2{(p1[0] + w * dir[0]),
-  //                            (p1[1] + w * dir[1]),
-  //                            (p1[2] + w * dir[2])};
-  //
-  // Real d0 = pow(((p2[0] - p1[0]) * (p2[0] - p1[0]) + (p2[1] - p1[1]) * (p2[1] - p1[1]) +
-  //                (p2[2] - p1[2]) * (p2[2] - p1[2])),0.5);
-  // // std::cout <<"d : "<< d <<"     dp: "<<dp<<std::endl;
-  //
-
   if (isOnSurface(p2,map))
     return true;
   else
@@ -298,6 +287,7 @@ ViewFactor::printNodesNormals()
 void
 ViewFactor::initialize()
 {
+  //Check Element Type and Number of nodes
   std::srand(time(NULL));
   std::cout << "---------------------- " <<std::endl;
   std::cout << "Analytical Value of View Factor"
@@ -308,11 +298,15 @@ ViewFactor::initialize()
   std::cout << "---------------------- " << std::endl;
   std::cout << ": Defined Boundaries : " << std::endl;
   std::cout << "---------------------- " << std::endl;
-
   for (const auto bid : _boundary_ids)
   {
     std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
   }
+  ElemType elem_type = _current_elem->type();   //HEX8=10 QUAD4=5
+  unsigned int n_elem = _current_elem->n_nodes();
+  std::cout << n_elem <<"-noded element (typeid="<<elem_type<<")"<< std::endl;
+  if (n_elem!=8)
+    mooseError("ViewFactor UserObject can only be used for 8-noded Hexagonal Elements");
 }
 
 void
@@ -332,8 +326,6 @@ ViewFactor::execute()
   // std::cout << "-----------side #: " << (_current_side) << std::endl;
   //Loop over nodes on current element side
   unsigned int n = _current_side_elem->n_nodes();
-  if (n!=4)
-    mooseError("ViewFactor UserObject can only be used for 4-noded Quadrilateral Elements");
   for (unsigned int i = 0; i < n; i++)
   {
     unsigned int _current_node_id = i;

@@ -20,9 +20,13 @@ public:
   virtual void finalize() override;
   virtual void threadJoin(const UserObject & y) override {}
 
-  const Real angleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
+  const Real getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
+  const Real getDistanceBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
   const Real getAnalyticalViewFactor(const std::vector<Real> & v);
-  const std::vector<Real> findNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map);
+  const Real getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map);
+  const Real getVectorLength(const std::vector<Real> & v);
+  const std::vector<Real> getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map);
+  const std::vector<Real> getCenterPoint(std::map<unsigned int, std::vector<Real> > map);
   const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map);
   const std::vector<Real> getRandomDirection(const std::vector<Real> & normal);
   // const std::map<BoundaryID, std::map<BoundaryID, Real> > getBoundarViewFactors(const

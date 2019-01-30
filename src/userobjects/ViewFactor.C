@@ -32,8 +32,9 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
     _sourceNumber(getParam<unsigned int>("source_number")),
     _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes")),
     _current_normals(_assembly.normals()),
-    _boundary_ids(boundaryIDs()),
-    _boundary_list(getParam<std::vector<BoundaryName>>("boundary"))
+    _boundary_ids(boundaryIDs())
+    // _master_boundary(getParam<std::vector<BoundaryName>>("master_boundary")),
+    // _slave_boundary(getParam<std::vector<BoundaryName>>("slave_boundary"))
 {
 }
 
@@ -146,7 +147,18 @@ ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim)
   Real theta_normal = acos(n[2]);
   Real phi_normal{0};
   if (theta_normal!=0)
-    phi_normal = acos(n[0]/sin(theta_normal));
+  {
+
+    ////FIX FOR ny<0
+    if (n[1]<0)
+    {
+      phi_normal = acos(n[0]/sin(theta_normal));
+    }
+    else
+    {
+      phi_normal = acos(n[0]/sin(theta_normal));
+    }
+  }
   //Create Rotation Matrix to transform global coordinate system to local coordinate system
   const Real theta_local = -theta_normal;
   const Real phi_local = -phi_normal;
@@ -182,32 +194,6 @@ ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim)
                                     (Rlocal[1][0]*dir_global[0]+Rlocal[1][1]*dir_global[1]+Rlocal[1][2]*dir_global[2]),
                                     (Rlocal[2][0]*dir_global[0]+Rlocal[2][1]*dir_global[1]+Rlocal[2][2]*dir_global[2])};
   return dir_local;
-}
-
-const std::vector<Real>
-ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map)
-{
-  const std::vector<Real> n = getNormalFromNodeMap(map);
-  const std::vector<Real> center{getCenterPoint(map)};
-  Real rad{0},d{0};  //radius, distance
-  for (size_t i = 0; i < map.size(); i++)   //find max distance to surrounding nodes
-  {
-    d = getDistanceBetweenVectors(center,map[i]);
-    if (d>rad)
-      rad=d;
-  }
-  // std::cout<<"r = "<<r<<std::endl;
-  // std::cout<<"center = ("<<center[0]<<","<<center[1]<<","<<center[2]<<")"<<std::endl;
-  while(true)
-  {
-    const Real rand_r = std::rand() / (1. * RAND_MAX);
-    const Real r =rad*pow(rand_r,0.5);
-    const std::vector<Real> dir{getRandomDirection(n,2)};
-    // std::cout<<"dir=("<<dir[0]<<","<<dir[1]<<","<<dir[2]<<")"<<std::endl;
-    const std::vector<Real> p{(center[0]+r*dir[0]),(center[1]+r*dir[1]),(center[2]+r*dir[2])};
-    if (isOnSurface(p,map))
-      return p;
-  }
 }
 
 const Real
@@ -284,6 +270,33 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
   // }
 }
 
+const std::vector<Real>
+ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map)
+{
+  const std::vector<Real> n = getNormalFromNodeMap(map);
+  const std::vector<Real> center{getCenterPoint(map)};
+  Real rad{0},d{0};  //radius, distance
+  for (size_t i = 0; i < map.size(); i++)   //find max distance to surrounding nodes
+  {
+    d = getDistanceBetweenVectors(center,map[i]);
+    if (d>rad)
+      rad=d;
+  }
+  // std::cout<<"r = "<<r<<std::endl;
+  // std::cout<<"center = ("<<center[0]<<","<<center[1]<<","<<center[2]<<")"<<std::endl;
+  while(true)
+  {
+    const Real rand_r = std::rand() / (1. * RAND_MAX);
+    const Real r =rad*pow(rand_r,0.5);
+    const std::vector<Real> dir{getRandomDirection(n,2)};
+    // std::cout<<"dir=("<<dir[0]<<","<<dir[1]<<","<<dir[2]<<")"<<std::endl;
+    const std::vector<Real> p{(center[0]+r*dir[0]),(center[1]+r*dir[1]),(center[2]+r*dir[2])};
+    // std::cout<<"sampled point = ("<<p[0]<<","<<p[1]<<","<<p[2]<<")"<<std::endl;
+    if (isOnSurface(p,map))
+      return p;
+  }
+}
+
 const bool
 ViewFactor::isIntersected(const std::vector<Real> & p1,
                           const std::vector<Real> & dir,
@@ -332,6 +345,8 @@ ViewFactor::printViewFactors()
     auto bnd1_map = _element_viewfactors[bnd1.first];
     for (const auto & bnd2 : bnd1_map)
     {
+      // if (_viewfactors[bnd1.first][bnd2.first]==0)
+      //   continue;
       auto bnd2_map = bnd1_map[bnd2.first];
       bnd_viewfactor = 0;
       for (const auto & elem1 : bnd2_map)
@@ -342,20 +357,20 @@ ViewFactor::printViewFactors()
         for (const auto & elem2 : elem1_map)
         {
           elem_to_bnd_viewfactor += elem2.second;
-          std::cout << "Bnd " << bnd1.first << " : Elem " << elem1.first << "    --->    "
-                    << "Bnd " << bnd2.first << " : Elem " << elem2.first
-                    << "    View Factor = " << elem2.second << std::endl;
+          std::cout << "Bnd " << bnd1.first << " :\tElem " << elem1.first << "  --->  "
+                    << "Bnd " << bnd2.first << " :\tElem " << elem2.first
+                    << "\tView Factor = " << elem2.second << std::endl;
         }
-        std::cout << "        Elem " << elem1.first << "    --->    "
-                  << "Bnd " << bnd2.first << "       Total View Factor = " << elem_to_bnd_viewfactor
+        std::cout << "        \tElem " << elem1.first << "  --->  "
+                  << "Bnd " << bnd2.first << "\t  Total View Factor = " << elem_to_bnd_viewfactor
                   << "\n"<<std::endl;
         bnd_viewfactor += elem_to_bnd_viewfactor;
       }
       bnd_viewfactor /= elem_pair_size;
-      std::cout << "         Bnd " << bnd1.first << "    --->    "
-                << "Bnd " << bnd2.first << "     Average View Factor = " << bnd_viewfactor
+      std::cout << "\t\tBnd " << bnd1.first << "  --->  "
+                << "Bnd " << bnd2.first << "\tAverage View Factor = " << bnd_viewfactor
                 << std::endl;
-      std::cout << "                                       % Relative Error = " <<100*(bnd_viewfactor/getAnalyticalViewFactor(_parallel_planes_geometry)-1)<< std::endl;
+      std::cout << "\t\t\t\t\t   % Relative Error = " <<100*(bnd_viewfactor/getAnalyticalViewFactor(_parallel_planes_geometry)-1)<< std::endl;
       std::cout << "----------------------------------------------------------------------"
                 << std::endl;
     }
@@ -387,30 +402,27 @@ ViewFactor::printNodesNormals()
   }
 }
 
-
-// const std::map<BoundaryID, std::map<BoundaryID, Real> > ViewFactor::getBoundarViewFactors(const
-// std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real > >
-// > > &map)
-// {
-// }
-
 void
 ViewFactor::initialize()
 {
   //Check Element Type and Number of nodes
   std::srand(time(NULL));
-  std::cout << "---------------------- " <<std::endl;
-  std::cout << "Analytical Value of View Factor"
-            << "\nParallel planes with W1=" << _parallel_planes_geometry[0]
-            << ", W2=" << _parallel_planes_geometry[1] << ", H=" << _parallel_planes_geometry[2]
-            << std::endl;
-  std::cout << "F = " << getAnalyticalViewFactor(_parallel_planes_geometry) << std::endl;
-  std::cout << "---------------------- " << std::endl;
-  std::cout << ": Defined Boundaries : " << std::endl;
-  std::cout << "---------------------- " << std::endl;
-  for (const auto bid : _boundary_ids)
+
+  if (_printScreen==true)
   {
-    std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
+    std::cout << "---------------------- " <<std::endl;
+    std::cout << "Analytical Value of View Factor"
+              << "\nParallel planes with W1=" << _parallel_planes_geometry[0]
+              << ", W2=" << _parallel_planes_geometry[1] << ", H=" << _parallel_planes_geometry[2]
+              << std::endl;
+    std::cout << "F = " << getAnalyticalViewFactor(_parallel_planes_geometry) << std::endl;
+    std::cout << "---------------------- " << std::endl;
+    std::cout << ": Defined Boundaries : " << std::endl;
+    std::cout << "---------------------- " << std::endl;
+    for (const auto bid : _boundary_ids)
+    {
+      std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
+    }
   }
   ElemType elem_type = _current_elem->type();   //HEX8=10 QUAD4=5
   unsigned int n_elem = _current_elem->n_nodes();
@@ -454,9 +466,14 @@ ViewFactor::finalize()
 {
   for (auto master_bid : _boundary_ids)
   {
+    Real viewfactor{0};
     const auto master_boundary = _node_set[master_bid];
     for (auto slave_bid : _boundary_ids)
     {
+      std::cout<<_viewfactors[slave_bid][master_bid]<<std::endl;
+      if ((_viewfactors[slave_bid][master_bid]!=0) || (master_bid==slave_bid))
+        continue;
+      viewfactor = 0;
       const auto slave_boundary = _node_set[slave_bid];
       const auto master_bname = _mesh.getBoundaryName(master_bid);
       const auto slave_bname = _mesh.getBoundaryName(slave_bid);
@@ -488,11 +505,11 @@ ViewFactor::finalize()
               std::cout <<"Master Normal : (" << master_normal[0]<<"," << master_normal[1] <<","<< master_normal[2]<<")" <<std::endl;
             }
             unsigned int counter{0};
-            Real viewfactor{0};
-            Real viewfactor_src{0};
+            Real viewfactor_per_elem{0};
+            Real viewfactor_per_src{0};
             for (size_t src = 0; src < _sourceNumber; src++)
             {
-              viewfactor_src = 0;
+              viewfactor_per_src = 0;
               const std::vector<Real> source_point = getRandomPoint(master_node_map);
               if (_printScreen==true)
               {
@@ -508,8 +525,8 @@ ViewFactor::finalize()
                 {
                   std::cout << "direction: (" << direction[0] << "," << direction[1] << ","
                             << direction[2] << ")" << std::endl;
+                  std::cout <<"theta : "<< theta << std::endl;
                 }
-                // std::cout <<"theta : "<< theta << std::endl;
                 if (theta < 90) // check forward sampling
                 {
                   if (isIntersected(source_point, direction, slave_node_map)) // check Intersecting
@@ -523,21 +540,42 @@ ViewFactor::finalize()
                   }
                 }
               }
-              viewfactor_src = (counter * 1.0) / _samplingNumber;
-              viewfactor += viewfactor_src;
+              viewfactor_per_src = (counter * 1.0) / _samplingNumber;
+              viewfactor_per_elem += viewfactor_per_src;
             }
-            _element_viewfactors[master_bid][slave_bid][master_elem.first][slave_elem.first] = (viewfactor * 1.0) / _sourceNumber;
+            viewfactor_per_elem *= (1.0/_sourceNumber);
+            viewfactor += viewfactor_per_elem;
+            if (_printScreen==true)
+            {
+              std::cout<<"\tElement View Factor = "<<viewfactor_per_elem<<std::endl;
+            }
+            _element_viewfactors[master_bid][slave_bid][master_elem.first][slave_elem.first] = viewfactor_per_elem;
           }
           else
           {
             _element_viewfactors[master_bid][slave_bid][master_elem.first][slave_elem.first] = 0;
+            viewfactor +=0;
             std::cout << "Element #" << master_elem.first << " -> Element #" << slave_elem.first
                       << "......invisible" << std::endl;
           }
         }
       }
+      viewfactor *= (1.0/master_boundary.size());
+      if (_printScreen==true)
+      {
+        std::cout<<"Boundary View Factor = "<<viewfactor<<std::endl;
+      }
+      _viewfactors[master_bid][slave_bid]=viewfactor;
     }
   }
   printViewFactors();
-  // printNodesNormals();
+  if (_printScreen==true)
+  {
+    printViewFactors();
+    printNodesNormals();
+  }
 }
+// Real ViewFactor::getViewFactor()
+// {
+//   return _viewfactors[_boundary_ids[0]][_boundary_ids[1]];
+// }

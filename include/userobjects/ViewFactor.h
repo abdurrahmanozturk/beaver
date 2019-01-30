@@ -49,7 +49,7 @@ public:
   // Point q;
   const MooseArray<Point> & _current_normals;
   const std::set<BoundaryID> & _boundary_ids;
-  const std::vector<BoundaryName> & _boundary_list;
+  // const std::vector<BoundaryName> & _master_boundary,_slave_boundary;
   std::map<BoundaryID, std::map<unsigned int, const Elem *> > _element_set_ptr;
   std::map<BoundaryID, std::map<unsigned int, unsigned int> > _element_set;
   std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real>>>> _element_viewfactors;

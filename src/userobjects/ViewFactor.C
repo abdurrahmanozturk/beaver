@@ -14,8 +14,9 @@ InputParameters
 validParams<ViewFactor>()
 {
   InputParameters params = validParams<SideUserObject>();
-  params.addParam<unsigned int>("sampling_number",1000, "Number of Sampling");
-  params.addParam<unsigned int>("source_number",1, "Number of Source Points");
+  params.addParam<unsigned int>("sampling_number",100, "Number of Sampling");
+  params.addParam<unsigned int>("source_number",100, "Number of Source Points");
+  params.addParam<bool>("print_screen",false, "Print to Screen");
   params.addParam<std::vector<Real>>("parallel_planes",
                                      "{W1,W2,H} values for parallel planes to calculate view factor analytically");
   // params.addRequiredParam<std::vector<BoundaryName>>("master_boundary", "Master Boundary ID");
@@ -26,6 +27,7 @@ validParams<ViewFactor>()
 ViewFactor::ViewFactor(const InputParameters & parameters)
   : SideUserObject(parameters),
     _PI(acos(-1)), // 3.141592653589793238462643383279502884
+    _printScreen(getParam<bool>("print_screen")),
     _samplingNumber(getParam<unsigned int>("sampling_number")),
     _sourceNumber(getParam<unsigned int>("source_number")),
     _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes")),
@@ -235,10 +237,9 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
   // std::vector<Real> z;
   // for (size_t i = 0; i < map.size(); i++)     //write nodes to test point is on surface or not
   // {
-  //   std::cout<<"Slave Node #"<<i<<" : ("<<map[i][0]<<","<<map[i][1]<<","<<map[i][2]<<")"<<std::endl;
-  //   x.push_back(map[i][0]);
-  //   y.push_back(map[i][1]);
-  //   z.push_back(map[i][2]);
+    // x.push_back(map[i][0]);
+    // y.push_back(map[i][1]);
+    // z.push_back(map[i][2]);
   // }
   // Real x_max = *(std::max_element(x.begin(), x.end()));
   // Real x_min = *(std::min_element(x.begin(), x.end()));
@@ -249,8 +250,8 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
 
   const std::vector<Real> center{getCenterPoint(map)};
   Real slave_area = getArea(center,map);
-  // std::cout << "Slave Element Surface Area ="<< slave_area << std::endl;
   Real area = getArea(p,map);
+  // std::cout << "Slave Element Surface Area ="<< slave_area << std::endl;
   // std::cout << "Calcualted Surface Area ="<< area << std::endl;
   // std::cout << "Area Residual ="<<area - slave_area<< std::endl;
   // bool a{0},b{0};
@@ -286,7 +287,7 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
 const bool
 ViewFactor::isIntersected(const std::vector<Real> & p1,
                           const std::vector<Real> & dir,
-                          const std::map<unsigned int, std::vector<Real>> & map)
+                          std::map<unsigned int, std::vector<Real>> map)
 {
   const std::vector<Real> n = getNormalFromNodeMap(map);
   const std::vector<Real> pR = getRandomPoint(map);
@@ -299,9 +300,16 @@ ViewFactor::isIntersected(const std::vector<Real> & p1,
   const std::vector<Real> p2{(p1[0] + d * dir[0]),
                              (p1[1] + d * dir[1]),
                              (p1[2] + d * dir[2])};
-  // std::cout << "d : "<<d<< std::endl;
-  // std::cout << "target    : (" << p2[0] <<","<< p2[1] <<","<< p2[2] <<")"<< std::endl;
-  // std::cout<<"Slave Normal #: ("<<n[0]<<","<<n[1]<<","<<n[2]<<")"<<std::endl;
+  if (_printScreen==true)
+  {
+    for (size_t i = 0; i < map.size(); i++)     //write nodes to test point is on surface or not
+    {
+     std::cout<<"Slave Node #"<<i<<" : ("<<map[i][0]<<","<<map[i][1]<<","<<map[i][2]<<")"<<std::endl;
+    }
+    std::cout << "d : "<<d<< std::endl;
+    std::cout << "target    : (" << p2[0] <<","<< p2[1] <<","<< p2[2] <<")"<< std::endl;
+    std::cout<<"Slave Normal #: ("<<n[0]<<","<<n[1]<<","<<n[2]<<")"<<std::endl;
+  }
   if (isOnSurface(p2,map))
     return true;
   else
@@ -466,13 +474,19 @@ ViewFactor::finalize()
           {
             std::cout << "Element #" << master_elem.first << " -> Element #" << slave_elem.first
                       << "...........done" << std::endl;
-            for (auto master_node : master_node_map)
+            if (_printScreen==true)
             {
-              // std::cout <<"Master Node #"<<master_node.first<<" : ("<<(master_node.second)[0]<<","
-              //           <<(master_node.second)[1]<<","<<(master_node.second)[2]<<")"<<std::endl;
+              for (auto master_node : master_node_map)
+              {
+                std::cout <<"Master Node #"<<master_node.first<<" : ("<<(master_node.second)[0]<<","
+                          <<(master_node.second)[1]<<","<<(master_node.second)[2]<<")"<<std::endl;
+              }
             }
             const std::vector<Real> master_normal = getNormalFromNodeMap(master_node_map);
-            // std::cout <<"Master Normal : (" << master_normal[0]<<"," << master_normal[1] <<","<< master_normal[2]<<")" <<std::endl;
+            if (_printScreen==true)
+            {
+              std::cout <<"Master Normal : (" << master_normal[0]<<"," << master_normal[1] <<","<< master_normal[2]<<")" <<std::endl;
+            }
             unsigned int counter{0};
             Real viewfactor{0};
             Real viewfactor_src{0};
@@ -480,28 +494,36 @@ ViewFactor::finalize()
             {
               viewfactor_src = 0;
               const std::vector<Real> source_point = getRandomPoint(master_node_map);
-              // std::cout << "source_point: ("
-              // <<source_point[0]<<","<<source_point[1]<<","<<source_point[2]<<")"<<std::endl;
+              if (_printScreen==true)
+              {
+                std::cout << "source_point: ("
+                <<source_point[0]<<","<<source_point[1]<<","<<source_point[2]<<")"<<std::endl;
+              }
               counter = 0;
               for (size_t ray = 0; ray < _samplingNumber; ray++)
               {
                 const std::vector<Real> direction = getRandomDirection(master_normal);
                 const Real theta = getAngleBetweenVectors(direction, master_normal);   // in Degree
-                // std::cout << "direction: (" << direction[0] << "," << direction[1] << ","
-                //           << direction[2] << ")" << std::endl;
+                if (_printScreen==true)
+                {
+                  std::cout << "direction: (" << direction[0] << "," << direction[1] << ","
+                            << direction[2] << ")" << std::endl;
+                }
                 // std::cout <<"theta : "<< theta << std::endl;
                 if (theta < 90) // check forward sampling
                 {
                   if (isIntersected(source_point, direction, slave_node_map)) // check Intersecting
                   {
                     counter++;
-                    // std::cout << "!! Intersected !!" << std::endl;
+                    if (_printScreen==true)
+                    {
+                      std::cout << "!! Intersected !!" << std::endl;
+                    }
                     // std::cout <<" Count:"<<counter<<std::endl;
                   }
                 }
               }
               viewfactor_src = (counter * 1.0) / _samplingNumber;
-              // std::cout<<"viewfactor_src= "<<viewfactor_src<<std::endl;
               viewfactor += viewfactor_src;
             }
             _element_viewfactors[master_bid][slave_bid][master_elem.first][slave_elem.first] = (viewfactor * 1.0) / _sourceNumber;

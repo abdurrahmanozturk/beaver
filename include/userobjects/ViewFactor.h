@@ -37,16 +37,16 @@ public:
                        const std::map<unsigned int, std::vector<Real>> & slave);
   const bool isIntersected(const std::vector<Real> & p1,
                            const std::vector<Real> & dir,
-                           const std::map<unsigned int, std::vector<Real>> & map);
+                           std::map<unsigned int, std::vector<Real>> map);
   void printViewFactors();
   void printNodesNormals();
-  unsigned int _qp;
+  // unsigned int _qp;
   const double _PI;
+  bool _printScreen;
   unsigned int _samplingNumber,_sourceNumber;
   std::vector<Real> _parallel_planes_geometry;
-  Point p;
-  Point q;
-  // MooseRandom _random;
+  // Point p;
+  // Point q;
   const MooseArray<Point> & _current_normals;
   const std::set<BoundaryID> & _boundary_ids;
   const std::vector<BoundaryName> & _boundary_list;

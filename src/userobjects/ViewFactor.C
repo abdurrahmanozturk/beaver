@@ -75,7 +75,7 @@ ViewFactor::getVectorLength(const std::vector<Real> & v)
 }
 
 const std::vector<Real>
-ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real>> map)
+ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map)
 {
   std::vector<Real> v1 = map[0];
   std::vector<Real> v2 = map[1];
@@ -117,54 +117,6 @@ ViewFactor::getCenterPoint(std::map<unsigned int, std::vector<Real> > map)
   return center;
 }
 
-const std::vector<Real>
-ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map)
-{
-  std::vector<Real> center{getCenterPoint(map)};
-  Real r{0},d{0};  //radius, distance
-  for (size_t i = 0; i < map.size(); i++)
-  {
-    d = getDistanceBetweenVectors(center,map[i]);
-    if (d>r)
-      r=d;
-  }
-  // std::cout<<"r = "<<r<<std::endl;
-  // std::cout<<"center = ("<<center[0]<<","<<center[1]<<","<<center[2]<<")"<<std::endl;
-  while(true)
-  {
-    const Real rand_theta = std::rand() / (1. * RAND_MAX);
-    const Real rand_r = std::rand() / (1. * RAND_MAX);
-    std::vector<Real> p{center[0],(center[1]+r*pow(rand_r,0.5)*cos(rand_theta)),(center[2]+r*pow(rand_r,0.5)*sin(rand_theta))};
-    if (isOnSurface(p,map))
-      return p;
-  }
-
-  //
-  // const std::vector<Real> node0 = map[0];
-  // const std::vector<Real> node1 = map[1];
-  // const std::vector<Real> node2 = map[2];
-  // const std::vector<Real> node3 = map[3];
-  // std::vector<Real> p(node0.size());
-  // Real px1, px2, py1, py2, pz1, pz2;
-  // Real rand_x, rand_y, rand_z;
-  // rand_x = std::rand() / (1. * RAND_MAX);
-  // rand_y = std::rand() / (1. * RAND_MAX);
-  // rand_z = std::rand() / (1. * RAND_MAX);
-  // px1 = rand_x * (node1[0] - node0[0]);
-  // py1 = rand_y * (node1[1] - node0[1]);
-  // pz1 = rand_z * (node1[2] - node0[2]);
-  // rand_x = std::rand() / (1. * RAND_MAX);
-  // rand_y = std::rand() / (1. * RAND_MAX);
-  // rand_z = std::rand() / (1. * RAND_MAX);
-  // px2 = rand_x * (node3[0] - node0[0]);
-  // py2 = rand_y * (node3[1] - node0[1]);
-  // pz2 = rand_z * (node3[2] - node0[2]);
-  // p[0] = node0[0] + px1 + px2;
-  // p[1] = node0[1] + py1 + py2;
-  // p[2] = node0[2] + pz1 + pz2;
-  // return p;
-}
-
 const bool
 ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
                       const std::map<unsigned int, std::vector<Real>> & slave)
@@ -186,18 +138,74 @@ ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
 }
 
 const std::vector<Real>
-ViewFactor::getRandomDirection(const std::vector<Real> & normal)
+ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim)
 {
-  const Real rand_theta = std::rand() / (1. * RAND_MAX);
+  //find theta and phi for unit normal vector in global coordinate system
+  Real theta_normal = acos(n[2]);
+  Real phi_normal{0};
+  if (theta_normal!=0)
+    phi_normal = acos(n[0]/sin(theta_normal));
+  //Create Rotation Matrix to transform global coordinate system to local coordinate system
+  const Real theta_local = -theta_normal;
+  const Real phi_local = -phi_normal;
+  Real Rlocal[3][3]={{(cos(theta_local)*cos(phi_local)),sin(phi_local),(-cos(phi_local)*sin(theta_local))},
+                     {(-cos(theta_local)*sin(phi_local)),cos(phi_local),(sin(theta_local)*sin(phi_local))},
+                     {sin(theta_local),0,cos(theta_local)}};
+  //Sample direction in global coordinate system
+  Real theta{0},phi{0};
   const Real rand_phi = std::rand() / (1. * RAND_MAX);
-  const Real theta = 0.5 * acos(1 - 2 * rand_theta);
+  const Real rand_theta = std::rand() / (1. * RAND_MAX);
+  switch (dim)   // check dimension  2: sample radial position  3:sample spherical position
+  {
+    case 2:
+    {
+      theta = _PI/2;
+      phi = 2 * _PI * rand_phi;
+      break;
+    }
+    case 3:
+    {
+      theta = 0.5 * acos(1 - 2 * rand_theta);
+      phi = 2 * _PI * rand_phi;
+      break;
+    }
+  }
   // std::cout << theta <<std::endl;
-  const Real phi = 2 * _PI * rand_phi;
-  const Real dir_z{sin(theta) * sin(phi)},
-             dir_y{sin(theta) * cos(phi)},
-             dir_x{cos(theta)};
-  const std::vector<Real> direction{dir_x,dir_y,dir_z}; // Radian
-  return direction;
+  const Real dir_x{sin(theta) * cos(phi)},
+             dir_y{sin(theta) * sin(phi)},
+             dir_z{cos(theta)};
+  const std::vector<Real> dir_global{dir_x,dir_y,dir_z};
+  // transform global direction to local direction
+  const std::vector<Real> dir_local{(Rlocal[0][0]*dir_global[0]+Rlocal[0][1]*dir_global[1]+Rlocal[0][2]*dir_global[2]),
+                                    (Rlocal[1][0]*dir_global[0]+Rlocal[1][1]*dir_global[1]+Rlocal[1][2]*dir_global[2]),
+                                    (Rlocal[2][0]*dir_global[0]+Rlocal[2][1]*dir_global[1]+Rlocal[2][2]*dir_global[2])};
+  return dir_local;
+}
+
+const std::vector<Real>
+ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map)
+{
+  const std::vector<Real> n = getNormalFromNodeMap(map);
+  const std::vector<Real> center{getCenterPoint(map)};
+  Real rad{0},d{0};  //radius, distance
+  for (size_t i = 0; i < map.size(); i++)   //find max distance to surrounding nodes
+  {
+    d = getDistanceBetweenVectors(center,map[i]);
+    if (d>rad)
+      rad=d;
+  }
+  // std::cout<<"r = "<<r<<std::endl;
+  // std::cout<<"center = ("<<center[0]<<","<<center[1]<<","<<center[2]<<")"<<std::endl;
+  while(true)
+  {
+    const Real rand_r = std::rand() / (1. * RAND_MAX);
+    const Real r =rad*pow(rand_r,0.5);
+    const std::vector<Real> dir{getRandomDirection(n,2)};
+    // std::cout<<"dir=("<<dir[0]<<","<<dir[1]<<","<<dir[2]<<")"<<std::endl;
+    const std::vector<Real> p{(center[0]+r*dir[0]),(center[1]+r*dir[1]),(center[2]+r*dir[2])};
+    if (isOnSurface(p,map))
+      return p;
+  }
 }
 
 const Real
@@ -241,15 +249,15 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
 
   const std::vector<Real> center{getCenterPoint(map)};
   Real slave_area = getArea(center,map);
-  std::cout << "Slave Element Surface Area ="<< slave_area << std::endl;
+  // std::cout << "Slave Element Surface Area ="<< slave_area << std::endl;
   Real area = getArea(p,map);
-  std::cout << "Calcualted Surface Area ="<< area << std::endl;
-  std::cout << "Area Residual ="<<area - slave_area<< std::endl;
+  // std::cout << "Calcualted Surface Area ="<< area << std::endl;
+  // std::cout << "Area Residual ="<<area - slave_area<< std::endl;
   // bool a{0},b{0};
   if (area>slave_area+1e-6)
   {
     // a=false;
-    std::cout<<"not on surface"<<std::endl;
+    // std::cout<<"not on surface"<<std::endl;
     return false;
   }
   else
@@ -291,9 +299,9 @@ ViewFactor::isIntersected(const std::vector<Real> & p1,
   const std::vector<Real> p2{(p1[0] + d * dir[0]),
                              (p1[1] + d * dir[1]),
                              (p1[2] + d * dir[2])};
-  std::cout << "d : "<<d<< std::endl;
-  std::cout << "target    : (" << p2[0] <<","<< p2[1] <<","<< p2[2] <<")"<< std::endl;
-  std::cout<<"Slave Normal #: ("<<n[0]<<","<<n[1]<<","<<n[2]<<")"<<std::endl;
+  // std::cout << "d : "<<d<< std::endl;
+  // std::cout << "target    : (" << p2[0] <<","<< p2[1] <<","<< p2[2] <<")"<< std::endl;
+  // std::cout<<"Slave Normal #: ("<<n[0]<<","<<n[1]<<","<<n[2]<<")"<<std::endl;
   if (isOnSurface(p2,map))
     return true;
   else
@@ -460,11 +468,11 @@ ViewFactor::finalize()
                       << "...........done" << std::endl;
             for (auto master_node : master_node_map)
             {
-              std::cout <<"Master Node #"<<master_node.first<<" : ("<<(master_node.second)[0]<<","
-                        <<(master_node.second)[1]<<","<<(master_node.second)[2]<<")"<<std::endl;
+              // std::cout <<"Master Node #"<<master_node.first<<" : ("<<(master_node.second)[0]<<","
+              //           <<(master_node.second)[1]<<","<<(master_node.second)[2]<<")"<<std::endl;
             }
             const std::vector<Real> master_normal = getNormalFromNodeMap(master_node_map);
-            std::cout <<"Master Normal : (" << master_normal[0]<<"," << master_normal[1] <<","<< master_normal[2]<<")" <<std::endl;
+            // std::cout <<"Master Normal : (" << master_normal[0]<<"," << master_normal[1] <<","<< master_normal[2]<<")" <<std::endl;
             unsigned int counter{0};
             Real viewfactor{0};
             Real viewfactor_src{0};
@@ -472,28 +480,28 @@ ViewFactor::finalize()
             {
               viewfactor_src = 0;
               const std::vector<Real> source_point = getRandomPoint(master_node_map);
-              std::cout << "source_point: ("
-              <<source_point[0]<<","<<source_point[1]<<","<<source_point[2]<<")"<<std::endl;
+              // std::cout << "source_point: ("
+              // <<source_point[0]<<","<<source_point[1]<<","<<source_point[2]<<")"<<std::endl;
               counter = 0;
               for (size_t ray = 0; ray < _samplingNumber; ray++)
               {
                 const std::vector<Real> direction = getRandomDirection(master_normal);
                 const Real theta = getAngleBetweenVectors(direction, master_normal);   // in Degree
-                std::cout << "direction: (" << direction[0] << "," << direction[1] << ","
-                          << direction[2] << ")" << std::endl;
-                std::cout <<"theta : "<< theta << std::endl;
+                // std::cout << "direction: (" << direction[0] << "," << direction[1] << ","
+                //           << direction[2] << ")" << std::endl;
+                // std::cout <<"theta : "<< theta << std::endl;
                 if (theta < 90) // check forward sampling
                 {
                   if (isIntersected(source_point, direction, slave_node_map)) // check Intersecting
                   {
                     counter++;
-                    std::cout << "!! Intersected !!" << std::endl;
+                    // std::cout << "!! Intersected !!" << std::endl;
                     // std::cout <<" Count:"<<counter<<std::endl;
                   }
                 }
               }
               viewfactor_src = (counter * 1.0) / _samplingNumber;
-              std::cout<<viewfactor_src<<std::endl;
+              // std::cout<<"viewfactor_src= "<<viewfactor_src<<std::endl;
               viewfactor += viewfactor_src;
             }
             _element_viewfactors[master_bid][slave_bid][master_elem.first][slave_elem.first] = (viewfactor * 1.0) / _sourceNumber;

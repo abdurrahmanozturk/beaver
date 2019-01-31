@@ -579,7 +579,7 @@ ViewFactor::finalize()
   }
 }
 
-Real ViewFactor::getValue()
+Real ViewFactor::getViewFactor()
 {
   return _F[_boundary_list[0]][_boundary_list[1]];
 }

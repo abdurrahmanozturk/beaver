@@ -152,7 +152,7 @@ ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim)
     ////FIX FOR ny<0
     if (n[1]<0)
     {
-      phi_normal = acos(n[0]/sin(theta_normal));
+      phi_normal = 2*_PI-acos(n[0]/sin(theta_normal));
     }
     else
     {
@@ -345,8 +345,8 @@ ViewFactor::printViewFactors()
     auto bnd1_map = _element_viewfactors[bnd1.first];
     for (const auto & bnd2 : bnd1_map)
     {
-      // if (_viewfactors[bnd1.first][bnd2.first]==0)
-      //   continue;
+      if (_viewfactors[bnd1.first][bnd2.first]==0)
+        continue;
       auto bnd2_map = bnd1_map[bnd2.first];
       bnd_viewfactor = 0;
       for (const auto & elem1 : bnd2_map)
@@ -361,7 +361,7 @@ ViewFactor::printViewFactors()
                     << "Bnd " << bnd2.first << " :\tElem " << elem2.first
                     << "\tView Factor = " << elem2.second << std::endl;
         }
-        std::cout << "        \tElem " << elem1.first << "  --->  "
+        std::cout << "\tElem " << elem1.first << "  --->  "
                   << "Bnd " << bnd2.first << "\t  Total View Factor = " << elem_to_bnd_viewfactor
                   << "\n"<<std::endl;
         bnd_viewfactor += elem_to_bnd_viewfactor;
@@ -470,7 +470,7 @@ ViewFactor::finalize()
     const auto master_boundary = _node_set[master_bid];
     for (auto slave_bid : _boundary_ids)
     {
-      std::cout<<_viewfactors[slave_bid][master_bid]<<std::endl;
+      // std::cout<<_viewfactors[slave_bid][master_bid]<<std::endl;
       if ((_viewfactors[slave_bid][master_bid]!=0) || (master_bid==slave_bid))
         continue;
       viewfactor = 0;
@@ -561,14 +561,14 @@ ViewFactor::finalize()
         }
       }
       viewfactor *= (1.0/master_boundary.size());
-      if (_printScreen==true)
-      {
+      // if (_printScreen==true)
+      // {
         std::cout<<"Boundary View Factor = "<<viewfactor<<std::endl;
-      }
+      // }
       _viewfactors[master_bid][slave_bid]=viewfactor;
     }
   }
-  printViewFactors();
+  // printViewFactors();
   if (_printScreen==true)
   {
     printViewFactors();

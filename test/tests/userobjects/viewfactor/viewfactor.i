@@ -71,11 +71,9 @@
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '1 8'
-    # master_boundary = 2
-    # slave_boundary = 7
+    boundary = '5 12'
     sampling_number = 100
-    source_number = 1
+    source_number = 100
     print_screen = true
     parallel_planes = '2.0 1.0 1.0'
   [../]

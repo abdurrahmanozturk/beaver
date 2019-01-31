@@ -563,7 +563,8 @@ ViewFactor::finalize()
       viewfactor *= (1.0/master_boundary_map.size());
       // if (_printScreen==true)
       // {
-        std::cout<<"Boundary View Factor = "<<viewfactor<<std::endl;
+        std::cout << "-----------------------------------------" << std::endl;
+        std::cout<<"F"<<master_bnd_id<<slave_bnd_id<<" = "<<viewfactor<<std::endl;
       // }
       _viewfactors[master_bnd_id][slave_bnd_id]=viewfactor;
     }

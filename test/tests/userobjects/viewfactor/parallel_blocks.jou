@@ -1,8 +1,8 @@
 #cubes
 reset
 brick x 1 y 2 z 2
-brick x 1 y 2 z 2
-move volume 2 z 3
+brick x 1 y 10 z 10
+move volume 2 x 3
 #subtract body 2 from body 1
 #volume 1 volume 2 size auto factor 32
 volume 1 volume 2 size 1

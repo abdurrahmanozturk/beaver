@@ -71,10 +71,10 @@
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '2 7'
+    boundary = '7 2'
     sampling_number = 100
     source_number = 100
-    print_screen = true
+    print_screen = false
     parallel_planes = '2.0 1.0 1.0'
   [../]
 []

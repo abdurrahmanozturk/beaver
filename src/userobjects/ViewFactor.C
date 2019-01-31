@@ -26,13 +26,13 @@ validParams<ViewFactor>()
 
 ViewFactor::ViewFactor(const InputParameters & parameters)
   : SideUserObject(parameters),
+    _current_normals(_assembly.normals()),
+    _boundary_ids(boundaryIDs()),
     _PI(acos(-1)), // 3.141592653589793238462643383279502884
     _printScreen(getParam<bool>("print_screen")),
     _samplingNumber(getParam<unsigned int>("sampling_number")),
     _sourceNumber(getParam<unsigned int>("source_number")),
-    _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes")),
-    _current_normals(_assembly.normals()),
-    _boundary_ids(boundaryIDs())
+    _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes"))
     // _master_boundary(getParam<std::vector<BoundaryName>>("master_boundary")),
     // _slave_boundary(getParam<std::vector<BoundaryName>>("slave_boundary"))
 {
@@ -340,12 +340,12 @@ ViewFactor::printViewFactors()
   Real elem_to_bnd_viewfactor{0};
   Real viewfactor{0};
   Real master_elem_number{0};
-  for (const auto & master_boundary : _element_viewfactors)
+  for (const auto & master_boundary : _viewfactors_map)
   {
-    auto master_boundary_map = _element_viewfactors[master_boundary.first];
+    auto master_boundary_map = _viewfactors_map[master_boundary.first];
     for (const auto & slave_boundary : master_boundary_map)
     {
-      if (_viewfactors[master_boundary.first][slave_boundary.first]==0)
+      if (_F[master_boundary.first][slave_boundary.first]==0)
         continue;
       auto slave_boundary_map = master_boundary_map[slave_boundary.first];
       viewfactor = 0;
@@ -421,6 +421,7 @@ ViewFactor::initialize()
     std::cout << "---------------------- " << std::endl;
     for (const auto bid : _boundary_ids)
     {
+      _boundary_list.push_back(bid);
       std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
     }
   }
@@ -440,8 +441,8 @@ ViewFactor::execute()
   const auto current_boundary_name = _mesh.getBoundaryName(current_boundary_id);
   unsigned int current_element_id =(_current_elem->id());
   //Define Map for current boundary and current element and put Elem pointer for current element side
-  _element_set_ptr[current_boundary_id][current_element_id] = _current_side_elem;
-  _element_set[current_boundary_id][current_element_id] = _current_side_elem->n_nodes();
+  // _element_set_ptr[current_boundary_id][current_element_id] = _current_side_elem;
+  // _element_set[current_boundary_id][current_element_id] = _current_side_elem->n_nodes();
   // std::cout << "------------------------------"<< std::endl;
   // std::cout << "-------boundary #: " << current_boundary_id << " : "<<current_boundary_name<< std::endl;
   // std::cout << "-----------elem #: " << (_current_elem->id()) << std::endl;
@@ -451,11 +452,12 @@ ViewFactor::execute()
   for (unsigned int i = 0; i < n; i++)
   {
     unsigned int _current_node_id = i;
-    const Node * node = _element_set_ptr[current_boundary_id][current_element_id]->node_ptr(i);    //get nodes
+    // const Node * node = _element_set_ptr[current_boundary_id][current_element_id]->node_ptr(i);    //get nodes
+    const Node * node = _current_side_elem->node_ptr(i);    //get nodes
     for (unsigned int j = 0; j < 3; j++)         // Define nodal coordinates and normals
     {
       _coordinates_map[current_boundary_id][current_element_id][_current_node_id].push_back((*node)(j));
-      _normal_map[current_boundary_id][current_element_id][_current_node_id].push_back(_normals[i](j));
+      // _normal_map[current_boundary_id][current_element_id][_current_node_id].push_back(_normals[i](j));
     }
     // std::cout <<"Node #"<<i<<" : ("<<(*node)(0)<<","<<(*node)(1)<<","<<(*node)(2)<<")\t";
     // std::cout <<" Normal : ("<<(normal)(0)<<","<<(normal)(1)<<","<<(normal)(2)<<")"<< std::endl;
@@ -470,9 +472,10 @@ ViewFactor::finalize()
     const auto master_boundary_map = _coordinates_map[master_bnd_id];
     for (auto slave_bnd_id : _boundary_ids)
     {
-      // std::cout<<_viewfactors[slave_bnd_id][master_bnd_id]<<std::endl;
-      if ((_viewfactors[slave_bnd_id][master_bnd_id]!=0) || (master_bnd_id==slave_bnd_id))
+      // std::cout<<_F[slave_bnd_id][master_bnd_id]<<std::endl;
+      if ((_F[slave_bnd_id][master_bnd_id]!=0) || (slave_bnd_id==master_bnd_id))
         continue;
+
       viewfactor = 0;
       const auto slave_boundary_map = _coordinates_map[slave_bnd_id];
       const auto master_bnd_name = _mesh.getBoundaryName(master_bnd_id);
@@ -527,7 +530,7 @@ ViewFactor::finalize()
                             << direction[2] << ")" << std::endl;
                   std::cout <<"theta : "<< theta << std::endl;
                 }
-                if (theta < 90) // check forward sampling
+                if (theta < 90) // check forward sampling, in direction of surface normal
                 {
                   if (isIntersected(source_point, direction, slave_elem_map)) // check Intersecting
                   {
@@ -549,11 +552,13 @@ ViewFactor::finalize()
             {
               std::cout<<"\tElement View Factor = "<<viewfactor_per_elem<<std::endl;
             }
-            _element_viewfactors[master_bnd_id][slave_bnd_id][master_elem.first][slave_elem.first] = viewfactor_per_elem;
+            _viewfactors_map[master_bnd_id][slave_bnd_id][master_elem.first][slave_elem.first] = viewfactor_per_elem;
+            _viewfactors[master_elem.first][slave_elem.first] = viewfactor_per_elem;
           }
           else
           {
-            _element_viewfactors[master_bnd_id][slave_bnd_id][master_elem.first][slave_elem.first] = 0;
+            _viewfactors_map[master_bnd_id][slave_bnd_id][master_elem.first][slave_elem.first] = 0;
+            _viewfactors[master_elem.first][slave_elem.first]=0;
             viewfactor +=0;
             std::cout << "Element #" << master_elem.first << " -> Element #" << slave_elem.first
                       << "......invisible" << std::endl;
@@ -561,12 +566,9 @@ ViewFactor::finalize()
         }
       }
       viewfactor *= (1.0/master_boundary_map.size());
-      // if (_printScreen==true)
-      // {
-        std::cout << "-----------------------------------------" << std::endl;
-        std::cout<<"F"<<master_bnd_id<<slave_bnd_id<<" = "<<viewfactor<<std::endl;
-      // }
-      _viewfactors[master_bnd_id][slave_bnd_id]=viewfactor;
+      std::cout << "-----------------------------------------" << std::endl;
+      std::cout<<"F"<<master_bnd_id<<slave_bnd_id<<" = "<<viewfactor<<std::endl;
+      _F[master_bnd_id][slave_bnd_id]=viewfactor;
     }
   }
   // printViewFactors();
@@ -576,7 +578,8 @@ ViewFactor::finalize()
     printNodesNormals();
   }
 }
-// Real ViewFactor::getViewFactor()
-// {
-//   return _viewfactors[_boundary_ids[0]][_boundary_ids[1]];
-// }
+
+Real ViewFactor::getValue()
+{
+  return _F[_boundary_list[0]][_boundary_list[1]];
+}

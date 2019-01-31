@@ -55,8 +55,8 @@ public:
   std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real>>>> _element_viewfactors;
   std::map<BoundaryID, std::map<BoundaryID, Real>> _viewfactors;
   // std::map<unsigned int, std::map<unsigned int, unsigned int> > _view_factor_set;
-  std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _node_set;
-  std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _normal_set;
+  std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _coordinates_map;
+  std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _normal_map;
 };
 
 #endif // VIEWFACTOR_H

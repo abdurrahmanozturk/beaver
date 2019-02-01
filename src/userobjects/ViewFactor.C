@@ -318,18 +318,33 @@ const bool
 ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
                       const std::map<unsigned int, std::vector<Real>> & slave)
 {
+  std::map<unsigned int, std::vector<Real>> master_map = master;
+  std::map<unsigned int, std::vector<Real>> slave_map = slave;
   const std::vector<Real> master_normal = getNormalFromNodeMap(master);
   const std::vector<Real> slave_normal = getNormalFromNodeMap(slave);
-  for (size_t i = 0; i < 1000; i++) // check visibility for different points
+  // check visibility for different points, can be removed for optimization
+  for (size_t i = 0; i < master.size(); i++)
   {
-    const std::vector<Real> master_point = getRandomPoint(master);
-    const std::vector<Real> slave_point = getRandomPoint(slave);
-    const std::vector<Real> master_slave = {(slave_point[0]-master_point[0]),(slave_point[1]-master_point[1]),(slave_point[2]-master_point[2])};
-    const std::vector<Real> slave_master = {(master_point[0]-slave_point[0]),(master_point[1]-slave_point[1]),(master_point[2]-slave_point[2])};
-    Real theta_master_slave = getAngleBetweenVectors(master_normal,master_slave);
-    Real theta_slave_master = getAngleBetweenVectors(slave_normal,slave_master);
-    if (theta_slave_master<90 && theta_master_slave<90)
-      return true;
+    const std::vector<Real> master_node = master_map[i];
+    for (size_t j = 0; j < slave.size(); j++)
+    {
+      const std::vector<Real> slave_node = slave_map[j];
+      // const std::vector<Real> master_point = getRandomPoint(master);
+      // const std::vector<Real> slave_point = getRandomPoint(slave);
+      const Real d = getDistanceBetweenPoints(master_node,slave_node);
+      const Real dir_x = (slave_node[0]-master_node[0])/d;
+      const Real dir_y = (slave_node[1]-master_node[1])/d;
+      const Real dir_z = (slave_node[2]-master_node[2])/d;
+      //check whether there is surface between master and slave or not
+      //loop over all boundaries and elements in mesh not defined boundaries
+      //to check it, use isIntersected() function
+      const std::vector<Real> master_slave = {(slave_node[0]-master_node[0]),(slave_node[1]-master_node[1]),(slave_node[2]-master_node[2])};
+      const std::vector<Real> slave_master = {(master_node[0]-slave_node[0]),(master_node[1]-slave_node[1]),(master_node[2]-slave_node[2])};
+      Real theta_master_slave = getAngleBetweenVectors(master_normal,master_slave);
+      Real theta_slave_master = getAngleBetweenVectors(slave_normal,slave_master);
+      if (theta_slave_master<90 && theta_master_slave<90)
+        return true;
+    }
   }
   return false;
 }

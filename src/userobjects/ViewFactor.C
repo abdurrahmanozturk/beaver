@@ -17,6 +17,7 @@ validParams<ViewFactor>()
   params.addParam<unsigned int>("sampling_number",100, "Number of Sampling");
   params.addParam<unsigned int>("source_number",100, "Number of Source Points");
   params.addParam<bool>("print_screen",false, "Print to Screen");
+  params.addParam<Real>("area_tolerance",1e-6, "Area Calculation Tolerance");
   params.addParam<std::vector<Real>>("parallel_planes",
                                      "{W1,W2,H} values for parallel planes to calculate view factor analytically");
   // params.addRequiredParam<std::vector<BoundaryName>>("master_boundary", "Master Boundary ID");
@@ -30,6 +31,7 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
     _boundary_ids(boundaryIDs()),
     _PI(acos(-1)), // 3.141592653589793238462643383279502884
     _printScreen(getParam<bool>("print_screen")),
+    _area_tol(getParam<Real>("area_tolerance")),
     _samplingNumber(getParam<unsigned int>("sampling_number")),
     _sourceNumber(getParam<unsigned int>("source_number")),
     _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes"))
@@ -233,24 +235,30 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
   // Real z_min = *(std::min_element(z.begin(), z.end()));
 
   const std::vector<Real> center{getCenterPoint(map)};
-  Real slave_area = getArea(center,map);
+  Real elem_area = getArea(center,map);
   Real area = getArea(p,map);
   // std::cout << "Slave Element Surface Area ="<< slave_area << std::endl;
   // std::cout << "Calcualted Surface Area ="<< area << std::endl;
   // std::cout << "Area Residual ="<<area - slave_area<< std::endl;
   // bool a{0},b{0};
-  if (area>slave_area+1e-6)
-  {
-    // a=false;
-    // std::cout<<"not on surface"<<std::endl;
-    return false;
-  }
-  else
-  {
-    // a=true;
-    // std::cout<<"on surface"<<std::endl;
+
+  if ((area-elem_area)<_area_tol)
     return true;
-  }
+  else
+    return false;
+  // if (area>slave_area+1e-6)
+  // {
+  //   // a=false;
+  //   // std::cout<<"not on surface"<<std::endl;
+  //   return false;
+  // }
+  // else
+  // {
+  //   // a=true;
+  //   // std::cout<<"on surface"<<std::endl;
+  //   return true;
+  // }
+
   // if (p[0]<=x_max && p[0]>=x_min && p[1]<=y_max && p[1]>=y_min && p[2]<=z_max && p[2]>=z_min)   // FIX THIS
   // {
   //   b=true;
@@ -472,8 +480,6 @@ ViewFactor::finalize()
     {
       // std::cout<<_F[slave_bnd_id][master_bnd_id]<<std::endl;
       // if ((_F[slave_bnd_id][master_bnd_id]!=0) || (slave_bnd_id==master_bnd_id))  // fix this for identical surfaces
-      if (slave_bnd_id==master_bnd_id)
-        continue;
 
       viewfactor = 0;
       const auto slave_boundary_map = _coordinates_map[slave_bnd_id];
@@ -563,8 +569,8 @@ ViewFactor::finalize()
             //           << "......invisible" << std::endl;
           }
         }
-        std::cout << "Boundary #" <<master_bnd_id<<":Element #" << master_elem.first << " -> Boundary #" << slave_bnd_id
-                  << "...........done" << std::endl;
+        // std::cout << "Boundary #" <<master_bnd_id<<":Element #" << master_elem.first << " -> Boundary #" << slave_bnd_id
+        //           << "...........done" << std::endl;
       }
       viewfactor *= (1.0/master_boundary_map.size());
       // std::cout << "-----------------------------------------" << std::endl;
@@ -572,7 +578,7 @@ ViewFactor::finalize()
       _F[master_bnd_id][slave_bnd_id]=viewfactor;
     }
   }
-  printViewFactors();
+  // printViewFactors();
   if (_printScreen==true)
   {
     printViewFactors();

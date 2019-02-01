@@ -89,10 +89,10 @@ ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map)
     //find 2 vectors in surface
   std::vector<Real> v12{(p2[0]-p1[0]),
                         (p2[1]-p1[1]),
-                        (p2[1]-p1[1])};
+                        (p2[2]-p1[2])};
   std::vector<Real> v13{(p3[0]-p1[0]),
                         (p3[1]-p1[1]),
-                        (p3[1]-p1[1])};
+                        (p3[2]-p1[2])};
   //cross product of vectors gives surface normal
   std::vector<Real> n(v12.size());
   n[0] = v12[1]*v13[2]-v12[2]*v13[1];

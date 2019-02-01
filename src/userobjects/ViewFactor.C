@@ -148,8 +148,6 @@ ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim)
   Real phi_normal{0};
   if (theta_normal!=0)
   {
-
-    ////FIX FOR ny<0
     if (n[1]<0)
     {
       phi_normal = 2*_PI-acos(n[0]/sin(theta_normal));
@@ -345,7 +343,7 @@ ViewFactor::printViewFactors()
     auto master_boundary_map = _viewfactors_map[master_boundary.first];
     for (const auto & slave_boundary : master_boundary_map)
     {
-      if (_F[master_boundary.first][slave_boundary.first]==0)
+      if (_F[master_boundary.first][slave_boundary.first]==0)    // no need bec
         continue;
       auto slave_boundary_map = master_boundary_map[slave_boundary.first];
       viewfactor = 0;
@@ -428,8 +426,8 @@ ViewFactor::initialize()
   ElemType elem_type = _current_elem->type();   //HEX8=10 QUAD4=5
   unsigned int n_elem = _current_elem->n_nodes();
   std::cout << n_elem <<"-noded element (typeid="<<elem_type<<")"<< std::endl;
-  if (n_elem!=8)
-    mooseError("ViewFactor UserObject can only be used for 8-noded Hexagonal Elements");
+  // if (n_elem!=8)
+  //   mooseError("ViewFactor UserObject can only be used for 8-noded Hexagonal Elements");
 }
 
 void
@@ -473,7 +471,8 @@ ViewFactor::finalize()
     for (auto slave_bnd_id : _boundary_ids)
     {
       // std::cout<<_F[slave_bnd_id][master_bnd_id]<<std::endl;
-      if ((_F[slave_bnd_id][master_bnd_id]!=0) || (slave_bnd_id==master_bnd_id))
+      // if ((_F[slave_bnd_id][master_bnd_id]!=0) || (slave_bnd_id==master_bnd_id))  // fix this for identical surfaces
+      if (slave_bnd_id==master_bnd_id)
         continue;
 
       viewfactor = 0;
@@ -492,8 +491,8 @@ ViewFactor::finalize()
           const auto slave_elem_map = _coordinates_map[slave_bnd_id][slave_elem.first];
           if (isVisible(master_elem_map,slave_elem_map))
           {
-            std::cout << "Element #" << master_elem.first << " -> Element #" << slave_elem.first
-                      << "...........done" << std::endl;
+            // std::cout << "Element #" << master_elem.first << " -> Element #" << slave_elem.first
+            //           << "...........done" << std::endl;
             if (_printScreen==true)
             {
               for (auto master_node : master_elem_map)
@@ -560,18 +559,20 @@ ViewFactor::finalize()
             _viewfactors_map[master_bnd_id][slave_bnd_id][master_elem.first][slave_elem.first] = 0;
             _viewfactors[master_elem.first][slave_elem.first]=0;
             viewfactor +=0;
-            std::cout << "Element #" << master_elem.first << " -> Element #" << slave_elem.first
-                      << "......invisible" << std::endl;
+            // std::cout << "Element #" << master_elem.first << " -> Element #" << slave_elem.first
+            //           << "......invisible" << std::endl;
           }
         }
+        std::cout << "Element #" << master_elem.first << " -> Boundary #" << slave_bnd_id
+                  << "...........done" << std::endl;
       }
       viewfactor *= (1.0/master_boundary_map.size());
-      std::cout << "-----------------------------------------" << std::endl;
+      // std::cout << "-----------------------------------------" << std::endl;
       std::cout<<"F"<<master_bnd_id<<slave_bnd_id<<" = "<<viewfactor<<std::endl;
       _F[master_bnd_id][slave_bnd_id]=viewfactor;
     }
   }
-  // printViewFactors();
+  printViewFactors();
   if (_printScreen==true)
   {
     printViewFactors();

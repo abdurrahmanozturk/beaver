@@ -20,7 +20,7 @@ public:
   virtual void threadJoin(const UserObject & y) override {}
 
   const Real getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
-  const Real getDistanceBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
+  const Real getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2);
   const Real getAnalyticalViewFactor(const std::vector<Real> & v);
   const Real getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real> > map);
   const Real getVectorLength(const std::vector<Real> & v);
@@ -33,11 +33,12 @@ public:
   // std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real >
   // > > > &map);
   const bool isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map);
-  const bool isVisible(const std::map<unsigned int, std::vector<Real>> & master,
-                       const std::map<unsigned int, std::vector<Real>> & slave);
   const bool isIntersected(const std::vector<Real> & p1,
                            const std::vector<Real> & dir,
                            std::map<unsigned int, std::vector<Real>> map);
+  const bool isVisible(const std::map<unsigned int, std::vector<Real>> & master,
+                       const std::map<unsigned int, std::vector<Real>> & slave);
+
   void printViewFactors();
   void printNodesNormals();
   // unsigned int _qp;

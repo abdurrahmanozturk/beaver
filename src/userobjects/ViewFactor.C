@@ -52,7 +52,7 @@ ViewFactor::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector
 }
 
 const Real
-ViewFactor::getDistanceBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2)
+ViewFactor::getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2)
 {
   Real d = pow(((v2[0]-v1[0])*(v2[0]-v1[0])
                +(v2[1]-v1[1])*(v2[1]-v1[1])
@@ -82,20 +82,19 @@ ViewFactor::getVectorLength(const std::vector<Real> & v)
 const std::vector<Real>
 ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map)
 {
-  std::vector<Real> v1 = map[0];
-  std::vector<Real> v2 = map[1];
-  std::vector<Real> v3 = map[2];
-  std::vector<Real> v12(v1.size());
-  std::vector<Real> v13(v1.size());
-  //find 2 vectors in surface
-  v12[0] = v2[0]-v1[0];
-  v12[1] = v2[1]-v1[1];
-  v12[2] = v2[2]-v1[2];
-  v13[0] = v3[0]-v1[0];
-  v13[1] = v3[1]-v1[1];
-  v13[2] = v3[2]-v1[2];
+  // three points in plane
+  std::vector<Real> p1 = map[0];
+  std::vector<Real> p2 = map[1];
+  std::vector<Real> p3 = map[2];
+    //find 2 vectors in surface
+  std::vector<Real> v12{(p2[0]-p1[0]),
+                        (p2[1]-p1[1]),
+                        (p2[1]-p1[1])};
+  std::vector<Real> v13{(p3[0]-p1[0]),
+                        (p3[1]-p1[1]),
+                        (p3[1]-p1[1])};
   //cross product of vectors gives surface normal
-  std::vector<Real> n(v1.size());
+  std::vector<Real> n(v12.size());
   n[0] = v12[1]*v13[2]-v12[2]*v13[1];
   n[1] = v12[2]*v13[0]-v12[0]*v13[2];
   n[2] = v12[0]*v13[1]-v12[1]*v13[0];
@@ -120,26 +119,6 @@ ViewFactor::getCenterPoint(std::map<unsigned int, std::vector<Real> > map)
   }
   std::vector<Real> center{(sum_x/n),(sum_y/n),(sum_z/n)};  //center is geometric mean nodes
   return center;
-}
-
-const bool
-ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
-                      const std::map<unsigned int, std::vector<Real>> & slave)
-{
-  const std::vector<Real> master_normal = getNormalFromNodeMap(master);
-  const std::vector<Real> slave_normal = getNormalFromNodeMap(slave);
-  for (size_t i = 0; i < 1000; i++) // check visibility for different points
-  {
-    const std::vector<Real> master_point = getRandomPoint(master);
-    const std::vector<Real> slave_point = getRandomPoint(slave);
-    const std::vector<Real> master_slave = {(slave_point[0]-master_point[0]),(slave_point[1]-master_point[1]),(slave_point[2]-master_point[2])};
-    const std::vector<Real> slave_master = {(master_point[0]-slave_point[0]),(master_point[1]-slave_point[1]),(master_point[2]-slave_point[2])};
-    Real theta_master_slave = getAngleBetweenVectors(master_normal,master_slave);
-    Real theta_slave_master = getAngleBetweenVectors(slave_normal,slave_master);
-    if (theta_slave_master<90 && theta_master_slave<90)
-      return true;
-  }
-  return false;
 }
 
 const std::vector<Real>
@@ -284,7 +263,7 @@ ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map)
   Real rad{0},d{0};  //radius, distance
   for (size_t i = 0; i < map.size(); i++)   //find max distance to surrounding nodes
   {
-    d = getDistanceBetweenVectors(center,map[i]);
+    d = getDistanceBetweenPoints(center,map[i]);
     if (d>rad)
       rad=d;
   }
@@ -333,6 +312,26 @@ ViewFactor::isIntersected(const std::vector<Real> & p1,
     return true;
   else
     return false;
+}
+
+const bool
+ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
+                      const std::map<unsigned int, std::vector<Real>> & slave)
+{
+  const std::vector<Real> master_normal = getNormalFromNodeMap(master);
+  const std::vector<Real> slave_normal = getNormalFromNodeMap(slave);
+  for (size_t i = 0; i < 1000; i++) // check visibility for different points
+  {
+    const std::vector<Real> master_point = getRandomPoint(master);
+    const std::vector<Real> slave_point = getRandomPoint(slave);
+    const std::vector<Real> master_slave = {(slave_point[0]-master_point[0]),(slave_point[1]-master_point[1]),(slave_point[2]-master_point[2])};
+    const std::vector<Real> slave_master = {(master_point[0]-slave_point[0]),(master_point[1]-slave_point[1]),(master_point[2]-slave_point[2])};
+    Real theta_master_slave = getAngleBetweenVectors(master_normal,master_slave);
+    Real theta_slave_master = getAngleBetweenVectors(slave_normal,slave_master);
+    if (theta_slave_master<90 && theta_master_slave<90)
+      return true;
+  }
+  return false;
 }
 
 void

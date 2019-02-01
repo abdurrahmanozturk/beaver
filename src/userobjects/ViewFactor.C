@@ -563,7 +563,7 @@ ViewFactor::finalize()
             //           << "......invisible" << std::endl;
           }
         }
-        std::cout << "Element #" << master_elem.first << " -> Boundary #" << slave_bnd_id
+        std::cout << "Boundary #" <<master_bnd_id<<":Element #" << master_elem.first << " -> Boundary #" << slave_bnd_id
                   << "...........done" << std::endl;
       }
       viewfactor *= (1.0/master_boundary_map.size());

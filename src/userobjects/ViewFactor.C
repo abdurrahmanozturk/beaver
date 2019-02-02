@@ -387,12 +387,12 @@ ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
     }
     const std::vector<Real> side_center = getCenterPoint(slave);
     d2 = getDistanceBetweenPoints(master_center,side_center);
-    if (isSidetoSide(master,side_map) && isIntersected(master_center,dir,side_map) && (d2-d1)<_error_tol)
+    if (isSidetoSide(master,side_map) && isIntersected(master_center,dir,side_map) && d2<d1)
       {
-        if (_printScreen==true)
-        {
+        // if (_printScreen==true)
+        // {
           std::cout<<"Boundary #"<<bnd_id<<" is blocking visibility."<<std::endl;
-        }
+        // }
         return false;
       }
   }

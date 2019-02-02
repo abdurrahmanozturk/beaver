@@ -1,7 +1,7 @@
 #view_factor calculations for 2 parallel blocks
 [Mesh]
   type = FileMesh
-  file = parallel_blocks.e
+  file = coaxial_cylinders.e
   # type = GeneratedMesh
   # xmax = 1
   # xmin = 0
@@ -71,7 +71,7 @@
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '2 13'
+    boundary = '2 5'
     sampling_number = 10
     source_number = 10
     print_screen = false

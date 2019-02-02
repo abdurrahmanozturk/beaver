@@ -53,7 +53,7 @@ public:
   const std::set<BoundaryID> _mesh_nodeset_ids;
   const double _PI;
   const bool _printScreen;
-  const Real _area_tol;   //area tolerance
+  const Real _error_tol;   //tolerance
   const unsigned int _samplingNumber,_sourceNumber;
   std::vector<Real> _parallel_planes_geometry;
   std::vector<BoundaryID> _boundary_list;

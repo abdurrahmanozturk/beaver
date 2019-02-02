@@ -17,7 +17,7 @@ validParams<ViewFactor>()
   params.addParam<unsigned int>("sampling_number",100, "Number of Sampling");
   params.addParam<unsigned int>("source_number",100, "Number of Source Points");
   params.addParam<bool>("print_screen",false, "Print to Screen");
-  params.addParam<Real>("area_tolerance",1e-6, "Area Calculation Tolerance");
+  params.addParam<Real>("error_tolerance",1e-6, "Tolerance for calculations");
   params.addParam<std::vector<Real>>("parallel_planes",
                                      "{W1,W2,H} values for parallel planes to calculate view factor analytically");
   // params.addRequiredParam<std::vector<BoundaryName>>("master_boundary", "Master Boundary ID");
@@ -34,7 +34,7 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
     _mesh_nodeset_ids(_mesh.meshNodesetIds()),
     _PI(acos(-1)), // 3.141592653589793238462643383279502884
     _printScreen(getParam<bool>("print_screen")),
-    _area_tol(getParam<Real>("area_tolerance")),
+    _error_tol(getParam<Real>("error_tolerance")),
     _samplingNumber(getParam<unsigned int>("sampling_number")),
     _sourceNumber(getParam<unsigned int>("source_number")),
     _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes"))
@@ -224,7 +224,7 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
   // std::cout << "Area Residual ="<<area - slave_area<< std::endl;
   // bool a{0},b{0};
 
-  if ((area-elem_area)<_area_tol)
+  if ((area-elem_area)<_error_tol)
     return true;
   else
     return false;
@@ -387,12 +387,12 @@ ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
     }
     const std::vector<Real> side_center = getCenterPoint(slave);
     d2 = getDistanceBetweenPoints(master_center,side_center);
-    if (isSidetoSide(master,side_map) && isIntersected(master_center,dir,side_map) && (d2<d1))
+    if (isSidetoSide(master,side_map) && isIntersected(master_center,dir,side_map) && (d2-d1)<_error_tol)
       {
-        // if (_printScreen==true)
-        // {
-          std::cout<<"Boundary #"<<bnd_id<<"blocking visibility."<<std::endl;
-        // }
+        if (_printScreen==true)
+        {
+          std::cout<<"Boundary #"<<bnd_id<<" is blocking visibility."<<std::endl;
+        }
         return false;
       }
   }
@@ -495,37 +495,6 @@ ViewFactor::initialize()
       std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
     }
   }
-  for (const auto &bid : _mesh_boundary_ids)
-  {
-    std::cout<<"Bnd #"<<bid<<" : "<<_mesh.getBoundaryName(bid)<<std::endl;
-  }
-  std::cout<<"bnd set size : "<<_mesh_boundary_ids.size()<<std::endl;
-  std::cout<<"side set size : "<<_mesh_sideset_ids.size()<<std::endl;
-  std::cout<<"node set size : "<<_mesh_nodeset_ids.size()<<std::endl;
-
-  // Data structures to hold the element boundary information
-  // std::vector<dof_id_type> elem_list;
-  // std::vector<unsigned short int> side_list;
-  // std::vector<boundary_id_type> id_list;
-
-
-  // _mesh.buildSideList(elem_list, side_list, id_list);
-  // std::cout << "-----------side list#: " << id_list.size() << std::endl;
-  // std::cout << "-----------side list#: " << elem_list.size() << std::endl;
-  // std::cout << "-----------side list#: " << side_list.size() << std::endl;
-
-  // //Loop over elements
-  // for (const auto & elem : mesh.active_element_ptr_range())
-  //   for (auto s : elem->side_index_range())
-  //     if (elem->neighbor_ptr(s) == nullptr) // on the boundary
-  //       {
-  //         std::unique_ptr<const Elem> side = elem->build_side_ptr(s);
-  //
-  //         auto nodes_on_side = elem->nodes_on_side(s);
-  //
-  //         for (auto & node_id : nodes_on_side)
-  //           on_boundary[node_id] = true;
-  //       }
 
   ElemType elem_type = _current_elem->type();   //HEX8=10 QUAD4=5
   unsigned int n_elem = _current_elem->n_nodes();
@@ -670,7 +639,7 @@ ViewFactor::finalize()
       }
       viewfactor *= (1.0/master_boundary_map.size());
       // std::cout << "-----------------------------------------" << std::endl;
-      std::cout<<"F"<<master_bnd_id<<slave_bnd_id<<" = "<<viewfactor<<std::endl;
+      std::cout<<"F["<<master_bnd_id<<"]["<<slave_bnd_id<<"] = "<<viewfactor<<std::endl;
       _F[master_bnd_id][slave_bnd_id]=viewfactor;
     }
   }

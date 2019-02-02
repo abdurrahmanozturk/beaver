@@ -1,0 +1,28 @@
+#coaxial cylinders
+reset
+create Cylinder height 6 radius 3
+create Cylinder height 6 radius 1
+create Cylinder height 6 radius 2.5
+subtract body 3 from body 1
+volume 1 volume 2 size 1
+mesh volume 1 2
+block 1 add volume 1
+block 1 name "outercylinder"
+block 2 add volume 2
+block 2 name "innercylinder"
+sideset 1 add surface 1
+sideset 1 name "outercylinder_outer"
+sideset 2 add surface 10
+sideset 2 name "outercylinder_inner"
+sideset 3 add surface 11
+sideset 3 name "outercylinder_bottom"
+sideset 4 add surface 12
+sideset 4 name "outercylinder_top"
+sideset 5 add surface 4
+sideset 5 name "innercylinder_outer"
+sideset 6 add surface 5
+sideset 6 name "innercylinder_bottom"
+sideset 7 add surface 6
+sideset 7 name "innercylinder_top"
+export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/coaxial_cylinders.e" overwrite
+

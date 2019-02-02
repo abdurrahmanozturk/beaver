@@ -71,7 +71,7 @@
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '2 7'
+    boundary = '2 13'
     sampling_number = 10
     source_number = 10
     print_screen = false

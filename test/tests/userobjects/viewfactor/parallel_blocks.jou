@@ -2,16 +2,20 @@
 reset
 brick x 1 y 2 z 2
 brick x 1 y 2 z 2
+brick x 1 y 2 z 2
 move volume 2 x 3
+move volume 3 x 6
 #subtract body 2 from body 1
 #volume 1 volume 2 size auto factor 32
-volume 1 volume 2 size 0.5
-mesh volume 1 2
+volume 1 volume 2 volume 3 size 1
+mesh volume 1 2 3
 #rotate volume 1 angle 45 about x
 block 1 add volume 1
 block 1 name "block1"
 block 2 add volume 2
 block 2 name "block2"
+block 3 add volume 3
+block 3 name "block3"
 sideset 1 add surface 4
 sideset 1 name "block1_x1"
 sideset 2 add surface 6
@@ -36,7 +40,20 @@ sideset 11 add surface 8
 sideset 11 name "block2_z1"
 sideset 12 add surface 7
 sideset 12 name "block2_z2"
+sideset 13 add surface 16
+sideset 13 name "block3_x1"
+sideset 14 add surface 18
+sideset 14 name "block3_x2"
+sideset 15 add surface 15
+sideset 15 name "block3_y1"
+sideset 16 add surface 17
+sideset 16 name "block3_y2"
+sideset 17 add surface 14
+sideset 17 name "block3_z1"
+sideset 18 add surface 13
+sideset 18 name "block3_z2"
 export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/parallel_blocks.e" overwrite
+
 
 
 

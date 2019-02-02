@@ -36,8 +36,10 @@ public:
   const bool isIntersected(const std::vector<Real> & p1,
                            const std::vector<Real> & dir,
                            std::map<unsigned int, std::vector<Real>> map);
+  const bool isSidetoSide(const std::map<unsigned int, std::vector<Real>> & master,
+                          const std::map<unsigned int, std::vector<Real>> & slave);
   const bool isVisible(const std::map<unsigned int, std::vector<Real>> & master,
-                       const std::map<unsigned int, std::vector<Real>> & slave);
+                          const std::map<unsigned int, std::vector<Real>> & slave);
 
   void printViewFactors();
   void printNodesNormals();
@@ -46,6 +48,9 @@ public:
   // Point q;
   const MooseArray<Point> & _current_normals;
   const std::set<BoundaryID> & _boundary_ids;
+  const std::set<BoundaryID> _mesh_boundary_ids;
+  const std::set<BoundaryID> _mesh_sideset_ids;
+  const std::set<BoundaryID> _mesh_nodeset_ids;
   const double _PI;
   const bool _printScreen;
   const Real _area_tol;   //area tolerance

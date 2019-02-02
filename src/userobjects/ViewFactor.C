@@ -29,6 +29,9 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
   : SideUserObject(parameters),
     _current_normals(_assembly.normals()),
     _boundary_ids(boundaryIDs()),
+    _mesh_boundary_ids(_mesh.meshBoundaryIds()),
+    _mesh_sideset_ids(_mesh.meshSidesetIds()),
+    _mesh_nodeset_ids(_mesh.meshNodesetIds()),
     _PI(acos(-1)), // 3.141592653589793238462643383279502884
     _printScreen(getParam<bool>("print_screen")),
     _area_tol(getParam<Real>("area_tolerance")),
@@ -315,29 +318,20 @@ ViewFactor::isIntersected(const std::vector<Real> & p1,
 }
 
 const bool
-ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
-                      const std::map<unsigned int, std::vector<Real>> & slave)
+ViewFactor::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & master,
+                         const std::map<unsigned int, std::vector<Real>> & slave)
 {
   std::map<unsigned int, std::vector<Real>> master_map = master;
   std::map<unsigned int, std::vector<Real>> slave_map = slave;
   const std::vector<Real> master_normal = getNormalFromNodeMap(master);
   const std::vector<Real> slave_normal = getNormalFromNodeMap(slave);
-  // check visibility for different points, can be removed for optimization
+  // check whether faces are looking each other
   for (size_t i = 0; i < master.size(); i++)
   {
     const std::vector<Real> master_node = master_map[i];
     for (size_t j = 0; j < slave.size(); j++)
     {
       const std::vector<Real> slave_node = slave_map[j];
-      // const std::vector<Real> master_point = getRandomPoint(master);
-      // const std::vector<Real> slave_point = getRandomPoint(slave);
-      const Real d = getDistanceBetweenPoints(master_node,slave_node);
-      const Real dir_x = (slave_node[0]-master_node[0])/d;
-      const Real dir_y = (slave_node[1]-master_node[1])/d;
-      const Real dir_z = (slave_node[2]-master_node[2])/d;
-      //check whether there is surface between master and slave or not
-      //loop over all boundaries and elements in mesh not defined boundaries
-      //to check it, use isIntersected() function
       const std::vector<Real> master_slave = {(slave_node[0]-master_node[0]),(slave_node[1]-master_node[1]),(slave_node[2]-master_node[2])};
       const std::vector<Real> slave_master = {(master_node[0]-slave_node[0]),(master_node[1]-slave_node[1]),(master_node[2]-slave_node[2])};
       Real theta_master_slave = getAngleBetweenVectors(master_normal,master_slave);
@@ -347,6 +341,62 @@ ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
     }
   }
   return false;
+}
+
+const bool
+ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
+                      const std::map<unsigned int, std::vector<Real>> & slave)
+{
+  //check element sides are looking each other
+  if (isSidetoSide(master,slave)==false)
+  {
+    return false;
+  }
+  // otherwise, check whether there is a surface between master and slave or not
+  const std::vector<Real> master_center = getCenterPoint(master); // edges can be chosen instead
+  const std::vector<Real> slave_center = getCenterPoint(slave);
+  Real d = getDistanceBetweenPoints(master_center,slave_center);
+  const Real dir_x = (slave_center[0]-master_center[0])/d;
+  const Real dir_y = (slave_center[1]-master_center[1])/d;
+  const Real dir_z = (slave_center[2]-master_center[2])/d;
+  const std::vector<Real> dir{dir_x,dir_y,dir_z};
+  Real d1 = getDistanceBetweenPoints(master_center,slave_center);
+  Real d2{0};
+  //loop over all elements in mesh,
+  // first retrieve the side list form the mesh and loop over all element sides
+  for (const auto & t : _mesh.buildSideList())    //buildSideList(el,side,bnd)
+  {
+    auto elem_id = std::get<0>(t);
+    auto side_id = std::get<1>(t);
+    auto bnd_id = std::get<2>(t);
+    // std::cout << "------------bnd#: " << bc_id << std::endl;
+    // std::cout << "-----------elem#: " << elem_id << std::endl;
+    // std::cout << "-----------side#: " << side_id << std::endl;
+    Elem * el = _mesh.elemPtr(elem_id);
+    std::unique_ptr<const Elem> el_side = el->build_side_ptr(side_id);
+    std::map<unsigned int, std::vector<Real>> side_map;
+    unsigned int n_n = el_side->n_nodes();
+    for (unsigned int i = 0; i < n_n; i++)
+    {
+      const Node * node = el_side->node_ptr(i);    //get nodes
+      for (unsigned int j = 0; j < 3; j++)         // Define nodal coordinates and normals
+      {
+        side_map[i].push_back((*node)(j));
+      }
+      // std::cout <<"Node #"<<i<<" : ("<<(*n_ptr)(0)<<","<<(*n_ptr)(1)<<","<<(*n_ptr)(2)<<")\t";
+    }
+    const std::vector<Real> side_center = getCenterPoint(slave);
+    d2 = getDistanceBetweenPoints(master_center,side_center);
+    if (isSidetoSide(master,side_map) && isIntersected(master_center,dir,side_map) && (d2<d1))
+      {
+        // if (_printScreen==true)
+        // {
+          std::cout<<"Boundary #"<<bnd_id<<"blocking visibility."<<std::endl;
+        // }
+        return false;
+      }
+  }
+  return true;
 }
 
 void
@@ -445,6 +495,38 @@ ViewFactor::initialize()
       std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
     }
   }
+  for (const auto &bid : _mesh_boundary_ids)
+  {
+    std::cout<<"Bnd #"<<bid<<" : "<<_mesh.getBoundaryName(bid)<<std::endl;
+  }
+  std::cout<<"bnd set size : "<<_mesh_boundary_ids.size()<<std::endl;
+  std::cout<<"side set size : "<<_mesh_sideset_ids.size()<<std::endl;
+  std::cout<<"node set size : "<<_mesh_nodeset_ids.size()<<std::endl;
+
+  // Data structures to hold the element boundary information
+  // std::vector<dof_id_type> elem_list;
+  // std::vector<unsigned short int> side_list;
+  // std::vector<boundary_id_type> id_list;
+
+
+  // _mesh.buildSideList(elem_list, side_list, id_list);
+  // std::cout << "-----------side list#: " << id_list.size() << std::endl;
+  // std::cout << "-----------side list#: " << elem_list.size() << std::endl;
+  // std::cout << "-----------side list#: " << side_list.size() << std::endl;
+
+  // //Loop over elements
+  // for (const auto & elem : mesh.active_element_ptr_range())
+  //   for (auto s : elem->side_index_range())
+  //     if (elem->neighbor_ptr(s) == nullptr) // on the boundary
+  //       {
+  //         std::unique_ptr<const Elem> side = elem->build_side_ptr(s);
+  //
+  //         auto nodes_on_side = elem->nodes_on_side(s);
+  //
+  //         for (auto & node_id : nodes_on_side)
+  //           on_boundary[node_id] = true;
+  //       }
+
   ElemType elem_type = _current_elem->type();   //HEX8=10 QUAD4=5
   unsigned int n_elem = _current_elem->n_nodes();
   std::cout << n_elem <<"-noded element (typeid="<<elem_type<<")"<< std::endl;

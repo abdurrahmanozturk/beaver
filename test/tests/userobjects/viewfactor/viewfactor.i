@@ -75,7 +75,7 @@
     sampling_number = 10
     source_number = 10
     print_screen = false
-    error_tolerance = 1e-6
+    error_tolerance = 1e-9
     parallel_planes = '2.0 2.0 2.0'
   [../]
 []

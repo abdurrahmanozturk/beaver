@@ -385,9 +385,13 @@ ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
       }
       // std::cout <<"Node #"<<i<<" : ("<<(*n_ptr)(0)<<","<<(*n_ptr)(1)<<","<<(*n_ptr)(2)<<")\t";
     }
-    const std::vector<Real> side_center = getCenterPoint(slave);
+    const std::vector<Real> side_center = getCenterPoint(side_map);
     d2 = getDistanceBetweenPoints(master_center,side_center);
+    // std::cout<<"d1= "<<d1<<" d2= "<<d2<<std::endl;
     if (isSidetoSide(master,side_map) && isIntersected(master_center,dir,side_map) && d2<d1)
+
+        ////// CHECK THIS IF CONDITION
+
       {
         if (_printScreen==true)
         {

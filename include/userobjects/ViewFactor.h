@@ -16,7 +16,7 @@ public:
   virtual void initialize() override;
   virtual void execute() override;
   virtual void finalize() override;
-  virtual Real getViewFactor(BoundaryID master_elem, BoundaryID slave_elem);
+  virtual Real getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) const;
   virtual void threadJoin(const UserObject & y) override {}
 
   const Real getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);

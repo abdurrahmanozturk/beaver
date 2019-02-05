@@ -41,6 +41,11 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
+  [./RadiationHeatTransfer]
+    type = RadiationHeatTransfer
+    variable = temp
+    viewfactor_userobject = ViewFactor
+  [../]
 []
 [NodalNormals]
 []
@@ -72,7 +77,7 @@
   [./ViewFactor]
     type = ViewFactor
     # boundary = '2 2'
-    master_boundary = '2 7'
+    master_boundary = '2'
     slave_boundary = '7'
     sampling_number = 10
     source_number = 10

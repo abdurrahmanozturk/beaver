@@ -2,6 +2,7 @@
 #define RadiationHeatTransfer_H
 
 #include "Kernel.h"
+#include "ViewFactor.h"
 
 class RadiationHeatTransfer;
 
@@ -20,7 +21,8 @@ protected:
   virtual Real computeQpResidual() override;
   virtual Real computeQpJacobian() override;
 
-  Real _view_factor;
+  // const VariableValue & _temp;
+  const ViewFactor & _viewfactor;
 };
 
 #endif // RadiationHeatTransfer_H

@@ -680,12 +680,13 @@ ViewFactor::finalize()
   }
 }
 
-Real ViewFactor::getViewFactor(BoundaryID master_elem, BoundaryID slave_elem)
+Real ViewFactor::getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) const
 {
+  std::cout<<"asdsad=  "<<_viewfactors.find(2)->second.find(0)->second<<std::endl;
   if (_viewfactors.find(master_elem) != _viewfactors.end())
     {
-      if (_viewfactors[master_elem].find(slave_elem) != _viewfactors[master_elem].end())
-        return _viewfactors[master_elem][slave_elem];
+      if (_viewfactors.find(master_elem)->second.find(slave_elem) != _viewfactors.find(master_elem)->second.end())
+        return _viewfactors.find(master_elem)->second.find(slave_elem)->second;
       else
         mooseError("Unknown element on slave boundary requested for viewfactor.");
     }

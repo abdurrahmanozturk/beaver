@@ -72,8 +72,8 @@
   [./ViewFactor]
     type = ViewFactor
     # boundary = '2 2'
-    master_boundary = 2
-    slave_boundary = 2
+    master_boundary = '2 7'
+    slave_boundary = '7'
     sampling_number = 10
     source_number = 10
     print_screen = false

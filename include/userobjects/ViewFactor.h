@@ -56,13 +56,19 @@ public:
   const Real _error_tol;   //tolerance
   const unsigned int _samplingNumber,_sourceNumber;
   std::vector<Real> _parallel_planes_geometry;
-  BoundaryID _master_boundary,_slave_boundary;
+  // BoundaryID _master_boundary,_slave_boundary;
   std::vector<BoundaryID> _boundary_ids;   //_boundary_list
   std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real>>>> _viewfactors_map;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _coordinates_map;
   // std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _normal_map;
   // std::map<BoundaryID, std::map<unsigned int, const Elem *> > _element_set_ptr;
   // std::map<BoundaryID, std::map<unsigned int, unsigned int> > _element_set;
+
+// PARENT CLASS
+
+std::vector<BoundaryName> _master_boundary_names,_slave_boundary_names;
+std::set<BoundaryID> _master_boundary_ids,_slave_boundary_ids;
+
 protected:
   std::map<BoundaryID, std::map<BoundaryID, Real>> _F;   //bnd-bnd viewfactors
   std::map<unsigned int, std::map<unsigned int, Real>> _viewfactors;  //elem-elem viewfactors

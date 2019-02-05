@@ -22,8 +22,8 @@ validParams<ViewFactor>()
   params.addParam<Real>("error_tolerance",1e-6, "Tolerance for calculations");
   params.addParam<std::vector<Real>>("parallel_planes",
                                      "{W1,W2,H} values for parallel planes to calculate view factor analytically");
-  params.addRequiredParam<unsigned int>("master_boundary", "Master Boundary ID");
-  params.addRequiredParam<unsigned int>("slave_boundary", "Slave Boundary ID");
+  params.addRequiredParam<std::vector<BoundaryName>>("master_boundary", "Master Boundary ID");
+  params.addRequiredParam<std::vector<BoundaryName>>("slave_boundary", "Slave Boundary ID");
   // !! Edit boundary definitions as vector of BoundaryNames for multiple input
   return params;
 }
@@ -41,10 +41,29 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
     _samplingNumber(getParam<unsigned int>("sampling_number")),
     _sourceNumber(getParam<unsigned int>("source_number")),
     _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes")),
-    _master_boundary(getParam<unsigned int>("master_boundary")),
-    _slave_boundary(getParam<unsigned int>("slave_boundary")),
-    _boundary_ids({_master_boundary,_slave_boundary})
+    _master_boundary_names(getParam<std::vector<BoundaryName>>("master_boundary")),
+    _slave_boundary_names(getParam<std::vector<BoundaryName>>("slave_boundary"))
+    // _boundary_ids({_master_boundary,_slave_boundary})
 {
+
+  // PUT THIS INTO PARENT CLASS
+    // Get the IDs from the supplied names
+    std::vector<BoundaryID> master_vec_ids = _mesh.getBoundaryIDs(_master_boundary_names, true);
+    std::vector<BoundaryID> slave_vec_ids = _mesh.getBoundaryIDs(_slave_boundary_names, true);
+
+    // Store the IDs, handling ANY_BOUNDARY_ID if supplied
+    if (std::find(_master_boundary_names.begin(), _master_boundary_names.end(), "ANY_BOUNDARY_ID") !=
+        _master_boundary_names.end())
+      _master_boundary_ids.insert(Moose::ANY_BOUNDARY_ID);
+    else
+      _master_boundary_ids.insert(master_vec_ids.begin(), master_vec_ids.end());
+
+    if (std::find(_slave_boundary_names.begin(), _slave_boundary_names.end(), "ANY_BOUNDARY_ID") !=
+        _slave_boundary_names.end())
+      _slave_boundary_ids.insert(Moose::ANY_BOUNDARY_ID);
+    else
+      _slave_boundary_ids.insert(slave_vec_ids.begin(), slave_vec_ids.end());
+
 }
 
 const Real
@@ -495,11 +514,11 @@ ViewFactor::initialize()
     std::cout << "---------------------- " << std::endl;
     std::cout << ": Defined Boundaries : " << std::endl;
     std::cout << "---------------------- " << std::endl;
-    for (const auto bid : _boundary_ids)
-    {
-      // _boundary_list.push_back(bid);
-      std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
-    }
+    // for (const auto bid : _boundary_ids)
+    // {
+    //   // _boundary_list.push_back(bid);
+    //   std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
+    // }
   }
   //Check Element Type and Number of nodes
   ElemType elem_type = _current_elem->type();   //HEX8=10 QUAD4=5
@@ -543,15 +562,15 @@ ViewFactor::execute()
 void
 ViewFactor::finalize()
 {
-  for (auto master_bnd_id : _boundary_ids)
+  for (auto master_bnd_id : _master_boundary_ids)
   {
     Real viewfactor{0};
     const auto master_boundary_map = _coordinates_map[master_bnd_id];
-    for (auto slave_bnd_id : _boundary_ids)
+    for (auto slave_bnd_id : _slave_boundary_ids)
     {
       // std::cout<<_F[slave_bnd_id][master_bnd_id]<<std::endl;
-      if (_F[master_bnd_id][slave_bnd_id]!=0)  // fix this for identical surfaces
-        continue;
+      // if (_F[master_bnd_id][slave_bnd_id]!=0)  // fix this for identical surfaces
+      //   continue;
 
       // if (master_bnd_id!=_master_boundary || slave_bnd_id!=_slave_boundary)  // fix this for identical surfaces
       //   continue;

@@ -66,6 +66,18 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
 
 }
 
+const std::set<BoundaryID> &
+ViewFactor::getMasterBoundaries() const
+{
+  return _master_boundary_ids;
+}
+
+const std::set<BoundaryID> &
+ViewFactor::getSlaveBoundaries() const
+{
+  return _slave_boundary_ids;
+}
+
 const Real
 ViewFactor::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2)
 {
@@ -672,7 +684,7 @@ ViewFactor::finalize()
       _F[master_bnd_id][slave_bnd_id]=viewfactor;
     }
   }
-  // printViewFactors();
+  printViewFactors();
   if (_printScreen==true)
   {
     printViewFactors();
@@ -682,15 +694,14 @@ ViewFactor::finalize()
 
 Real ViewFactor::getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) const
 {
-  std::cout<<"asdsad=  "<<_viewfactors.find(2)->second.find(0)->second<<std::endl;
   if (_viewfactors.find(master_elem) != _viewfactors.end())
-    {
-      if (_viewfactors.find(master_elem)->second.find(slave_elem) != _viewfactors.find(master_elem)->second.end())
-        return _viewfactors.find(master_elem)->second.find(slave_elem)->second;
-      else
-        mooseError("Unknown element on slave boundary requested for viewfactor.");
-    }
-    mooseError("Unknown element on master boundary requested for viewfactor.");
-
-  return 0;   //satisfy compiler
+  {
+    if (_viewfactors.find(master_elem)->second.find(slave_elem) != _viewfactors.find(master_elem)->second.end())
+      return _viewfactors.find(master_elem)->second.find(slave_elem)->second;
+    else
+      return 0.0;
+      // mooseError("Unknown element on slave boundary requested for viewfactor. Make sure UserObject is executed on timetep_begin and master-slave boundary pair is same with the UserObject");
+  }
+  // mooseError("Unknown element on master boundary requested for viewfactor. Make sure UserObject is executed on timetep_begin and master-slave boundary pair is same with the UserObject");
+  return 0.0;   //satisfy compiler
 }

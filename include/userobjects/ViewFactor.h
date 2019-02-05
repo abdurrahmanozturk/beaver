@@ -29,6 +29,8 @@ public:
   const std::vector<Real> getCenterPoint(std::map<unsigned int, std::vector<Real> > map);
   const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map);
   const std::vector<Real> getRandomDirection(const std::vector<Real> & n, const int dim=3);
+  const std::set<BoundaryID> & getMasterBoundaries() const;
+  const std::set<BoundaryID> & getSlaveBoundaries() const;
   // const std::map<BoundaryID, std::map<BoundaryID, Real> > getBoundarViewFactors(const
   // std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real >
   // > > > &map);

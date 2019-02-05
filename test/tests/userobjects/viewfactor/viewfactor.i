@@ -10,9 +10,9 @@
   # zmax = 1
   # zmin = 0
   # dim = 3
-  # nx = 2
-  # ny = 2
-  # nz = 2
+  # nx = 1
+  # ny = 1
+  # nz = 1
   # elem_type = HEX8
 []
 [Variables]
@@ -84,6 +84,7 @@
     print_screen = false
     error_tolerance = 1e-9
     parallel_planes = '2.0 2.0 2.0'
+    execute_on = 'timestep_begin'
   [../]
 []
 [Postprocessors]

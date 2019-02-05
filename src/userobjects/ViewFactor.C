@@ -13,22 +13,25 @@ template <>
 InputParameters
 validParams<ViewFactor>()
 {
-  InputParameters params = validParams<SideUserObject>();
+  InputParameters params = validParams<UserObject>();
+  params += validParams<BoundaryRestrictable>();
+  params += validParams<MaterialPropertyInterface>();
   params.addParam<unsigned int>("sampling_number",100, "Number of Sampling");
   params.addParam<unsigned int>("source_number",100, "Number of Source Points");
   params.addParam<bool>("print_screen",false, "Print to Screen");
   params.addParam<Real>("error_tolerance",1e-6, "Tolerance for calculations");
   params.addParam<std::vector<Real>>("parallel_planes",
                                      "{W1,W2,H} values for parallel planes to calculate view factor analytically");
-  // params.addRequiredParam<std::vector<BoundaryName>>("master_boundary", "Master Boundary ID");
-  // params.addRequiredParam<std::vector<BoundaryName>>("slave_boundary", "Slave Boundary ID");
+  params.addRequiredParam<unsigned int>("master_boundary", "Master Boundary ID");
+  params.addRequiredParam<unsigned int>("slave_boundary", "Slave Boundary ID");
+  // !! Edit boundary definitions as vector of BoundaryNames for multiple input
   return params;
 }
 
 ViewFactor::ViewFactor(const InputParameters & parameters)
   : SideUserObject(parameters),
     _current_normals(_assembly.normals()),
-    _boundary_ids(boundaryIDs()),
+    // _boundary_ids(boundaryIDs()),
     _mesh_boundary_ids(_mesh.meshBoundaryIds()),
     _mesh_sideset_ids(_mesh.meshSidesetIds()),
     _mesh_nodeset_ids(_mesh.meshNodesetIds()),
@@ -37,9 +40,10 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
     _error_tol(getParam<Real>("error_tolerance")),
     _samplingNumber(getParam<unsigned int>("sampling_number")),
     _sourceNumber(getParam<unsigned int>("source_number")),
-    _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes"))
-    // _master_boundary(getParam<std::vector<BoundaryName>>("master_boundary")),
-    // _slave_boundary(getParam<std::vector<BoundaryName>>("slave_boundary"))
+    _parallel_planes_geometry(getParam<std::vector<Real>>("parallel_planes")),
+    _master_boundary(getParam<unsigned int>("master_boundary")),
+    _slave_boundary(getParam<unsigned int>("slave_boundary")),
+    _boundary_ids({_master_boundary,_slave_boundary})
 {
 }
 
@@ -479,9 +483,7 @@ ViewFactor::printNodesNormals()
 void
 ViewFactor::initialize()
 {
-  //Check Element Type and Number of nodes
   std::srand(time(NULL));
-
   if (_printScreen==true)
   {
     std::cout << "---------------------- " <<std::endl;
@@ -495,11 +497,11 @@ ViewFactor::initialize()
     std::cout << "---------------------- " << std::endl;
     for (const auto bid : _boundary_ids)
     {
-      _boundary_list.push_back(bid);
+      // _boundary_list.push_back(bid);
       std::cout << "id: " << bid <<" name: "<<_mesh.getBoundaryName(bid)<< std::endl;
     }
   }
-
+  //Check Element Type and Number of nodes
   ElemType elem_type = _current_elem->type();   //HEX8=10 QUAD4=5
   unsigned int n_elem = _current_elem->n_nodes();
   std::cout << n_elem <<"-noded element (typeid="<<elem_type<<")"<< std::endl;
@@ -548,7 +550,11 @@ ViewFactor::finalize()
     for (auto slave_bnd_id : _boundary_ids)
     {
       // std::cout<<_F[slave_bnd_id][master_bnd_id]<<std::endl;
-      // if ((_F[slave_bnd_id][master_bnd_id]!=0) || (slave_bnd_id==master_bnd_id))  // fix this for identical surfaces
+      if (_F[master_bnd_id][slave_bnd_id]!=0)  // fix this for identical surfaces
+        continue;
+
+      // if (master_bnd_id!=_master_boundary || slave_bnd_id!=_slave_boundary)  // fix this for identical surfaces
+      //   continue;
 
       viewfactor = 0;
       const auto slave_boundary_map = _coordinates_map[slave_bnd_id];
@@ -655,7 +661,16 @@ ViewFactor::finalize()
   }
 }
 
-Real ViewFactor::getViewFactor()
+Real ViewFactor::getViewFactor(BoundaryID master_elem, BoundaryID slave_elem)
 {
-  return _F[_boundary_list[0]][_boundary_list[1]];
+  if (_viewfactors.find(master_elem) != _viewfactors.end())
+    {
+      if (_viewfactors[master_elem].find(slave_elem) != _viewfactors[master_elem].end())
+        return _viewfactors[master_elem][slave_elem];
+      else
+        mooseError("Unknown element on slave boundary requested for viewfactor.");
+    }
+    mooseError("Unknown element on master boundary requested for viewfactor.");
+
+  return 0;   //satisfy compiler
 }

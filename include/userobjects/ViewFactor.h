@@ -16,7 +16,7 @@ public:
   virtual void initialize() override;
   virtual void execute() override;
   virtual void finalize() override;
-  virtual Real getViewFactor();
+  virtual Real getViewFactor(BoundaryID master_elem, BoundaryID slave_elem);
   virtual void threadJoin(const UserObject & y) override {}
 
   const Real getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
@@ -47,7 +47,7 @@ public:
   // Point p;
   // Point q;
   const MooseArray<Point> & _current_normals;
-  const std::set<BoundaryID> & _boundary_ids;
+  // const std::set<BoundaryID> & _boundary_ids;
   const std::set<BoundaryID> _mesh_boundary_ids;
   const std::set<BoundaryID> _mesh_sideset_ids;
   const std::set<BoundaryID> _mesh_nodeset_ids;
@@ -56,15 +56,16 @@ public:
   const Real _error_tol;   //tolerance
   const unsigned int _samplingNumber,_sourceNumber;
   std::vector<Real> _parallel_planes_geometry;
-  std::vector<BoundaryID> _boundary_list;
-  // BoundaryID _master_boundary,_slave_boundary;
-  std::map<BoundaryID, std::map<BoundaryID, Real>> _F;   //bnd-bnd viewfactors
-  std::map<unsigned int, std::map<unsigned int, Real>> _viewfactors;  //elem-elem viewfactors
+  BoundaryID _master_boundary,_slave_boundary;
+  std::vector<BoundaryID> _boundary_ids;   //_boundary_list
   std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real>>>> _viewfactors_map;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _coordinates_map;
   // std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _normal_map;
   // std::map<BoundaryID, std::map<unsigned int, const Elem *> > _element_set_ptr;
   // std::map<BoundaryID, std::map<unsigned int, unsigned int> > _element_set;
+protected:
+  std::map<BoundaryID, std::map<BoundaryID, Real>> _F;   //bnd-bnd viewfactors
+  std::map<unsigned int, std::map<unsigned int, Real>> _viewfactors;  //elem-elem viewfactors
 };
 
 #endif // VIEWFACTOR_H

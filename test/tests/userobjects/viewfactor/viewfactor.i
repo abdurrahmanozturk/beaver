@@ -41,20 +41,21 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  [./RadiationHeatTransfer]
-    type = RadiationHeatTransfer
-    variable = temp
-    viewfactor_userobject = ViewFactor
-  [../]
 []
 [NodalNormals]
 []
 [BCs]
+  [./RadiationHeatTransfer]
+    type = RadiationHeatTransferBC
+    variable = temp
+    boundary = '2 7'
+    viewfactor_userobject = ViewFactor
+  [../]
   [./top]
     type = DirichletBC
     value = 300 #K
     variable = temp
-    boundary = 1
+    boundary = 7
   [../]
   [./bottom]
     type = DirichletBC
@@ -76,14 +77,13 @@
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    # boundary = '2 2'
     master_boundary = '2'
     slave_boundary = '7'
-    sampling_number = 10
-    source_number = 10
+    sampling_number = 100
+    source_number = 100
     print_screen = false
     error_tolerance = 1e-9
-    parallel_planes = '2.0 2.0 2.0'
+    parallel_planes = '10.0 10.0 9.0'
     execute_on = 'timestep_begin'
   [../]
 []

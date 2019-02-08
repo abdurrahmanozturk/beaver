@@ -79,7 +79,7 @@ ViewFactor::getSlaveBoundaries() const
 }
 
 const Real
-ViewFactor::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2)
+ViewFactor::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2) const
 {
   Real v1_length = pow((v1[0]*v1[0]+v1[1]*v1[1]+v1[2]*v1[2]),0.5);
   Real v2_length = pow((v2[0]*v2[0]+v2[1]*v2[1]+v2[2]*v2[2]),0.5);
@@ -90,7 +90,7 @@ ViewFactor::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector
 }
 
 const Real
-ViewFactor::getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2)
+ViewFactor::getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2) const
 {
   Real d = pow(((v2[0]-v1[0])*(v2[0]-v1[0])
                +(v2[1]-v1[1])*(v2[1]-v1[1])
@@ -112,13 +112,13 @@ ViewFactor::getAnalyticalViewFactor(const std::vector<Real> & v)
 }
 
 const Real
-ViewFactor::getVectorLength(const std::vector<Real> & v)
+ViewFactor::getVectorLength(const std::vector<Real> & v) const
 {
   return pow((v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),0.5);
 }
 
 const std::vector<Real>
-ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map)
+ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map) const
 {
   // three points in plane
   std::vector<Real> p1 = map[0];
@@ -145,7 +145,7 @@ ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map)
 }
 
 const std::vector<Real>
-ViewFactor::getCenterPoint(std::map<unsigned int, std::vector<Real> > map)
+ViewFactor::getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const
 {
   unsigned int n=map.size();
   Real sum_x{0},sum_y{0},sum_z{0};
@@ -160,7 +160,7 @@ ViewFactor::getCenterPoint(std::map<unsigned int, std::vector<Real> > map)
 }
 
 const std::vector<Real>
-ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim)
+ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim) const
 {
   //find theta and phi for unit normal vector in global coordinate system
   Real theta_normal = acos(n[2]);
@@ -214,7 +214,7 @@ ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim)
 }
 
 const Real
-ViewFactor::getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map)
+ViewFactor::getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
 {
   //FIND AREA OF ELEMENT SURFACE by summing area of triangles
   unsigned int n = map.size();    // number of nodes in element surface
@@ -233,7 +233,7 @@ ViewFactor::getArea(const std::vector<Real> &p, std::map<unsigned int, std::vect
 }
 
 const bool
-ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map)
+ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
 {
   // std::vector<Real> x;
   // std::vector<Real> y;
@@ -294,7 +294,7 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
 }
 
 const std::vector<Real>
-ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map)
+ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map) const
 {
   const std::vector<Real> n = getNormalFromNodeMap(map);
   const std::vector<Real> center{getCenterPoint(map)};
@@ -323,7 +323,7 @@ ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map)
 const bool
 ViewFactor::isIntersected(const std::vector<Real> & p1,
                           const std::vector<Real> & dir,
-                          std::map<unsigned int, std::vector<Real>> map)
+                          std::map<unsigned int, std::vector<Real>> map) const
 {
   const std::vector<Real> n = getNormalFromNodeMap(map);
   const std::vector<Real> pR = getRandomPoint(map);
@@ -354,7 +354,7 @@ ViewFactor::isIntersected(const std::vector<Real> & p1,
 
 const bool
 ViewFactor::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & master,
-                         const std::map<unsigned int, std::vector<Real>> & slave)
+                         const std::map<unsigned int, std::vector<Real>> & slave) const
 {
   std::map<unsigned int, std::vector<Real>> master_map = master;
   std::map<unsigned int, std::vector<Real>> slave_map = slave;
@@ -380,7 +380,7 @@ ViewFactor::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & maste
 
 const bool
 ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
-                      const std::map<unsigned int, std::vector<Real>> & slave)
+                      const std::map<unsigned int, std::vector<Real>> & slave) const
 {
   //check element sides are looking each other
   if (isSidetoSide(master,slave)==false)
@@ -699,9 +699,9 @@ Real ViewFactor::getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) co
     if (_viewfactors.find(master_elem)->second.find(slave_elem) != _viewfactors.find(master_elem)->second.end())
       return _viewfactors.find(master_elem)->second.find(slave_elem)->second;
     else
-      return 0.0;
-      // mooseError("Unknown element on slave boundary requested for viewfactor. Make sure UserObject is executed on timetep_begin and master-slave boundary pair is same with the UserObject");
+      // return 0.0;
+      mooseError("Unknown element on slave boundary requested for viewfactor. Make sure UserObject is executed on timetep_begin and master-slave boundary pair is same with the UserObject");
   }
-  // mooseError("Unknown element on master boundary requested for viewfactor. Make sure UserObject is executed on timetep_begin and master-slave boundary pair is same with the UserObject");
-  return 0.0;   //satisfy compiler
+  mooseError("Unknown element on master boundary requested for viewfactor. Make sure UserObject is executed on timetep_begin and master-slave boundary pair is same with the UserObject");
+  // return 0.0;   //satisfy compiler
 }

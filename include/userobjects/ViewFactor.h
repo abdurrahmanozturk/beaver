@@ -19,29 +19,29 @@ public:
   virtual Real getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) const;
   virtual void threadJoin(const UserObject & y) override {}
 
-  const Real getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2);
-  const Real getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2);
+  const Real getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2) const;
+  const Real getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2) const;
   const Real getAnalyticalViewFactor(const std::vector<Real> & v);
-  const Real getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real> > map);
-  const Real getVectorLength(const std::vector<Real> & v);
+  const Real getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real> > map) const;
+  const Real getVectorLength(const std::vector<Real> & v) const;
 
-  const std::vector<Real> getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map);
-  const std::vector<Real> getCenterPoint(std::map<unsigned int, std::vector<Real> > map);
-  const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map);
-  const std::vector<Real> getRandomDirection(const std::vector<Real> & n, const int dim=3);
+  const std::vector<Real> getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map) const;
+  const std::vector<Real> getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const;
+  const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map) const;
+  const std::vector<Real> getRandomDirection(const std::vector<Real> & n, const int dim=3) const;
   const std::set<BoundaryID> & getMasterBoundaries() const;
   const std::set<BoundaryID> & getSlaveBoundaries() const;
   // const std::map<BoundaryID, std::map<BoundaryID, Real> > getBoundarViewFactors(const
   // std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real >
   // > > > &map);
-  const bool isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map);
+  const bool isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const;
   const bool isIntersected(const std::vector<Real> & p1,
                            const std::vector<Real> & dir,
-                           std::map<unsigned int, std::vector<Real>> map);
+                           std::map<unsigned int, std::vector<Real>> map) const;
   const bool isSidetoSide(const std::map<unsigned int, std::vector<Real>> & master,
-                          const std::map<unsigned int, std::vector<Real>> & slave);
+                          const std::map<unsigned int, std::vector<Real>> & slave) const;
   const bool isVisible(const std::map<unsigned int, std::vector<Real>> & master,
-                          const std::map<unsigned int, std::vector<Real>> & slave);
+                          const std::map<unsigned int, std::vector<Real>> & slave) const;
 
   void printViewFactors();
   void printNodesNormals();

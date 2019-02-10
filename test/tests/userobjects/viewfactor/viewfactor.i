@@ -17,7 +17,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 300
+    initial_condition = 400
   [../]
 []
 # [AuxVariables]
@@ -45,23 +45,23 @@
 [NodalNormals]
 []
 [BCs]
+  [./master]
+    type = DirichletBC
+    value = 1000 #K
+    variable = temp
+    boundary = 1
+  [../]
+  [./slave]
+    type = DirichletBC
+    value = 500 #K
+    variable = temp
+    boundary = 7
+  [../]
   [./RadiationHeatTransfer]
     type = RadiationHeatTransferBC
     variable = temp
     boundary = '2 7'
     viewfactor_userobject = ViewFactor
-  [../]
-  [./top]
-    type = DirichletBC
-    value = 300 #K
-    variable = temp
-    boundary = 7
-  [../]
-  [./bottom]
-    type = DirichletBC
-    value = 400 #K
-    variable = temp
-    boundary = 2
   [../]
 []
 [Materials]
@@ -84,7 +84,7 @@
     print_screen = false
     error_tolerance = 1e-9
     parallel_planes = '10.0 10.0 9.0'
-    execute_on = 'timestep_begin'
+    execute_on = INITIAL
   [../]
 []
 [Postprocessors]

@@ -18,16 +18,22 @@ class RadiationHeatTransferBC : public IntegratedBC
 public:
   RadiationHeatTransferBC(const InputParameters & parameters);
   const Real getArea(const Elem * elem,const unsigned int side);
+  void updateValues();
 
 protected:
   virtual Real computeQpResidual() override;
   virtual Real computeQpJacobian() override;
+  // const unsigned int _var_number;
+  // System _system;
+  // Real _value;
+  // Point _slave_center;
 
 private:
   const ViewFactor & _viewfactor;
   const std::set<BoundaryID> & _master_boundary_ids;
   const std::set<BoundaryID> & _slave_boundary_ids;
   const Real _stefan_boltzmann;
+  const Real _emissivity;
   unsigned int _master_elem_id,_slave_elem_id;
   BoundaryID _current_boundary_id;
 };

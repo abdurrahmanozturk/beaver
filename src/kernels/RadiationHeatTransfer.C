@@ -17,12 +17,13 @@ validParams<RadiationHeatTransfer>()
 
 RadiationHeatTransfer::RadiationHeatTransfer(const InputParameters & parameters)
   : Kernel(parameters),
-  // _temp(coupledValue("variable")),
-  _viewfactor(getUserObject<ViewFactor>("viewfactor_userobject")),
-  _master_boundary_ids(_viewfactor.getMasterBoundaries()),
-  _slave_boundary_ids(_viewfactor.getSlaveBoundaries()),
-  _current_side(_assembly.side()),
-  _current_node(_assembly.node())
+    // _temp(coupledValue("variable")),
+    _viewfactor(getUserObject<ViewFactor>("viewfactor_userobject")),
+    _master_boundary_ids(_viewfactor.getMasterBoundaries()),
+    _slave_boundary_ids(_viewfactor.getSlaveBoundaries()),
+    _current_side(_assembly.side()),
+    _current_neighbor_side(_assembly.neighborSide()),
+    _current_node(_assembly.node())
 {
 }
 
@@ -36,30 +37,41 @@ RadiationHeatTransfer::computeQpResidual()
   // Calculate Radiation heat transfer between element pairs
   //loop over all elements in mesh,
   // first retrieve the side list form the mesh and loop over all element sides
+  std::cout << "current elem id= " << _current_elem->id() << std::endl;
+  std::cout << "current side id= " << _current_side << std::endl;
+  std::cout << "current neighbor side id= " << _current_neighbor_side << std::endl;
+  BoundaryID _current_boundary_id = _mesh.getBoundaryIDs(_current_elem, _current_side)[0];
+  std::cout << "current boundary id= " << _current_boundary_id << std::endl;
   _master_elem_id = _current_elem->id();
-  for (const auto & t : _mesh.buildSideList())    //buildSideList(el,side,bnd)
-  {
-    auto elem_id = std::get<0>(t);
-    // auto side_id = std::get<1>(t);
-    // auto bnd_id = std::get<2>(t);
-    // std::cout << "------------bnd#: " << bc_id << std::endl;
-    // std::cout << "-----------elem#: " << elem_id << std::endl;
-    // std::cout << "-----------side#: " << side_id << std::endl;
-    Elem * el = _mesh.elemPtr(elem_id);
-    _slave_elem_id = el->id();
-    Real f12 =_viewfactor.getViewFactor(_master_elem_id,_slave_elem_id);
-    if (f12!=0.0)
-    {
-      // std::cout <<"Node #"<<" : ("<<(*_current_node)(0)<<","<<(*_current_node)(1)<<","<<(*_current_node)(2)<<")"<<std::endl;
-      // for (unsigned int j = 0; j < 3; j++)         // Define nodal coordinates and normals
-      // {
-      //   // side_map[i].push_back((*node)(j));
-      // std::cout <<"quadrature point #"<<_qp<<" : ("<<_q_point[_qp]<<"\t";
-      // }
-      std::cout<<"F["<<_master_elem_id<<"]["<<_slave_elem_id<<"] = "<<f12<<std::endl;
-    }
-  }
-  std::cout <<"next #"<<std::endl;
+  // if (_master_boundary_ids.find(_current_boundary_id)!=_master_boundary_ids.end())
+  // {
+  //   for (const auto & t : _mesh.buildSideList())    //buildSideList(el,side,bnd)
+  //   {
+  //     auto elem_id = std::get<0>(t);
+  //     auto side_id = std::get<1>(t);
+  //     auto bnd_id = std::get<2>(t);
+  //     // std::cout << "------------bnd#: " << bc_id << std::endl;
+  //     // std::cout << "-----------elem#: " << elem_id << std::endl;
+  //     // std::cout << "-----------side#: " << side_id << std::endl;
+  //     if (_slave_boundary_ids.find(bnd_id)!=_slave_boundary_ids.end())
+  //     {
+  //       Elem * el = _mesh.elemPtr(elem_id);
+  //       _slave_elem_id = el->id();
+  //       Real f12 =_viewfactor.getViewFactor(_master_elem_id,_slave_elem_id);
+  //       if (f12!=0.0)
+  //       {
+  //         // std::cout <<"Node #"<<" : ("<<(*_current_node)(0)<<","<<(*_current_node)(1)<<","<<(*_current_node)(2)<<")"<<std::endl;
+  //         // for (unsigned int j = 0; j < 3; j++)         // Define nodal coordinates and normals
+  //         // {
+  //         //   // side_map[i].push_back((*node)(j));
+  //         // std::cout <<"quadrature point #"<<_qp<<" : ("<<_q_point[_qp]<<"\t";
+  //         // }
+  //         std::cout<<"F["<<_master_elem_id<<"]["<<_slave_elem_id<<"] = "<<f12<<std::endl;
+  //       }
+  //     }
+  //   }
+  // }
+  // std::cout <<"next #"<<std::endl;
   //   std::unique_ptr<const Elem> el_side = el->build_side_ptr(side_id);
   //   std::map<unsigned int, std::vector<Real>> side_map;
   //   unsigned int n_n = el_side->n_nodes();
@@ -73,8 +85,6 @@ RadiationHeatTransfer::computeQpResidual()
   //     // std::cout <<"Node #"<<i<<" : ("<<(*n_ptr)(0)<<","<<(*n_ptr)(1)<<","<<(*n_ptr)(2)<<")\t";
   //   }
   // }
-  // std::cout<<"current elem id= "<<_current_elem->id()<<std::endl;
-  // std::cout<<"current side id= "<<_current_side<<std::endl;
   // for (auto mas : _master_boundary_ids )
   // {
   //   std::cout<<"master= "<<mas<<std::endl;

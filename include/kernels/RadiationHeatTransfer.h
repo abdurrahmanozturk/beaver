@@ -27,6 +27,7 @@ protected:
   const std::set<BoundaryID> & _slave_boundary_ids;
   unsigned int _master_elem_id,_slave_elem_id;
   unsigned int & _current_side;
+  unsigned int & _current_neighbor_side;
   const Node *& _current_node;
 };
 

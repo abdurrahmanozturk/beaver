@@ -1,4 +1,5 @@
 #include "RadiationHeatTransferBC.h"
+#include "PenetrationLocator.h"
 
 registerMooseObject("beaverApp", RadiationHeatTransferBC);
 
@@ -19,14 +20,13 @@ validParams<RadiationHeatTransferBC>()
 
 RadiationHeatTransferBC::RadiationHeatTransferBC(const InputParameters & parameters)
   : IntegratedBC(parameters),
-    // _var_number(_subproblem
-    //   .getVariable(_tid,
-    //     parameters.get<VariableName>("variable"),
-    //     Moose::VarKindType::VAR_ANY,
-    //     Moose::VarFieldType::VAR_FIELD_STANDARD)
-    //     .number()),
-    //     _system(_subproblem.getSystem(getParam<VariableName>("variable"))),
-    //     _value(0)
+    _var_number(_subproblem
+                    .getVariable(_tid,
+                                 parameters.get<NonlinearVariableName>("variable"),
+                                 Moose::VarKindType::VAR_ANY,
+                                 Moose::VarFieldType::VAR_FIELD_STANDARD)
+                    .number()),
+    _system(_subproblem.getSystem(getParam<NonlinearVariableName>("variable"))),
     _viewfactor(getUserObject<ViewFactor>("viewfactor_userobject")),
     _master_boundary_ids(_viewfactor.getMasterBoundaries()),
     _slave_boundary_ids(_viewfactor.getSlaveBoundaries()),
@@ -67,7 +67,7 @@ RadiationHeatTransferBC::computeQpResidual()
 {
   Real q_ms, q_sm, q_net{0}, T_slave{500.0};
   Real temp_func_master = _u[_qp] * _u[_qp] * _u[_qp] * _u[_qp];
-  q_net = _stefan_boltzmann * temp_func_master; // black body
+  // q_net = _stefan_boltzmann * temp_func_master; // black body
   _current_boundary_id = _mesh.getBoundaryIDs(_current_elem, _current_side)[0];
   if (_master_boundary_ids.find(_current_boundary_id)!=_master_boundary_ids.end())
   {
@@ -88,20 +88,38 @@ RadiationHeatTransferBC::computeQpResidual()
         // updateValues();
         Elem * el = _mesh.elemPtr(elem_id);
         _slave_elem_id = el->id();
-        Real f_ms =_viewfactor.getViewFactor(_master_elem_id,_slave_elem_id);
-        // std::cout<<"F["<<_master_elem_id<<"]["<<_slave_elem_id<<"] = "<<f_ms<<std::endl;
         Real area_slave = getArea(el,side_id);
+        std::unique_ptr<const Elem> elem_side = el->build_side_ptr(side_id);
+        std::map<unsigned int, std::vector<Real>> side_map;
+        unsigned int n_n = elem_side->n_nodes();
+        for (unsigned int i = 0; i < n_n; i++)
+        {
+          const Node * node = elem_side->node_ptr(i); // get nodes
+          for (unsigned int j = 0; j < 3; j++)        // Define nodal coordinates and normals
+          {
+            side_map[i].push_back((*node)(j));
+          }
+        }
+        const Point side_center(_viewfactor.getCenterPoint2(side_map));
+        T_slave = _system.point_value(_var_number, side_center, false);
+        // std::cout<<T_slave<<std::endl;
         Real temp_func_slave = T_slave * T_slave * T_slave * T_slave;
-        // Real f_sm = f_ms * (area_master/area_slave);
-        // q_ms = f_ms*temp_func_slave;   // master - slave
-        // q_sm = f_sm*temp_func_master;    //slave - master
-        q_net -= _stefan_boltzmann * f_ms * temp_func_slave;
+        // const unsigned int Dim = el->dim();
+        // const std::vector<std::vector<OutputShape>> & phi = my_fe->get_phi();
+        // T_slave = _variable->getValue(el, slave_side_phi);
+        Real f_ms = _viewfactor.getViewFactor(_master_elem_id, _slave_elem_id);
+        // std::cout<<"F["<<_master_elem_id<<"]["<<_slave_elem_id<<"] = "<<f_ms<<std::endl;
+        Real f_sm = f_ms * (area_master / area_slave);
+        q_ms = _stefan_boltzmann * f_ms * temp_func_master; // master-slave
+        q_sm = _stefan_boltzmann * f_sm * temp_func_slave;  // slave-master
+        q_net += q_ms - q_sm;
         // std::cout<<"q= "<<q_net<<std::endl;
-        // _slave_center = Point(2.5, 0.0, 0.0);
 
         // FIND THE SOLUTION AT SLAVE QUADRATURE POINT
-        // Node * qnode = _mesh.getQuadratureNode(el, side_id, _qp);
 
+        // ADD emissivity values for master and slave Boundaries
+
+        // Node * qnode = _mesh.getQuadratureNode(el, side_id, _qp);
         // _value = _system.point_value(_var_number, _slave_center, false);
 
         // std::cout<<"Slave:"<<std::endl;
@@ -118,13 +136,13 @@ RadiationHeatTransferBC::computeQpResidual()
 Real
 RadiationHeatTransferBC::computeQpJacobian()
 {
-  // Real dq_net{0.0};
-  // _current_boundary_id = _mesh.getBoundaryIDs(_current_elem, _current_side)[0];
-  // if (_master_boundary_ids.find(_current_boundary_id)!=_master_boundary_ids.end())
-  // {
-  //   Real dtemp_func_master = 4 * _phi[_j][_qp]*_u[_qp]*_u[_qp]*_u[_qp];
-  //   dq_net = _stefan_boltzmann * dtemp_func_master;   //black body
-  // }
-  // return _test[_i][_qp] * dq_net;
+  Real dq_net{0.0};
+  _current_boundary_id = _mesh.getBoundaryIDs(_current_elem, _current_side)[0];
+  if (_master_boundary_ids.find(_current_boundary_id) != _master_boundary_ids.end())
+  {
+    Real dtemp_func_master = 4 * _phi[_j][_qp] * _u[_qp] * _u[_qp] * _u[_qp];
+    dq_net = _stefan_boltzmann * dtemp_func_master; // black body
+  }
+  return _test[_i][_qp] * dq_net;
   return 0;
 }

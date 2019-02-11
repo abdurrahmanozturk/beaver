@@ -23,10 +23,10 @@ public:
 protected:
   virtual Real computeQpResidual() override;
   virtual Real computeQpJacobian() override;
-  // const unsigned int _var_number;
-  // System _system;
+  const unsigned int _var_number;
+  const System & _system;
+  // Point _point;
   // Real _value;
-  // Point _slave_center;
 
 private:
   const ViewFactor & _viewfactor;

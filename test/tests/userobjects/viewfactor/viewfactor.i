@@ -17,7 +17,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 400
+    initial_condition = 500
   [../]
 []
 # [AuxVariables]
@@ -41,6 +41,10 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
+  [./TimeDerivative]
+    type = TimeDerivative
+    variable = temp
+  []
 []
 [NodalNormals]
 []
@@ -51,18 +55,25 @@
     variable = temp
     boundary = 1
   [../]
-  [./slave]
-    type = DirichletBC
-    value = 500 #K
-    variable = temp
-    boundary = 7
-  [../]
+  # [./slave]
+  #   type = DirichletBC
+  #   value = 900 #K
+  #   variable = temp
+  #   boundary = 7
+  # [../]
   [./RadiationHeatTransfer]
     type = RadiationHeatTransferBC
     variable = temp
     boundary = '2 7'
     viewfactor_userobject = ViewFactor
   [../]
+  # [./Convective]
+  #   type = CoupledConvectiveFlux
+  #   T_infinity = 300
+  #   coefficient = 50
+  #   variable = temp
+  #   boundary = '8'
+  # [../]
 []
 [Materials]
   [./uo2_thermal]
@@ -71,14 +82,19 @@
   [../]
 []
 [Executioner]
-  type = Steady
+  type = Transient
   solve_type = PJFNK
+  start_time = 0
+  end_time = 1000
+  dt = 1
+  dtmin = 1e-6
+  nl_abs_tol = 1e-10
 []
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    master_boundary = '2'
-    slave_boundary = '7'
+    master_boundary = '2 7'
+    slave_boundary = '2 7'
     sampling_number = 100
     source_number = 100
     print_screen = false

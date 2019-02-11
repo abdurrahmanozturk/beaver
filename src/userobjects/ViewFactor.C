@@ -159,6 +159,21 @@ ViewFactor::getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const
   return center;
 }
 
+const Point
+ViewFactor::getCenterPoint2(std::map<unsigned int, std::vector<Real>> map) const
+{
+  unsigned int n = map.size();
+  Real sum_x{0}, sum_y{0}, sum_z{0};
+  for (size_t i = 0; i < n; i++)
+  {
+    sum_x += map[i][0];
+    sum_y += map[i][1];
+    sum_z += map[i][2];
+  }
+  Point center((sum_x / n), (sum_y / n), (sum_z / n)); // center is geometric mean nodes
+  return center;
+}
+
 const std::vector<Real>
 ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim) const
 {
@@ -307,7 +322,7 @@ ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map) const
   }
   // std::cout<<"r = "<<r<<std::endl;
   // std::cout<<"center = ("<<center[0]<<","<<center[1]<<","<<center[2]<<")"<<std::endl;
-  while(true)
+  while (true)
   {
     const Real rand_r = std::rand() / (1. * RAND_MAX);
     const Real r =rad*pow(rand_r,0.5);

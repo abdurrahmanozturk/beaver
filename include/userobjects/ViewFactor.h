@@ -28,6 +28,7 @@ public:
   const std::vector<Real> getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map) const;
   const std::vector<Real> getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const;
   const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map) const;
+  const Point getCenterPoint2(std::map<unsigned int, std::vector<Real>> map) const;
   const std::vector<Real> getRandomDirection(const std::vector<Real> & n, const int dim=3) const;
   const std::set<BoundaryID> & getMasterBoundaries() const;
   const std::set<BoundaryID> & getSlaveBoundaries() const;

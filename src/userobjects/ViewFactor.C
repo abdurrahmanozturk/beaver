@@ -116,19 +116,22 @@ ViewFactor::finalize()
       _F[master_bnd_id][slave_bnd_id]=viewfactor;
     }
   }
+  std::cout<<"F[7][11]"<<_viewfactors[4][11]<<std::endl;
   if (_printScreen==true)
     printViewFactors();
 }
 
-Real ViewFactor::getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) const
+Real ViewFactor::getViewFactor(BoundaryID master_bnd, unsigned int master_elem, BoundaryID slave_bnd, unsigned int slave_elem) const
 {
-  if (_viewfactors.find(master_elem) != _viewfactors.end())
+  if (_viewfactors_map.find(master_bnd) != _viewfactors_map.end())
   {
-    if (_viewfactors.find(master_elem)->second.find(slave_elem) != _viewfactors.find(master_elem)->second.end())
-      return _viewfactors.find(master_elem)->second.find(slave_elem)->second;
+    if (_viewfactors_map.find(master_bnd)->second.find(slave_bnd) != _viewfactors_map.find(master_bnd)->second.end())
+      if (_viewfactors_map.find(master_bnd)->second.find(slave_bnd)->second.find(master_elem) != _viewfactors_map.find(master_bnd)->second.find(slave_bnd)->second.end())
+        if (_viewfactors_map.find(master_bnd)->second.find(slave_bnd)->second.find(master_elem)->second.find(slave_elem) != _viewfactors_map.find(master_bnd)->second.find(slave_bnd)->second.find(master_elem)->second.end())
+          return (_viewfactors_map.find(master_bnd)->second.find(slave_bnd)->second.find(master_elem)->second.find(slave_elem)->second);
     else
-      mooseError("Viewfactor requested for unknown slave boundary. Make sure UserObject is executed on timestep_begin and boundaries are defined in UserObject block.");
+      mooseError("Viewfactor requested for unknown slave boundary. Make sure UserObject is executed on INITIAL and boundaries are defined correctly in UserObject block.");
   }
-  mooseError("Viewfactor requested for unknown master boundary. Make sure UserObject is executed on timestep_begin and boundaries are defined in UserObject block.");
+  mooseError("Viewfactor requested for unknown slave boundary. Make sure UserObject is executed on INITIAL and boundaries are defined correctly in UserObject block.");
   return 0;   //satisfy compiler
 }

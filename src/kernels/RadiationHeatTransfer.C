@@ -1,7 +1,7 @@
 #include "RadiationHeatTransfer.h"
 #include "Assembly.h"
 
-// registerMooseObject("BeaverApp", RadiationHeatTransfer);
+registerMooseObject("beaverApp", RadiationHeatTransfer);
 
 template <>
 InputParameters

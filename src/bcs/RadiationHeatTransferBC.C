@@ -36,6 +36,16 @@ RadiationHeatTransferBC::RadiationHeatTransferBC(const InputParameters & paramet
   unsigned int i{0};
   for (const auto bid : _boundary_ids)
     _emissivity[bid]=emissivity[i++];
+
+  for (const auto & t : _mesh.buildSideList())    //buildSideList(el,side,bnd)
+  {
+    auto elem_id = std::get<0>(t);
+    auto side_id = std::get<1>(t);
+    auto bnd_id = std::get<2>(t);
+    // if (_slave_boundary_ids.find(bnd_id)!=_slave_boundary_ids.end())
+    if (_boundary_ids.find(bnd_id)!=_boundary_ids.end())
+      _elem_side_map[elem_id]=side_id;
+  }
 }
 
 const std::map<unsigned int, std::vector<Real>>
@@ -82,47 +92,48 @@ RadiationHeatTransferBC::computeQpResidual()
     // std::cout<<"qp "<<_qp<<std::endl;
     // std::cout<<"master_temp ="<<_u[_qp]<<std::endl;
     // std::cout<<"qpoint "<<_q_point[_qp]<<std::endl;
-    for (const auto & t : _mesh.buildSideList())    //buildSideList(el,side,bnd)
+    for (const auto & elem : _elem_side_map)
     {
-      auto elem_id = std::get<0>(t);
-      auto side_id = std::get<1>(t);
-      auto bnd_id = std::get<2>(t);
-      // if (_slave_boundary_ids.find(bnd_id)!=_slave_boundary_ids.end())
-      if (_boundary_ids.find(bnd_id)!=_boundary_ids.end())
+      Elem * el = _mesh.elemPtr(elem.first);
+      unsigned int side = elem.second;
+      BoundaryID bnd_id = _mesh.getBoundaryIDs(el,side)[0];
+      // std::cout<<current_boundary_id<<"->"<<bnd_id<<std::endl;
+      _slave_elem_id = el->id();   //elem.first
+      if (_master_elem_id == _slave_elem_id)
+        continue;
+      Real area_slave = getArea(el,side);
+      std::map<unsigned int, std::vector<Real>> side_map{getSideMap(el,side)};
+      const std::vector<Real> center = _viewfactor.getCenterPoint(side_map);
+      const Point point(center[0],center[1],center[2]);
+      _u_slave = _system.point_value(_var_number, point, false);
+      // std::cout<<_u_slave<<std::endl;
+      Real temp_func_slave = _u_slave * _u_slave * _u_slave * _u_slave;
+      // const unsigned int Dim = el->dim();
+      // const std::vector<std::vector<OutputShape>> & phi = my_fe->get_phi();
+      // T_slave = _variable->getValue(el, slave_side_phi);
+      Real f_ms = _viewfactor.getViewFactor(current_boundary_id,_master_elem_id, bnd_id, _slave_elem_id);
+      if (f_ms!=0)
       {
-        Elem * el = _mesh.elemPtr(elem_id);
-        _slave_elem_id = el->id();
-        Real area_slave = getArea(el,side_id);
-        std::map<unsigned int, std::vector<Real>> side_map{getSideMap(el,side_id)};
-        const std::vector<Real> side_center = _viewfactor.getCenterPoint(side_map);
-        const Point point(side_center[0],side_center[1],side_center[2]);
-        _u_slave = _system.point_value(_var_number, point, false);
-        // std::cout<<_u_slave<<std::endl;
-        Real temp_func_slave = _u_slave * _u_slave * _u_slave * _u_slave;
-        // const unsigned int Dim = el->dim();
-        // const std::vector<std::vector<OutputShape>> & phi = my_fe->get_phi();
-        // T_slave = _variable->getValue(el, slave_side_phi);
-        Real f_ms = _viewfactor.getViewFactor(_master_elem_id, _slave_elem_id);
         // std::cout<<"F["<<_master_elem_id<<"]["<<_slave_elem_id<<"] = "<<f_ms<<std::endl;
-        Real f_sm = f_ms * (area_master / area_slave);
-        q_ms = _emissivity[current_boundary_id] * _stefan_boltzmann * f_ms * temp_func_master; // master-slave
-        q_sm = _emissivity[bnd_id] * _stefan_boltzmann * f_sm * temp_func_slave;  // slave-master
-        q_net += q_ms - q_sm;
-        // std::cout<<"q= "<<q_net<<std::endl;
-
-        // FIND THE SOLUTION AT SLAVE QUADRATURE POINT
-
-        // ADD emissivity values for master and slave Boundaries
-
-        // Node * qnode = _mesh.getQuadratureNode(el, side_id, _qp);
-        // _value = _system.point_value(_var_number, _slave_center, false);
-
-        // std::cout<<"Slave:"<<std::endl;
-        // std::cout<<"qp "<<_qp<<std::endl;
-        // std::cout<<"temp ="<<_value<<std::endl;
-        // std::cout<<"qpoint "<<qnode<<std::endl;
-        // calculate net heat flux between master element and salve element
       }
+      Real f_sm = f_ms * (area_master / area_slave);
+      q_ms = _emissivity[current_boundary_id] * _stefan_boltzmann * f_ms * temp_func_master; // master-slave
+      q_sm = _emissivity[bnd_id] * _stefan_boltzmann * f_sm * temp_func_slave;  // slave-master
+      q_net += q_ms - q_sm;
+      // std::cout<<"q= "<<q_net<<std::endl;
+
+      // FIND THE SOLUTION AT SLAVE QUADRATURE POINT
+
+      // ADD emissivity values for master and slave Boundaries
+
+      // Node * qnode = _mesh.getQuadratureNode(el, side_id, _qp);
+      // _value = _system.point_value(_var_number, _slave_center, false);
+
+      // std::cout<<"Slave:"<<std::endl;
+      // std::cout<<"qp "<<_qp<<std::endl;
+      // std::cout<<"temp ="<<_value<<std::endl;
+      // std::cout<<"qpoint "<<qnode<<std::endl;
+      // calculate net heat flux between master element and salve element
     }
   }
   return _test[_i][_qp] * q_net;

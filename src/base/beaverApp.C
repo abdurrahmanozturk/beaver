@@ -5,10 +5,10 @@
 #include "MooseSyntax.h"
 
 // Kernels
-#include "RadiationHeatTransfer.h"
+// #include "RadiationHeatTransfer.h"
 
 // UserObjects
-#include "ViewFactor.h"
+// #include "ViewFactor.h"
 
 
 // Materials
@@ -55,9 +55,9 @@ beaverApp::registerObjects(Factory & factory)
     Registry::registerObjectsTo(factory, {"beaverApp"});
 
     // Kernels
-    registerKernel(RadiationHeatTransfer);
+    // registerKernel(RadiationHeatTransfer);
     // UserObjects
-    registerUserObject(ViewFactor);
+    // registerUserObject(ViewFactor);
 
     // Materials
     registerMaterial(UO2);

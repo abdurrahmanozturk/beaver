@@ -61,13 +61,13 @@
   #   variable = temp
   #   boundary = 7
   # [../]
-  # [./RadiationHeatTransfer]
-  #   type = RadiationHeatTransferBC
-  #   variable = temp
-  #   boundary = '2 7 8 13'
-  #   emissivity = '1 1 1 1'
-  #   viewfactor_userobject = ViewFactor
-  # [../]
+  [./RadiationHeatTransfer]
+    type = RadiationHeatTransferBC
+    variable = temp
+    boundary = '2 7 8 13'
+    emissivity = '1 1 1 1'
+    viewfactor_userobject = ViewFactor
+  [../]
   # [./Convective]
   #   type = CoupledConvectiveFlux
   #   T_infinity = 300
@@ -86,7 +86,7 @@
   type = Steady
   solve_type = PJFNK
   # start_time = 0
-  # end_time = 1000
+  # end_time = 1
   # dt = 1e-3
   # dtmin = 1e-6
   # nl_abs_tol = 1e-10
@@ -99,12 +99,13 @@
   #   source_number = 100
   #   execute_on = INITIAL
   # [../]
-  [./ShapeFactor]
+  [./ViewFactor]
     type = ViewFactor
-    boundary = '2 7'
+    boundary = '2 7 8 13'
     method = MONTECARLO
-    sampling_number = 100
-    source_number = 100
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
     execute_on = INITIAL
   [../]
 []

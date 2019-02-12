@@ -18,7 +18,8 @@ public:
   virtual void finalize() override;
   virtual void threadJoin(const UserObject & y) override {}
 
-  virtual Real getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) const;
+  virtual Real getViewFactor(BoundaryID master_bnd, unsigned int master_elem,
+                             BoundaryID slave_bnd, unsigned int slave_elem) const;
 
 protected:
   const unsigned int _samplingNumber,_sourceNumber;

@@ -35,6 +35,7 @@ private:
   const std::set<BoundaryID> & _slave_boundary_ids;
   const Real _stefan_boltzmann;
   std::map<BoundaryID, Real> _emissivity;
+  std::map<unsigned int, unsigned int> _elem_side_map;
   unsigned int _master_elem_id,_slave_elem_id;
 };
 

@@ -1,18 +1,18 @@
-#ifndef VIEWFACTOR_H
-#define VIEWFACTOR_H
+#ifndef VIEWFACTORMONTECARLO_H
+#define VIEWFACTORMONTECARLO_H
 
 #include "SideUserObject.h"
 
 // Forward Declarations
-class ViewFactor;
+class ViewFactorMonteCarlo;
 
 template <>
-InputParameters validParams<ViewFactor>();
+InputParameters validParams<ViewFactorMonteCarlo>();
 
-class ViewFactor : public SideUserObject
+class ViewFactorMonteCarlo : public SideUserObject
 {
 public:
-  ViewFactor(const InputParameters & parameters);
+  ViewFactorMonteCarlo(const InputParameters & parameters);
   virtual void initialize() override;
   virtual void execute() override;
   virtual void finalize() override;
@@ -76,4 +76,4 @@ protected:
   std::map<unsigned int, std::map<unsigned int, Real>> _viewfactors;  //elem-elem viewfactors
 };
 
-#endif // VIEWFACTOR_H
+#endif // VIEWFACTORMONTECARLO_H

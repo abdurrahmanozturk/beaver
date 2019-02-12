@@ -17,7 +17,6 @@ validParams<RadiationHeatTransfer>()
 
 RadiationHeatTransfer::RadiationHeatTransfer(const InputParameters & parameters)
   : Kernel(parameters),
-    // _temp(coupledValue("variable")),
     _viewfactor(getUserObject<ViewFactor>("viewfactor_userobject")),
     _master_boundary_ids(_viewfactor.getMasterBoundaries()),
     _slave_boundary_ids(_viewfactor.getSlaveBoundaries()),

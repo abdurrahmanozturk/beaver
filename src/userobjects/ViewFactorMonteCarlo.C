@@ -1,5 +1,5 @@
 #include <vector>
-#include "ViewFactor.h"
+#include "ViewFactorMonteCarlo.h"
 #include "MooseRandom.h"
 // libMesh includes
 #include "libmesh/boundary_info.h"
@@ -13,7 +13,7 @@ registerMooseObject("beaverApp", ViewFactorMonteCarlo);
 
 template <>
 InputParameters
-validParams<ViewFactor>()
+validParams<ViewFactorMonteCarlo>()
 {
   InputParameters params = validParams<UserObject>();
   params += validParams<BoundaryRestrictableRequired>();
@@ -32,7 +32,7 @@ validParams<ViewFactor>()
   return params;
 }
 
-ViewFactor::ViewFactor(const InputParameters & parameters)
+ViewFactorMonteCarlo::ViewFactorMonteCarlo(const InputParameters & parameters)
   : SideUserObject(parameters),
     _current_normals(_assembly.normals()),
     _boundary_ids(boundaryIDs()),
@@ -85,19 +85,19 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
 }
 
 const std::set<BoundaryID> &
-ViewFactor::getMasterBoundaries() const
+ViewFactorMonteCarlo::getMasterBoundaries() const
 {
   return _master_boundary_ids;
 }
 
 const std::set<BoundaryID> &
-ViewFactor::getSlaveBoundaries() const
+ViewFactorMonteCarlo::getSlaveBoundaries() const
 {
   return _slave_boundary_ids;
 }
 
 const Real
-ViewFactor::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2) const
+ViewFactorMonteCarlo::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2) const
 {
   Real v1_length = pow((v1[0]*v1[0]+v1[1]*v1[1]+v1[2]*v1[2]),0.5);
   Real v2_length = pow((v2[0]*v2[0]+v2[1]*v2[1]+v2[2]*v2[2]),0.5);
@@ -108,7 +108,7 @@ ViewFactor::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector
 }
 
 const Real
-ViewFactor::getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2) const
+ViewFactorMonteCarlo::getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2) const
 {
   Real d = pow(((v2[0]-v1[0])*(v2[0]-v1[0])
                +(v2[1]-v1[1])*(v2[1]-v1[1])
@@ -117,7 +117,7 @@ ViewFactor::getDistanceBetweenPoints(const std::vector<Real> v1, const std::vect
 }
 
 const Real
-ViewFactor::getAnalyticalViewFactor(const std::vector<Real> & v)
+ViewFactorMonteCarlo::getAnalyticalViewFactor(const std::vector<Real> & v)
 {
   Real x = 1.0 * v[0] / v[2];
   Real y = 1.0 * v[1] / v[2];
@@ -130,13 +130,13 @@ ViewFactor::getAnalyticalViewFactor(const std::vector<Real> & v)
 }
 
 const Real
-ViewFactor::getVectorLength(const std::vector<Real> & v) const
+ViewFactorMonteCarlo::getVectorLength(const std::vector<Real> & v) const
 {
   return pow((v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),0.5);
 }
 
 const std::vector<Real>
-ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map) const
+ViewFactorMonteCarlo::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map) const
 {
   // three points in plane
   std::vector<Real> p1 = map[0];
@@ -163,7 +163,7 @@ ViewFactor::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map)
 }
 
 const std::vector<Real>
-ViewFactor::getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const
+ViewFactorMonteCarlo::getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const
 {
   unsigned int n=map.size();
   Real sum_x{0},sum_y{0},sum_z{0};
@@ -178,7 +178,7 @@ ViewFactor::getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const
 }
 
 const std::vector<Real>
-ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim) const
+ViewFactorMonteCarlo::getRandomDirection(const std::vector<Real> & n,const int dim) const
 {
   //find theta and phi for unit normal vector in global coordinate system
   Real theta_normal = acos(n[2]);
@@ -232,7 +232,7 @@ ViewFactor::getRandomDirection(const std::vector<Real> & n,const int dim) const
 }
 
 const Real
-ViewFactor::getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
+ViewFactorMonteCarlo::getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
 {
   //FIND AREA OF ELEMENT SURFACE by summing area of triangles
   unsigned int n = map.size();    // number of nodes in element surface
@@ -251,7 +251,7 @@ ViewFactor::getArea(const std::vector<Real> &p, std::map<unsigned int, std::vect
 }
 
 const bool
-ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
+ViewFactorMonteCarlo::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
 {
   // std::vector<Real> x;
   // std::vector<Real> y;
@@ -312,7 +312,7 @@ ViewFactor::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::
 }
 
 const std::vector<Real>
-ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map) const
+ViewFactorMonteCarlo::getRandomPoint(std::map<unsigned int, std::vector<Real>> map) const
 {
   const std::vector<Real> n = getNormalFromNodeMap(map);
   const std::vector<Real> center{getCenterPoint(map)};
@@ -339,7 +339,7 @@ ViewFactor::getRandomPoint(std::map<unsigned int, std::vector<Real>> map) const
 }
 
 const bool
-ViewFactor::isIntersected(const std::vector<Real> & p1,
+ViewFactorMonteCarlo::isIntersected(const std::vector<Real> & p1,
                           const std::vector<Real> & dir,
                           std::map<unsigned int, std::vector<Real>> map) const
 {
@@ -371,7 +371,7 @@ ViewFactor::isIntersected(const std::vector<Real> & p1,
 }
 
 const bool
-ViewFactor::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & master,
+ViewFactorMonteCarlo::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & master,
                          const std::map<unsigned int, std::vector<Real>> & slave) const
 {
   std::map<unsigned int, std::vector<Real>> master_map = master;
@@ -397,7 +397,7 @@ ViewFactor::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & maste
 }
 
 const bool
-ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
+ViewFactorMonteCarlo::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
                       const std::map<unsigned int, std::vector<Real>> & slave) const
 {
   //check element sides are looking each other
@@ -455,7 +455,7 @@ ViewFactor::isVisible(const std::map<unsigned int, std::vector<Real>> & master,
 }
 
 void
-ViewFactor::printViewFactors()
+ViewFactorMonteCarlo::printViewFactors()
 {
   std::cout << " " << std::endl;
   std::cout << "============================ View Factors ============================"
@@ -506,7 +506,7 @@ ViewFactor::printViewFactors()
 }
 
 void
-ViewFactor::printNodesNormals()
+ViewFactorMonteCarlo::printNodesNormals()
 {
   for (const auto &boundary_id : _boundary_ids)    //bid : bid
   {
@@ -531,7 +531,7 @@ ViewFactor::printNodesNormals()
 }
 
 void
-ViewFactor::initialize()
+ViewFactorMonteCarlo::initialize()
 {
   std::srand(time(NULL));
   if (_debugMode==true)
@@ -551,11 +551,11 @@ ViewFactor::initialize()
   unsigned int n_elem = _current_elem->n_nodes();
   // std::cout << n_elem <<"-noded element (typeid="<<elem_type<<")"<< std::endl;
   // if (n_elem!=8)
-  //   mooseError("ViewFactor UserObject can only be used for 8-noded Hexagonal Elements");
+  //   mooseError("ViewFactorMonteCarlo UserObject can only be used for 8-noded Hexagonal Elements");
 }
 
 void
-ViewFactor::execute()
+ViewFactorMonteCarlo::execute()
 {
   // LOOPING OVER ELEMENTS ON THE MASTER BOUNDARY
   // Define IDs
@@ -586,7 +586,7 @@ ViewFactor::execute()
   }
 }
 void
-ViewFactor::finalize()
+ViewFactorMonteCarlo::finalize()
 {
   std::cout<<"Calculating View Factors"<<std::endl;
   std::cout<<"------------------------"<<std::endl;
@@ -728,7 +728,7 @@ ViewFactor::finalize()
   }
 }
 
-Real ViewFactor::getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) const
+Real ViewFactorMonteCarlo::getViewFactor(BoundaryID master_elem, BoundaryID slave_elem) const
 {
   if (_viewfactors.find(master_elem) != _viewfactors.end())
   {

@@ -64,7 +64,8 @@
   [./RadiationHeatTransfer]
     type = RadiationHeatTransferBC
     variable = temp
-    boundary = '2 7'
+    boundary = '2 7 8 13'
+    emissivity = '1 1 1 1'
     viewfactor_userobject = ViewFactor
   [../]
   # [./Convective]
@@ -86,20 +87,16 @@
   solve_type = PJFNK
   start_time = 0
   end_time = 1000
-  dt = 1
+  dt = 1e-3
   dtmin = 1e-6
   nl_abs_tol = 1e-10
 []
 [UserObjects]
   [./ViewFactor]
     type = ViewFactor
-    master_boundary = '2 7'
-    slave_boundary = '2 7'
+    boundary = '2 7 8 13'
     sampling_number = 100
     source_number = 100
-    print_screen = false
-    error_tolerance = 1e-9
-    parallel_planes = '10.0 10.0 9.0'
     execute_on = INITIAL
   [../]
 []

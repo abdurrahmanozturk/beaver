@@ -50,17 +50,17 @@ public:
   // Point p;
   // Point q;
   const MooseArray<Point> & _current_normals;
-  // const std::set<BoundaryID> & _boundary_ids;
+  std::set<BoundaryID>  _boundary_ids;
   const std::set<BoundaryID> _mesh_boundary_ids;
   const std::set<BoundaryID> _mesh_sideset_ids;
   const std::set<BoundaryID> _mesh_nodeset_ids;
   const double _PI;
+  const bool _debugMode;
   const bool _printScreen;
   const Real _error_tol;   //tolerance
   const unsigned int _samplingNumber,_sourceNumber;
   std::vector<Real> _parallel_planes_geometry;
   // BoundaryID _master_boundary,_slave_boundary;
-  std::vector<BoundaryID> _boundary_ids;   //_boundary_list
   std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real>>>> _viewfactors_map;
   std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _coordinates_map;
   // std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _normal_map;

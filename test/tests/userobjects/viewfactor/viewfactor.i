@@ -41,10 +41,10 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./TimeDerivative]
-  #   type = TimeDerivative
-  #   variable = temp
-  # []
+  [./TimeDerivative]
+    type = TimeDerivative
+    variable = temp
+  []
 []
 [NodalNormals]
 []
@@ -83,13 +83,13 @@
   [../]
 []
 [Executioner]
-  type = Steady
+  type = Transient
   solve_type = PJFNK
-  # start_time = 0
-  # end_time = 1
-  # dt = 1e-3
-  # dtmin = 1e-6
-  # nl_abs_tol = 1e-10
+  start_time = 0
+  end_time = 1
+  dt = 1e-3
+  dtmin = 1e-6
+  nl_abs_tol = 1e-10
 []
 [UserObjects]
   # [./ViewFactor]

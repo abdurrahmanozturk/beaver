@@ -35,10 +35,6 @@ void
 ViewFactor::initialize()
 {
   std::srand(time(NULL));
-  for (auto elside:_elem_side_map)
-  {
-    std::cout<<"el: "<<elside.first<<"side: "<<elside.second<<std::endl;
-  }
 }
 
 void
@@ -116,9 +112,9 @@ ViewFactor::execute()
         viewfactor_elem_to_bnd += 0;
       }
     }
-    std::cout<<"F["<<master_elem<<"]["<<slave_elem<<"]= "<<_viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem]<<std::endl;
+    // std::cout<<"F["<<master_elem<<"]["<<slave_elem<<"]= "<<_viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem]<<std::endl;
   }
-  std::cout<<"Fsum="<<viewfactor_elem_to_bnd<<std::endl;
+  // std::cout<<"Fsum="<<viewfactor_elem_to_bnd<<std::endl;
 }
 
 // void
@@ -135,6 +131,8 @@ ViewFactor::execute()
 void
 ViewFactor::finalize()
 {
+  if (_printScreen==true)
+    printViewFactors();
 //   std::cout<<"------------"<<std::endl;
 //   std::cout<<"ViewFactors:"<<std::endl;
 //   for (auto it1 : _viewfactors_map)
@@ -167,6 +165,8 @@ ViewFactor::finalize()
   //               std::cout<<"F["<<i<<"]["<<j<<"]["<<k<<"]["<<l<<"] = "<<getViewFactor(i,j,k,l)<<std::endl;
   //             }
   //           }
+  //
+  //
   //
   // std::cout<<"Calculating View Factors"<<std::endl;
   // std::cout<<"------------------------"<<std::endl;

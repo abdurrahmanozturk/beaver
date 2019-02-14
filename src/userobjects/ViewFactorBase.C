@@ -121,6 +121,23 @@ ViewFactorBase::getVectorLength(const std::vector<Real> & v) const
   return pow((v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),0.5);
 }
 
+const std::map<unsigned int, std::vector<Real>>
+ViewFactorBase::getSideMap(const Elem * elem,const unsigned int side) const
+{
+  std::unique_ptr<const Elem> elem_side = elem->build_side_ptr(side);
+  std::map<unsigned int, std::vector<Real>> side_map;
+  unsigned int n_n = elem_side->n_nodes();
+  for (unsigned int i = 0; i < n_n; i++)
+  {
+    const Node * node = elem_side->node_ptr(i);    //get nodes
+    for (unsigned int j = 0; j < 3; j++)         // Define nodal coordinates and normals
+    {
+      side_map[i].push_back((*node)(j));
+    }
+  }
+  return side_map;
+}
+
 const std::vector<Real>
 ViewFactorBase::getNormalFromNodeMap(std::map<unsigned int, std::vector<Real> > map) const
 {

@@ -26,6 +26,8 @@ public:
   const std::vector<Real> getRandomDirection(const std::vector<Real> & n, const int dim=3) const;
   const std::set<BoundaryID> & getMasterBoundaries() const;
   const std::set<BoundaryID> & getSlaveBoundaries() const;
+  const std::map<unsigned int, std::vector<Real>> getSideMap(const Elem * elem,
+                                                             const unsigned int side) const;
   const bool isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const;
   const bool isIntersected(const std::vector<Real> & p1,
                            const std::vector<Real> & dir,

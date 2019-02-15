@@ -41,10 +41,10 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./TimeDerivative]
-  #   type = TimeDerivative
-  #   variable = temp
-  # []
+  [./TimeDerivative]
+    type = TimeDerivative
+    variable = temp
+  []
 []
 [NodalNormals]
 []
@@ -61,19 +61,21 @@
   #   variable = temp
   #   boundary = 7
   # [../]
-  # [./RadiationHeatTransfer]
-  #   type = RadiationHeatTransferBC
+  [./RadiationHeatTransfer]
+    type = RadiationHeatTransferBC
+    variable = temp
+    boundary = '2 7'
+    emissivity = '1 1'
+    viewfactor_userobject = ViewFactor
+  [../]
+  # [./RadiativeBC]
+  #   type = RadiativeBC
   #   variable = temp
-  #   boundary = '2 7 8 13'
-  #   emissivity = '1 1 1 1'
-  #   viewfactor_userobject = ViewFactor
-  # [../]
-  # [./Convective]
-  #   type = CoupledConvectiveFlux
-  #   T_infinity = 300
-  #   coefficient = 50
-  #   variable = temp
-  #   boundary = '8'
+  #   viewfactor_method = MONTECARLO
+  #   boundary = '2 7'
+  #   emissivity = '1 1'
+  #   sampling_number = 10
+  #   source_number = 10
   # [../]
 []
 [Materials]
@@ -83,13 +85,13 @@
   [../]
 []
 [Executioner]
-  type = Steady
+  type = Transient
   solve_type = PJFNK
-  # start_time = 0
-  # end_time = 1
-  # dt = 1e-3
-  # dtmin = 1e-6
-  # nl_abs_tol = 1e-10
+  start_time = 0
+  end_time = 100
+  dt = 1e-3
+  dtmin = 1e-6
+  # nl_abs_tol = 1e-15
 []
 [UserObjects]
   # [./ViewFactor]
@@ -103,9 +105,9 @@
     type = ViewFactor
     boundary = '2 7'
     method = MONTECARLO
-    sampling_number = 100
-    source_number = 100
-    print_screen = true
+    sampling_number = 10
+    source_number = 10
+    print_screen = false
     execute_on = INITIAL
   [../]
 []

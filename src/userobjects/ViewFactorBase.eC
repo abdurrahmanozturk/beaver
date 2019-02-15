@@ -132,7 +132,7 @@ ViewFactorBase::getSideMap(const Elem * elem,const unsigned int side) const
 }
 
 const std::vector<Real>
-ViewFactorBase::getNormal(std::map<unsigned int, std::vector<Real>> map) const
+ViewFactorBase::getNormal(std::map<unsigned int, std::vector<Real> > map) const
 {
   // three points in plane
   std::vector<Real> p1 = map[0];
@@ -348,13 +348,12 @@ ViewFactorBase::isVisible(const std::map<unsigned int, std::vector<Real>> & mast
                           const std::map<unsigned int, std::vector<Real>> & slave_side_map) const
 {
   //check element sides are looking at each other
-  if (isSidetoSide(master_side_map, slave_side_map) == false)
+  if (isSidetoSide(master_side_map,slave_side_map)==false)
   {
     return false;
   }
   // otherwise, check whether there is a surface between master and slave or not
-  const std::vector<Real> master_center =
-      getCenterPoint(master_side_map); // edges can be chosen instead
+  const std::vector<Real> master_center = getCenterPoint(master_side_map); // edges can be chosen instead
   const std::vector<Real> slave_center = getCenterPoint(slave_side_map);
   Real d = getDistanceBetweenPoints(master_center,slave_center);
   const Real dir_x = (slave_center[0]-master_center[0])/d;
@@ -390,8 +389,7 @@ ViewFactorBase::isVisible(const std::map<unsigned int, std::vector<Real>> & mast
     d2 = getDistanceBetweenPoints(master_center,side_center);
     // std::cout<<"d1= "<<d1<<" d2= "<<d2<<std::endl;
     // for better results node to node distances can be checked
-    if (isSidetoSide(master_side_map, side_map) && isIntersected(master_center, dir, side_map) &&
-        d2 < d1)
+    if (isSidetoSide(master_side_map,side_map) && isIntersected(master_center,dir,side_map) && d2<d1)
     {
       if (_debugMode==true)
       {
@@ -453,8 +451,7 @@ ViewFactorBase::printViewFactors()
 const Real
 ViewFactorBase::doMonteCarlo(std::map<unsigned int, std::vector<Real>> master_side_map,
                              std::map<unsigned int, std::vector<Real>> slave_side_map,
-                             unsigned int _sourceNumber,
-                             unsigned int _samplingNumber)
+                             unsigned int _sourceNumber, unsigned int _samplingNumber)
 {
   const std::vector<Real> master_elem_normal = getNormal(master_side_map);
   unsigned int counter{0};

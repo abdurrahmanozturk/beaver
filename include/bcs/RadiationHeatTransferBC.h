@@ -29,7 +29,7 @@ protected:
   // Real _value;
 
 private:
-  const ViewFactor & _viewfactor;
+  const ViewFactor & _vf;
   const std::set<BoundaryID> & _boundary_ids;
   const std::set<BoundaryID> & _master_boundary_ids;
   const std::set<BoundaryID> & _slave_boundary_ids;

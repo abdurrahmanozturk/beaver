@@ -1,4 +1,3 @@
-#view_factor calculations for 2 parallel blocks
 [Mesh]
   type = FileMesh
   file = parallel_blocks.e

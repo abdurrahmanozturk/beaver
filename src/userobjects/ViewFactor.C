@@ -20,6 +20,7 @@ ViewFactor::ViewFactor(const InputParameters & parameters)
     _samplingNumber(getParam<unsigned int>("sampling_number")),
     _sourceNumber(getParam<unsigned int>("source_number")),
     _method(getParam<std::string>("method"))
+    // _viewfactor(declareProperty<Real>("viewfactor"))
 {
   for (const auto & t : _mesh.buildSideList())    //buildSideList(el,side,bnd)
   {
@@ -86,12 +87,14 @@ ViewFactor::execute()
           mooseError("Undefined method for view factor calculations.");
         _viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem] = viewfactor_elem_to_elem;
         viewfactor_elem_to_bnd += viewfactor_elem_to_elem;
+        // _viewfactor[_qp] = viewfactor_elem_to_elem;
       }
       else
       {
         // std::cout<<"not visible"<<std::endl;
         _viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem] = 0;
         viewfactor_elem_to_bnd += 0;
+        // _viewfactor[_qp] = 0;
       }
     }
     // std::cout<<"F["<<master_elem<<"]["<<slave_elem<<"]= "<<_viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem]<<std::endl;

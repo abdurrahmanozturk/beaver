@@ -1,6 +1,6 @@
 BasedOnStyle: LLVM
 
-TabWidth: 3
+TabWidth: 2
 ColumnLimit: 100
 UseTab: Never
 

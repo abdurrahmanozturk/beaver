@@ -135,7 +135,7 @@ framework/contrib/exodiff/exodiff
 *.gcov
 
 # paraview state files
-#*.pvsm
+*.pvsm
 
 #Peacock generated files
 peacock_*.i

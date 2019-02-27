@@ -101,17 +101,17 @@ ViewFactor::execute()
   }
   // std::cout<<"Fsum="<<viewfactor_elem_to_bnd<<std::endl;
 }
-
-// void
-// ViewFactor::threadJoin(const UserObject & y)
-// {
-//   const ViewFactor & vf = dynamic_cast<const ViewFactor &>(y);
-//   for (auto it1 : vf._viewfactors_map)
-//     for (auto it2 : it1.second)
-//       for (auto it3 : it2.second)
-//         for (auto it4 : it3.second)
-//           _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
-// }
+//
+void
+ViewFactor::threadJoin(const UserObject & y)
+{
+  const ViewFactor & vf = dynamic_cast<const ViewFactor &>(y);
+  for (auto it1 : vf._viewfactors_map)
+    for (auto it2 : it1.second)
+      for (auto it3 : it2.second)
+        for (auto it4 : it3.second)
+          _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
+}
 
 void
 ViewFactor::finalize()
@@ -120,38 +120,28 @@ ViewFactor::finalize()
   std::cout << "------------------------" << std::endl;
   if (_printScreen==true)
     printViewFactors();
-//   std::cout<<"------------"<<std::endl;
-//   std::cout<<"ViewFactors:"<<std::endl;
-//   for (auto it1 : _viewfactors_map)
-//     for (auto it2 : it1.second)
-//       for (auto it3 : it2.second)
-//         for (auto it4 : it3.second)
-//           {
-//             gatherSum(it4.second);
-//           }
+  std::cout<<"------------"<<std::endl;
+  std::cout<<"ViewFactors:"<<std::endl;
   // for (auto it1 : _viewfactors_map)
   //   for (auto it2 : it1.second)
   //     for (auto it3 : it2.second)
   //       for (auto it4 : it3.second)
   //         {
-  //           // std::cout<<"map size ="<<_viewfactors_map.size()*it1.second.size()*it2.second.size()*it3.second.size()<<std::endl;
-  //           Real vf = _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
-  //           std::cout<<"F["<<it1.first<<"]["<<it2.first<<"]["<<it3.first<<"]["<<it4.first<<"] = "<<vf<<std::endl;
+  //           gatherSum(it4.second);
   //         }
 
-  // for (size_t i = 2; i < 8; i++)
-  //   if (i==2 || i==7)
-  //     for (size_t j = 0; j < 8; j++)
-  //       for (size_t k = 2; k < 8; k++)
-  //         if (k==2 || k==7)
-  //           for (size_t l = 0; l < 8; l++)
-  //           {
-  //             Real vf = getViewFactor(i,j,k,l);
-  //             if (vf<10)
-  //             {
-  //               std::cout<<"F["<<i<<"]["<<j<<"]["<<k<<"]["<<l<<"] = "<<getViewFactor(i,j,k,l)<<std::endl;
-  //             }
-  //           }
+  // _communicator.allgather(_viewfactors_map);    // check header files for use of _communicator!!!
+
+  //write viewfactors to screen for debugging
+  for (auto it1 : _viewfactors_map)
+    for (auto it2 : it1.second)
+      for (auto it3 : it2.second)
+        for (auto it4 : it3.second)
+          {
+            // std::cout<<"map size ="<<_viewfactors_map.size()*it1.second.size()*it2.second.size()*it3.second.size()<<std::endl;
+            Real vf = _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
+            std::cout<<"F["<<it1.first<<"]["<<it2.first<<"]["<<it3.first<<"]["<<it4.first<<"] = "<<vf<<std::endl;
+          }
 }
 
 Real ViewFactor::getViewFactor(BoundaryID master_bnd, unsigned int master_elem, BoundaryID slave_bnd, unsigned int slave_elem) const

@@ -32,7 +32,7 @@ ViewFactorBase::ViewFactorBase(const InputParameters & parameters)
 {
     if (_master_boundary_names.size()!=0 && _slave_boundary_names.size()!=0)
     {
-      _boundary_ids.clear();
+      _boundary_ids.clear();   //use master and slave boundaries if they are given in input file
       // Get the IDs from the supplied names
       std::vector<BoundaryID> master_vec_ids = _mesh.getBoundaryIDs(_master_boundary_names, true);
       std::vector<BoundaryID> slave_vec_ids = _mesh.getBoundaryIDs(_slave_boundary_names, true);
@@ -63,38 +63,6 @@ ViewFactorBase::ViewFactorBase(const InputParameters & parameters)
     }
 }
 
-const std::set<BoundaryID> &
-ViewFactorBase::getMasterBoundaries() const
-{
-  return _master_boundary_ids;
-}
-
-const std::set<BoundaryID> &
-ViewFactorBase::getSlaveBoundaries() const
-{
-  return _slave_boundary_ids;
-}
-
-const Real
-ViewFactorBase::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2) const
-{
-  Real v1_length = pow((v1[0]*v1[0]+v1[1]*v1[1]+v1[2]*v1[2]),0.5);
-  Real v2_length = pow((v2[0]*v2[0]+v2[1]*v2[1]+v2[2]*v2[2]),0.5);
-  Real v12_dot = v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2];
-  Real theta = acos(v12_dot/(v1_length*v2_length));  //Radian
-  theta *= (180/_PI);
-  return theta;
-}
-
-const Real
-ViewFactorBase::getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2) const
-{
-  Real d = pow(((v2[0]-v1[0])*(v2[0]-v1[0])
-               +(v2[1]-v1[1])*(v2[1]-v1[1])
-               +(v2[2]-v1[2])*(v2[2]-v1[2])),0.5);
-  return d;
-}
-
 const Real
 ViewFactorBase::getAnalyticalViewFactor(const std::vector<Real> & v)
 {
@@ -108,24 +76,56 @@ ViewFactorBase::getAnalyticalViewFactor(const std::vector<Real> & v)
   return viewfactor;
 }
 
+const std::set<BoundaryID> &
+ViewFactorBase::getMasterBoundaries() const
+{
+  return _master_boundary_ids;
+}
+
+const std::set<BoundaryID> &
+ViewFactorBase::getSlaveBoundaries() const
+{
+  return _slave_boundary_ids;
+}
+
 const Real
 ViewFactorBase::getVectorLength(const std::vector<Real> & v) const
 {
-  return pow((v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),0.5);
+  return pow((v[0]*v[0]+v[1]*v[1]+v[2]*v[2]),0.5);      //vector length
+}
+
+const Real
+ViewFactorBase::getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2) const
+{
+  Real v1_length = getVectorLength(v2);                 //length of v1
+  Real v2_length = getVectorLength(v1);                 //length of v2
+  Real v12_dot = v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2];   //Dot product of v1 and v2
+  Real theta = acos(v12_dot/(v1_length*v2_length));     //Theta in Radian
+  theta *= (180/_PI);                                   //Theta in Degree
+  return theta;
+}
+
+const Real
+ViewFactorBase::getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2) const
+{
+  Real d = pow(((v2[0]-v1[0])*(v2[0]-v1[0])
+               +(v2[1]-v1[1])*(v2[1]-v1[1])
+               +(v2[2]-v1[2])*(v2[2]-v1[2])),0.5);      //distance between two points
+  return d;
 }
 
 const std::map<unsigned int, std::vector<Real>>
 ViewFactorBase::getSideMap(const Elem * elem,const unsigned int side) const
 {
-  std::unique_ptr<const Elem> elem_side = elem->build_side_ptr(side);
-  std::map<unsigned int, std::vector<Real>> side_map;
-  unsigned int n_n = elem_side->n_nodes();
-  for (unsigned int i = 0; i < n_n; i++)
+  std::unique_ptr<const Elem> elem_side = elem->build_side_ptr(side); //define side pointer
+  std::map<unsigned int, std::vector<Real>> side_map;  //define an empty map of vectors
+  unsigned int n_n = elem_side->n_nodes();       //define number of nodes in side
+  for (unsigned int i = 0; i < n_n; i++)         // loop over nodes
   {
-    const Node * node = elem_side->node_ptr(i);    //get nodes
-    for (unsigned int j = 0; j < 3; j++)         // Define nodal coordinates and normals
+    const Node * node = elem_side->node_ptr(i);  // define pointer for node i
+    for (unsigned int j = 0; j < 3; j++)         // loop over components(x,y,z) of node i
     {
-      side_map[i].push_back((*node)(j));
+      side_map[i].push_back((*node)(j));         // put nodal coordinates of node i into vector
     }
   }
   return side_map;
@@ -158,6 +158,7 @@ ViewFactorBase::getNormal(std::map<unsigned int, std::vector<Real>> map) const
   return n;
 }
 
+
 const std::vector<Real>
 ViewFactorBase::getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const
 {
@@ -169,8 +170,27 @@ ViewFactorBase::getCenterPoint(std::map<unsigned int, std::vector<Real> > map) c
     sum_y += map[i][1];
     sum_z += map[i][2];
   }
-  std::vector<Real> center{(sum_x/n),(sum_y/n),(sum_z/n)};  //center is geometric mean nodes
+  std::vector<Real> center{(sum_x/n),(sum_y/n),(sum_z/n)};  //center is geometric mean of nodes
   return center;
+}
+
+const Real
+ViewFactorBase::getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
+{
+  //FIND AREA OF ELEMENT SURFACE by summing area of triangles
+  unsigned int n = map.size();    // number of nodes in element surface
+  // std::cout<<" n= "<<n<<std::endl;
+  Real area{0};
+  for (size_t i = 0; i < n; i++)    //create triangle and calculate area
+  {
+    const std::vector<Real> node1 = map[i];
+    const std::vector<Real> node2 = map[(i+1)%n];
+    const std::vector<Real> v1 = {(node1[0]-p[0]),(node1[1]-p[1]),(node1[2]-p[2])};
+    const std::vector<Real> v2 = {(node2[0]-p[0]),(node2[1]-p[1]),(node2[2]-p[2])};
+    const Real theta = (_PI/180)*getAngleBetweenVectors(v1,v2);
+    area += 0.5 * getVectorLength(v1)*getVectorLength(v2)*sin(theta);
+  }
+  return area;
 }
 
 const std::vector<Real>
@@ -227,24 +247,6 @@ ViewFactorBase::getRandomDirection(const std::vector<Real> & n,const int dim) co
   return dir_local;
 }
 
-const Real
-ViewFactorBase::getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
-{
-  //FIND AREA OF ELEMENT SURFACE by summing area of triangles
-  unsigned int n = map.size();    // number of nodes in element surface
-  // std::cout<<" n= "<<n<<std::endl;
-  Real area{0};
-  for (size_t i = 0; i < n; i++)    //create triangle and calculate area
-  {
-    const std::vector<Real> node1 = map[i];
-    const std::vector<Real> node2 = map[(i+1)%n];
-    const std::vector<Real> v1 = {(node1[0]-p[0]),(node1[1]-p[1]),(node1[2]-p[2])};
-    const std::vector<Real> v2 = {(node2[0]-p[0]),(node2[1]-p[1]),(node2[2]-p[2])};
-    const Real theta = (_PI/180)*getAngleBetweenVectors(v1,v2);
-    area += 0.5 * getVectorLength(v1)*getVectorLength(v2)*sin(theta);
-  }
-  return area;
-}
 
 const bool
 ViewFactorBase::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const

@@ -24,10 +24,10 @@ RadiationHeatTransferBC::RadiationHeatTransferBC(const InputParameters & paramet
                                  Moose::VarKindType::VAR_ANY,
                                  Moose::VarFieldType::VAR_FIELD_STANDARD).number()),
     _system(_subproblem.getSystem(getParam<NonlinearVariableName>("variable"))),
-    _viewfactor(getUserObject<ViewFactor>("viewfactor_userobject")),
+    _vf(getUserObject<ViewFactor>("viewfactor_userobject")),
     _boundary_ids(boundaryIDs()),
-    _master_boundary_ids(_viewfactor.getMasterBoundaries()),
-    _slave_boundary_ids(_viewfactor.getSlaveBoundaries()),
+    _master_boundary_ids(_vf.getMasterBoundaries()),
+    _slave_boundary_ids(_vf.getSlaveBoundaries()),
     _stefan_boltzmann(getParam<Real>("stefan_boltzmann"))
 {
   std::vector<Real> emissivity = getParam<std::vector<Real>>("emissivity");
@@ -69,8 +69,8 @@ const Real
 RadiationHeatTransferBC::getArea(const Elem * elem,const unsigned int side)
 {
   std::map<unsigned int, std::vector<Real>> side_map{getSideMap(elem,side)};
-  const std::vector<Real> side_center = _viewfactor.getCenterPoint(side_map);
-  Real area = _viewfactor.getArea(side_center,side_map);
+  const std::vector<Real> side_center = _vf.getCenterPoint(side_map);
+  Real area = _vf.getArea(side_center,side_map);
   // std::cout<<"BC::area ="<<area<<std::endl;
   return area;
 }
@@ -103,7 +103,7 @@ RadiationHeatTransferBC::computeQpResidual()
         continue;
       Real area_slave = getArea(el,side);
       std::map<unsigned int, std::vector<Real>> side_map{getSideMap(el,side)};
-      const std::vector<Real> center = _viewfactor.getCenterPoint(side_map);
+      const std::vector<Real> center = _vf.getCenterPoint(side_map);
       const Point point(center[0],center[1],center[2]);
       _u_slave = _system.point_value(_var_number, point, false);
       // std::cout<<_u_slave<<std::endl;
@@ -111,7 +111,7 @@ RadiationHeatTransferBC::computeQpResidual()
       // const unsigned int Dim = el->dim();
       // const std::vector<std::vector<OutputShape>> & phi = my_fe->get_phi();
       // T_slave = _variable->getValue(el, slave_side_phi);
-      Real f_ms = _viewfactor.getViewFactor(current_boundary_id,_master_elem_id, bnd_id, _slave_elem_id);
+      Real f_ms = _vf.getViewFactor(current_boundary_id,_master_elem_id, bnd_id, _slave_elem_id);
       if (f_ms!=0)
       {
         // std::cout<<"F["<<_master_elem_id<<"]["<<_slave_elem_id<<"] = "<<f_ms<<std::endl;

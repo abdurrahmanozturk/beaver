@@ -14,12 +14,11 @@ class ViewFactorBase : public SideUserObject
 public:
   ViewFactorBase(const InputParameters & parameters);
 
+  const Real getVectorLength(const std::vector<Real> & v) const;
   const Real getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2) const;
   const Real getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2) const;
   const Real getAnalyticalViewFactor(const std::vector<Real> & v);
   const Real getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real> > map) const;
-  const Real getVectorLength(const std::vector<Real> & v) const;
-
   const std::vector<Real> getNormal(std::map<unsigned int, std::vector<Real>> map) const;
   const std::vector<Real> getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const;
   const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map) const;

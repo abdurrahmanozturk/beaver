@@ -18,7 +18,7 @@ validParams<ViewFactorBase>()
 
 ViewFactorBase::ViewFactorBase(const InputParameters & parameters)
   : SideUserObject(parameters),
-    _current_normals(_assembly.normals()),
+    // _current_normals(_assembly.normals()),
     _boundary_ids(boundaryIDs()),
     _mesh_boundary_ids(_mesh.meshBoundaryIds()),
     _mesh_sideset_ids(_mesh.meshSidesetIds()),

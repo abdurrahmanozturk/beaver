@@ -10,9 +10,6 @@ class RadiationHeatTransferBC;
 template <>
 InputParameters validParams<RadiationHeatTransferBC>();
 
-/**
- * Base class for deriving any boundary condition of a integrated type
- */
 class RadiationHeatTransferBC : public IntegratedBC
 {
 public:

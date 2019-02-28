@@ -10,9 +10,8 @@
 // UserObjects
 // #include "ViewFactor.h"
 
-
 // Materials
-#include "UO2.h"
+// #include "UO2.h"
 #include "UO2Density.h"
 #include "UO2HeatCapacity.h"
 #include "UO2ThermalConductivity.h"
@@ -60,7 +59,7 @@ beaverApp::registerObjects(Factory & factory)
     // registerUserObject(ViewFactor);
 
     // Materials
-    registerMaterial(UO2);
+    // registerMaterial(UO2);
     registerMaterial(UO2Density);
     registerMaterial(UO2HeatCapacity);
     registerMaterial(UO2ThermalConductivity);

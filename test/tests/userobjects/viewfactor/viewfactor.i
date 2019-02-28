@@ -111,12 +111,26 @@
   [../]
 []
 [Postprocessors]
-  # [./source_point]
-  #   type = PointValue
-  #   point = '0 0 0'
-  #   variable = src_pt
-  #   execute_on = 'timestep_begin'
-  # [../]
+  [./boundarytemp_1]
+    type = SideAverageValue
+    boundary = '1'
+    variable = temp
+  [../]
+  [./boundarytemp_2]
+    type = SideAverageValue
+    boundary = '2'
+    variable = temp
+  [../]
+  [./boundarytemp_7]
+    type = SideAverageValue
+    boundary = '7'
+    variable = temp
+  [../]
+  [./boundarytemp_9]
+    type = SideAverageValue
+    boundary = '9'
+    variable = temp
+  [../]
 []
 
 [Outputs]

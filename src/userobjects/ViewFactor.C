@@ -84,7 +84,7 @@ ViewFactor::execute()
         if (_method=="MONTECARLO")
           viewfactor_elem_to_elem = doMonteCarlo(_master_side_map,_slave_side_map,_sourceNumber,_samplingNumber);
         else
-          mooseError("Undefined method for view factor calculations.");
+          mooseError("Unknown method for view factor calculations.");
         _viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem] = viewfactor_elem_to_elem;
         viewfactor_elem_to_bnd += viewfactor_elem_to_elem;
         // _viewfactor[_qp] = viewfactor_elem_to_elem;
@@ -140,7 +140,8 @@ ViewFactor::finalize()
           {
             // std::cout<<"map size ="<<_viewfactors_map.size()*it1.second.size()*it2.second.size()*it3.second.size()<<std::endl;
             Real vf = _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
-            std::cout<<"F["<<it1.first<<"]["<<it2.first<<"]["<<it3.first<<"]["<<it4.first<<"] = "<<vf<<std::endl;
+            // std::cout<<"F["<<it1.first<<"]["<<it2.first<<"]["<<it3.first<<"]["<<it4.first<<"]
+            // ="<<vf<<std::endl;
           }
 }
 

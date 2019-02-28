@@ -48,7 +48,7 @@ public:
   // unsigned int _qp;
   // Point p;
   // Point q;
-  const MooseArray<Point> & _current_normals;
+  // const MooseArray<Point> & _current_normals;
   std::set<BoundaryID>  _boundary_ids;
   const std::set<BoundaryID> _mesh_boundary_ids;
   const std::set<BoundaryID> _mesh_sideset_ids;

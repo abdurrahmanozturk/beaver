@@ -120,8 +120,8 @@ ViewFactor::finalize()
   std::cout << "------------------------" << std::endl;
   if (_printScreen==true)
     printViewFactors();
-  std::cout<<"------------"<<std::endl;
-  std::cout<<"ViewFactors:"<<std::endl;
+  // std::cout<<"------------"<<std::endl;
+  // std::cout<<"ViewFactors:"<<std::endl;
   // for (auto it1 : _viewfactors_map)
   //   for (auto it2 : it1.second)
   //     for (auto it3 : it2.second)
@@ -129,8 +129,6 @@ ViewFactor::finalize()
   //         {
   //           gatherSum(it4.second);
   //         }
-
-  // _communicator.allgather(_viewfactors_map);    // check header files for use of _communicator!!!
 
   //write viewfactors to screen for debugging
   for (auto it1 : _viewfactors_map)

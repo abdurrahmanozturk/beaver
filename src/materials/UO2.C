@@ -1,6 +1,8 @@
 #include "UO2.h"
 #include "libmesh/quadrature.h"
 
+registerMooseObject("beaverApp", UO2);
+
 template <>
 InputParameters
 validParams<UO2>()

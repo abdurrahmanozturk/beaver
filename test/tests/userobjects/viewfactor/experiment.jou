@@ -46,9 +46,35 @@ sweep curve 3 zaxis angle 180
 sweep curve 4 zaxis angle 180
 sweep curve 5 zaxis angle 180
 #
+<<<<<<< HEAD
 sweep surface 1 direction 0 0 1 distance 0.01
 sweep surface 2 3 4 direction 0 0 1 distance 0.028
 sweep surface 5 direction 0 0 1 distance 0.001
+=======
+##mesh electrode sleeve
+#curve 87 75 76 64 63 52 54 66 59 71 78 83 interval 2
+#curve 86 62 58 82 84 81 57 60 interval 4
+#curve 69 72 70 74 interval 10
+#curve 55 53 56 65 61 67 77 68 73 79 85 80 interval 14
+#volume 6 scheme sweep source surface 33 target 28
+#mesh volume 6
+#volume 7 scheme sweep source surface 39 target 34
+#mesh volume 7
+#volume 8 scheme sweep source surface 45 target 40
+#mesh volume 8
+#merge volume 6 7 8
+#
+###mesh susceptor
+##curve 99 95 88 90 98 94 96 93 118 122 117 120 123 111 119 107 112 102 100 interval 2
+##curve 92 97 89 91 113 104 115 109 101 103 interval 4
+##curve 106 110 105 108 interval 8
+##volume 9 scheme sweep source surface 51 target 46
+##mesh volume 9
+##volume 10 scheme sweep source surface 56 surface 54
+##mesh volume 10
+##volume 11 scheme sweep source surface 62 surface 60
+##mesh volume 11
+>>>>>>> b3aa4be1f0409ca2e890f1b441a299d9e260eb4f
 #
 #create surface rectangle width 0.0055 height 0.01
 #surface 1 move 0.00275 0 0
@@ -76,6 +102,7 @@ block 2 add volume 2
 block 2 name "bn1"
 block 3 add volume 3
 block 3 name "susceptor"
+<<<<<<< HEAD
 block 4 add volume 4
 block 4 name "bn2"
 block 5 add volume 5
@@ -137,3 +164,91 @@ sideset 26 name "wall_bottom"
 #export mesh "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
 #export mesh "~/projects/moose/modules/heat_conduction/test/tests/heat_conduction/radiative_heat_transfer/experiment.e" overwrite
 export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
+=======
+#block 4 add volume 9 10 11
+#block 4 name "susceptor"
+sideset 1 add surface 9
+sideset 1 name "pellet_outside"
+sideset 2 add surface 15
+sideset 2 name "electrode_sleeve_inner"
+sideset 3 add surface 13
+sideset 3 name "electrode_sleeve_outer"
+sideset 4 add surface 20
+sideset 4 name "susceptor_inner"
+sideset 5 add surface 18
+sideset 5 name "susceptor_outer"
+#sideset 6 add surface 4 9 14
+#sideset 6 name "pellet top"
+#sideset 7 add surface 20 26
+#sideset 7 name "electrode top"
+#sideset 8 add surface 32
+#sideset 8 name "electrode sleeve top"
+#sideset 9 add surface 38
+#sideset 9 name "susceptor top"
+#sideset 10 add surface 47 53 59
+#sideset 10 name "susceptor inner wall"
+#sideset 11 add surface 31
+#sideset 11 name "electrode sleeve1 outer wall"
+#sideset 12 add surface 29
+#sideset 12 name "electrode sleeve1 inner wall"
+#sideset 13 add surface 19
+#sideset 13 name "electrode1 outer wall"
+#sideset 14 add surface 25
+#sideset 14 name "electrode2 outer wall"
+#sideset 15 add surface 17
+#sideset 15 name "electrode1 inner wall"
+#sideset 16 add surface 23
+#sideset 16 name "electrode2 inner wall"
+#sideset 17 add surface 8
+#sideset 17 name "pellet exposed wall"
+#sideset 18 add surface 3
+#sideset 18 name "pellet electrode1 wall"
+#sideset 19 add surface 13
+#sideset 19 name "pellet electrode2 wall"
+#sideset 20 add surface 49
+#sideset 20 name "susceptor outer wall"
+#sideset 21 add surface 20
+#sideset 21 name "electrode1 top"
+#sideset 22 add surface 26
+#sideset 22 name "electrode2 top"
+#sideset 24 add surface 18
+#sideset 24 name "electrode1 bottom"
+#sideset 25 add surface 24
+#sideset 25 name "electrode2 bottom"
+#sideset 26 add surface 53 58
+#sideset 26 name "pellet top radiative surface"
+#sideset 27 add surface 37
+#sideset 27 name "electrode sleeve2 outer wall"
+#sideset 28 add surface 35
+#sideset 28 name "electrode sleeve2 inner wall"
+#sideset 29 add surface 43
+#sideset 29 name "electrode sleeve3 outer wall"
+#sideset 30 add surface 41
+#sideset 30 name "electrode sleeve3 inner wall"
+#sideset 31 add surface 31 37 43
+#sideset 31 name "electrode sleeve outer wall"
+#sideset 32 add surface 29 35 41
+#sideset 32 name "electrode sleeve inner wall"
+#sideset 33 add surface 19 25
+#sideset 33 name "electrodes outer surfaces"
+#sideset 34 add surface 47
+#sideset 34 name "susceptor1 inner wall"
+#sideset 35 add surface 53
+#sideset 35 name "susceptor2 inner wall"
+#sideset 36 add surface 59
+#sideset 36 name "susceptor3 inner wall"
+#nodeset 1001 add node 2 80
+#nodeset 1001 name "pellet centerline"
+#nodeset 1002 add node 1705 1696
+#nodeset 1002 name "sleeve2 centerline"
+#nodeset 1003 add node 2239 2267
+#nodeset 1003 name "susceptor2 centerline"
+#
+##volume all scale 0.01
+#
+block all element type HEX8
+
+export mesh "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
+export mesh "~/projects/moose/modules/heat_conduction/test/tests/heat_conduction/radiative_heat_transfer/experiment.e" overwrite
+#export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
+>>>>>>> b3aa4be1f0409ca2e890f1b441a299d9e260eb4f

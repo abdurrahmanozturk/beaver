@@ -40,33 +40,36 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./TimeDerivative]
-  #   type = TimeDerivative
-  #   variable = temp
-  # []
-[]
-[NodalNormals]
+  [./TimeDerivative]
+    type = TimeDerivative
+    variable = temp
+  []
+  [./HeatSource]
+    type = HeatSource
+    variable = temp
+    value = 360
+    block = 'pellet'
+  [../]
 []
 [BCs]
-  [./master]
+  [./wall_BC]
     type = DirichletBC
-    value = 1000 #K
+    value = 400 #K
     variable = temp
-    boundary = 1
+    boundary = 5
   [../]
-  # [./slave]
-  #   type = DirichletBC
-  #   value = 900 #K
+  # [./convection_BC]
+  #   type = ConvectiveFluxBC
   #   variable = temp
-  #   boundary = 7
+  #   boundary = 5
   # [../]
-  # [./RadiationHeatTransfer]
-  #   type = RadiationHeatTransferBC
-  #   variable = temp
-  #   boundary = '2 7'
-  #   emissivity = '1 1'
-  #   viewfactor_userobject = ViewFactor
-  # [../]
+  [./RadiationHeatTransfer]
+    type = RadiativeHeatFluxBC
+    variable = temp
+    boundary = '1 11 26'
+    emissivity = '1 1 1'
+    viewfactor_userobject = ViewFactor
+  [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
   #   variable = temp
@@ -84,13 +87,13 @@
   [../]
 []
 [Executioner]
-  type = Steady
+  type = Transient
   solve_type = PJFNK
-  # start_time = 0
-  # end_time = 100
+  start_time = 0
+  end_time = 100
   # dt = 1e-3
   # dtmin = 1e-6
-  # nl_abs_tol = 1e-15
+  nl_abs_tol = 1e-15
 []
 [UserObjects]
   # [./ViewFactor]
@@ -102,39 +105,40 @@
   # [../]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '2 7'
+    boundary = '1 11 26'
     method = MONTECARLO
     sampling_number = 10
     source_number = 10
     print_screen = true
+    debug_mode = false
     execute_on = INITIAL
   [../]
 []
 [Postprocessors]
-  [./boundarytemp_1]
+  [./pellet_bottom]
+    type = SideAverageValue
+    boundary = '8'
+    variable = temp
+  [../]
+  [./pellet_top]
     type = SideAverageValue
     boundary = '1'
     variable = temp
   [../]
-  [./boundarytemp_2]
+  [./pellet_surface]
     type = SideAverageValue
-    boundary = '2'
+    boundary = '6'
     variable = temp
   [../]
-  [./boundarytemp_7]
+  [./wall_temp]
     type = SideAverageValue
-    boundary = '7'
-    variable = temp
-  [../]
-  [./boundarytemp_9]
-    type = SideAverageValue
-    boundary = '9'
+    boundary = '26'
     variable = temp
   [../]
 []
 
 [Outputs]
   exodus = true
-  file_base = viewfactor
+  file_base = experiment_out
   console = true
 []

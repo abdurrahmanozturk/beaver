@@ -56,6 +56,7 @@ ViewFactor::execute()
   _master_side_map = getSideMap(_current_elem,_current_side);   //master side node coordinates
   for (const auto & elem : _elem_side_map)
   {
+    // std::cout<<"checkpoint1"<<std::endl;
     unsigned int slave_elem = elem.first;   //slave_elem id el->id()
     // std::cout<<"master elem:"<<master_elem<<"-> slave elem:"<<slave_elem<<std::endl;
     // if (master_elem == slave_elem)     //element can not see itself
@@ -64,8 +65,10 @@ ViewFactor::execute()
     unsigned int slave_side = elem.second;  //slave_side id
     slave_bnd = _mesh.getBoundaryIDs(el,slave_side)[0];  //slave_bnd id
     _slave_side_map = getSideMap(el,slave_side);   //slave side node coordinates
+    // std::cout<<"checkpoint2"<<std::endl;
     if (_viewfactors_map[slave_bnd][master_bnd][slave_elem][master_elem]!=0)    //use reciprocity of viewfactors
     {
+      // std::cout<<"checkpoint3"<<std::endl;
       Real master_side_area = getArea(getCenterPoint(_master_side_map),_master_side_map);
       Real slave_side_area = getArea(getCenterPoint(_slave_side_map),_slave_side_map);
       Real afsm = slave_side_area/master_side_area;
@@ -78,8 +81,10 @@ ViewFactor::execute()
     }
     else
     {
+      // std::cout<<"checkpoint4"<<std::endl;
       if (isVisible(_master_side_map,_slave_side_map))
       {
+        // std::cout<<"checkpoint5"<<std::endl;
         Real viewfactor_elem_to_elem = 0;   //initialize viewFactor calculation
         if (_method=="MONTECARLO")
           viewfactor_elem_to_elem = doMonteCarlo(_master_side_map,_slave_side_map,_sourceNumber,_samplingNumber);
@@ -91,6 +96,7 @@ ViewFactor::execute()
       }
       else
       {
+        // std::cout<<"checkpoint7"<<std::endl;
         // std::cout<<"not visible"<<std::endl;
         _viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem] = 0;
         viewfactor_elem_to_bnd += 0;

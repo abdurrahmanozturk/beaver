@@ -104,8 +104,8 @@
     type = ViewFactor
     boundary = '2 7'
     method = MONTECARLO
-    sampling_number = 10
-    source_number = 10
+    sampling_number = 1000
+    source_number = 100
     print_screen = true
     execute_on = INITIAL
   [../]

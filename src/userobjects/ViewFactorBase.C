@@ -187,7 +187,7 @@ ViewFactorBase::getArea(const std::vector<Real> &p, std::map<unsigned int, std::
     const std::vector<Real> node2 = map[(i+1)%n];
     const std::vector<Real> v1 = {(node1[0]-p[0]),(node1[1]-p[1]),(node1[2]-p[2])};
     const std::vector<Real> v2 = {(node2[0]-p[0]),(node2[1]-p[1]),(node2[2]-p[2])};
-    const Real theta = (_PI/180)*getAngleBetweenVectors(v1,v2);
+    const Real theta = (_PI/180)*getAngleBetweenVectors(v1,v2); // Radian
     area += 0.5 * getVectorLength(v1)*getVectorLength(v2)*sin(theta);
   }
   return area;
@@ -251,6 +251,7 @@ ViewFactorBase::getRandomDirection(const std::vector<Real> & n,const int dim) co
 const bool
 ViewFactorBase::isOnSurface(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real>> map) const
 {
+  // std::cout<<"checkpoint_isOnSurface1"<<std::endl;
   const std::vector<Real> center{getCenterPoint(map)};
   Real elem_area = getArea(center,map);
   Real area = getArea(p,map);
@@ -296,6 +297,7 @@ ViewFactorBase::isIntersected(const std::vector<Real> & p1,
                               const std::vector<Real> & dir,
                               std::map<unsigned int, std::vector<Real>> map) const
 {
+  // std::cout<<"checkpoint_isintersected1"<<std::endl;
   const std::vector<Real> n = getNormal(map);
   const std::vector<Real> pR = getRandomPoint(map);
   Real d = (n[0] * (pR[0] - p1[0]) + n[1] * (pR[1] - p1[1]) + n[2] * (pR[2] - p1[2])) /
@@ -313,16 +315,19 @@ ViewFactorBase::isIntersected(const std::vector<Real> & p1,
     std::cout << "target    : (" << p2[0] <<","<< p2[1] <<","<< p2[2] <<")"<< std::endl;
     std::cout<<"Slave Normal #: ("<<n[0]<<","<<n[1]<<","<<n[2]<<")"<<std::endl;
   }
+  // std::cout<<"checkpoint_isintersected2"<<std::endl;
   if (isOnSurface(p2,map))
     return true;
   else
     return false;
+  // std::cout<<"checkpoint_isintersected3"<<std::endl;
 }
 
 const bool
 ViewFactorBase::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & master_side_map,
                              const std::map<unsigned int, std::vector<Real>> & slave_side_map) const
 {
+  // std::cout<<"checkpoint_isSidetoSide1"<<std::endl;
   std::map<unsigned int, std::vector<Real>> master_map = master_side_map;
   std::map<unsigned int, std::vector<Real>> slave_map = slave_side_map;
   const std::vector<Real> master_normal = getNormal(master_side_map);
@@ -331,6 +336,7 @@ ViewFactorBase::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & m
   for (size_t i = 0; i < master_side_map.size(); i++)
   {
     const std::vector<Real> master_node = master_map[i];
+    // std::cout<<"checkpoint_isSidetoSide2"<<std::endl;
     for (size_t j = 0; j < slave_side_map.size(); j++)
     {
       const std::vector<Real> slave_node = slave_map[j];
@@ -338,6 +344,7 @@ ViewFactorBase::isSidetoSide(const std::map<unsigned int, std::vector<Real>> & m
       const std::vector<Real> slave_master = {(master_node[0]-slave_node[0]),(master_node[1]-slave_node[1]),(master_node[2]-slave_node[2])};
       Real theta_master_slave = getAngleBetweenVectors(master_normal,master_slave);
       Real theta_slave_master = getAngleBetweenVectors(slave_normal,slave_master);
+      // std::cout<<"checkpoint_isSidetoSide3"<<std::endl;
       if (theta_slave_master<90 && theta_master_slave<90)
         return true;
     }
@@ -350,6 +357,7 @@ ViewFactorBase::isVisible(const std::map<unsigned int, std::vector<Real>> & mast
                           const std::map<unsigned int, std::vector<Real>> & slave_side_map) const
 {
   //check element sides are looking at each other
+  // std::cout<<"checkpoint_isvisible1"<<std::endl;
   if (isSidetoSide(master_side_map, slave_side_map) == false)
   {
     return false;
@@ -367,6 +375,7 @@ ViewFactorBase::isVisible(const std::map<unsigned int, std::vector<Real>> & mast
   Real d2{0};
   //loop over all elements in mesh,
   //first retrieve the side list form the mesh and loop over all element sides
+  // std::cout<<"checkpoint_isvisible2"<<std::endl;
   for (const auto & t : _mesh.buildSideList())    //buildSideList(el,side,bnd)
   {
     auto elem_id = std::get<0>(t);
@@ -379,11 +388,14 @@ ViewFactorBase::isVisible(const std::map<unsigned int, std::vector<Real>> & mast
     std::unique_ptr<const Elem> el_side = el->build_side_ptr(side_id);
     std::map<unsigned int, std::vector<Real>> side_map;
     unsigned int n_n = el_side->n_nodes();
+    // std::cout<<"checkpoint_isvisible3"<<std::endl;
     for (unsigned int i = 0; i < n_n; i++)
     {
+      // std::cout<<"checkpoint_isvisible4"<<std::endl;
       const Node * node = el_side->node_ptr(i);    //get nodes
       for (unsigned int j = 0; j < 3; j++)         // Define nodal coordinates and normals
       {
+        // std::cout<<"checkpoint_isvisible5"<<std::endl;
         side_map[i].push_back((*node)(j));
       }
       // std::cout <<"Node #"<<i<<" : ("<<(*n_ptr)(0)<<","<<(*n_ptr)(1)<<","<<(*n_ptr)(2)<<")\t";
@@ -392,6 +404,7 @@ ViewFactorBase::isVisible(const std::map<unsigned int, std::vector<Real>> & mast
     d2 = getDistanceBetweenPoints(master_center,side_center);
     // std::cout<<"d1= "<<d1<<" d2= "<<d2<<std::endl;
     // for better results node to node distances can be checked
+    // std::cout<<"checkpoint_isvisible6"<<std::endl;
     if (isSidetoSide(master_side_map, side_map) && isIntersected(master_center, dir, side_map) &&
         d2 < d1)
     {
@@ -399,9 +412,11 @@ ViewFactorBase::isVisible(const std::map<unsigned int, std::vector<Real>> & mast
       {
         std::cout<<"Boundary #"<<bnd_id<<" is blocking visibility."<<std::endl;
       }
+      // std::cout<<"checkpoint_isvisible7"<<std::endl;
       return false;
     }
   }
+  // std::cout<<"checkpoint_isvisible8"<<std::endl;
   return true;
 }
 
@@ -433,14 +448,18 @@ ViewFactorBase::printViewFactors()
         for (const auto & slave_elem : master_elem_map)
         {
           elem_to_bnd_viewfactor += slave_elem.second;
+          if (slave_elem.second==0)
+            continue;
           std::cout << "Bnd " << master_boundary.first << " :\tElem " << master_elem.first << "  --->  "
                     << "Bnd " << slave_boundary.first << " :\tElem " << slave_elem.first
                     << "\tView Factor = " << slave_elem.second << std::endl;
         }
+        viewfactor += elem_to_bnd_viewfactor;
+        if (elem_to_bnd_viewfactor==0)
+          continue;
         std::cout << "\tElem " << master_elem.first << "  --->  "
                   << "Bnd " << slave_boundary.first << "\t  Total View Factor = " << elem_to_bnd_viewfactor
                   << "\n"<<std::endl;
-        viewfactor += elem_to_bnd_viewfactor;
       }
       viewfactor /= master_elem_number;    //take average for elements on master boundary
       std::cout << "\t\tBnd " << master_boundary.first << "  --->  "
@@ -458,6 +477,7 @@ ViewFactorBase::doMonteCarlo(std::map<unsigned int, std::vector<Real>> master_si
                              unsigned int _sourceNumber,
                              unsigned int _samplingNumber)
 {
+  // std::cout<<"checkpoint_doMonteCarlo1"<<std::endl;
   const std::vector<Real> master_elem_normal = getNormal(master_side_map);
   unsigned int counter{0};
   Real viewfactor_per_elem{0};
@@ -467,6 +487,7 @@ ViewFactorBase::doMonteCarlo(std::map<unsigned int, std::vector<Real>> master_si
     viewfactor_per_src = 0;
     const std::vector<Real> source_point = getRandomPoint(master_side_map);
     counter = 0;
+    // std::cout<<"checkpoint_doMonteCarlo2"<<std::endl;
     for (size_t ray = 0; ray < _samplingNumber; ray++)
     {
       const std::vector<Real> direction = getRandomDirection(master_elem_normal);
@@ -483,5 +504,6 @@ ViewFactorBase::doMonteCarlo(std::map<unsigned int, std::vector<Real>> master_si
     viewfactor_per_elem += viewfactor_per_src;
   }
   viewfactor_per_elem *= (1.0/_sourceNumber);
+  // std::cout<<"checkpoint_doMonteCarlo3"<<std::endl;
   return viewfactor_per_elem;
 }

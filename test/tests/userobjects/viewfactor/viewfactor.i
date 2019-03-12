@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = parallel_blocks.e
+  file = coaxial_disks_coarse.e
   # type = GeneratedMesh
   # xmax = 1
   # xmin = 0
@@ -16,7 +16,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 500
+    initial_condition = 400
   [../]
 []
 # [AuxVariables]
@@ -40,19 +40,25 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./TimeDerivative]
-  #   type = TimeDerivative
-  #   variable = temp
-  # []
+  [./TimeDerivative]
+    type = TimeDerivative
+    variable = temp
+  []
+  [./HeatSource]
+    type = HeatSource
+    variable = temp
+    value = 360
+    block = 'disk2'
+  [../]
 []
 [NodalNormals]
 []
 [BCs]
   [./master]
     type = DirichletBC
-    value = 1000 #K
+    value = 400 #K
     variable = temp
-    boundary = 1
+    boundary = 3
   [../]
   # [./slave]
   #   type = DirichletBC
@@ -60,13 +66,13 @@
   #   variable = temp
   #   boundary = 7
   # [../]
-  # [./RadiationHeatTransfer]
-  #   type = RadiationHeatTransferBC
-  #   variable = temp
-  #   boundary = '2 7'
-  #   emissivity = '1 1'
-  #   viewfactor_userobject = ViewFactor
-  # [../]
+  [./RadiationHeatTransfer]
+    type = RadiationHeatTransferBC
+    variable = temp
+    boundary = '2 6'
+    emissivity = '1 1'
+    viewfactor_userobject = ViewFactor
+  [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
   #   variable = temp
@@ -84,13 +90,13 @@
   [../]
 []
 [Executioner]
-  type = Steady
+  type = Transient
   solve_type = PJFNK
-  # start_time = 0
-  # end_time = 100
-  # dt = 1e-3
-  # dtmin = 1e-6
-  # nl_abs_tol = 1e-15
+  start_time = 0
+  end_time = 100
+  dt = 1e-3
+  dtmin = 1e-6
+  nl_abs_tol = 1e-15
 []
 [UserObjects]
   # [./ViewFactor]
@@ -102,7 +108,7 @@
   # [../]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '2 7'
+    boundary = '2 6'
     method = MONTECARLO
     sampling_number = 1000
     source_number = 100
@@ -111,24 +117,24 @@
   [../]
 []
 [Postprocessors]
-  [./boundarytemp_1]
-    type = SideAverageValue
-    boundary = '1'
-    variable = temp
-  [../]
   [./boundarytemp_2]
     type = SideAverageValue
     boundary = '2'
     variable = temp
   [../]
-  [./boundarytemp_7]
+  [./boundarytemp_3]
     type = SideAverageValue
-    boundary = '7'
+    boundary = '3'
     variable = temp
   [../]
-  [./boundarytemp_9]
+  [./boundarytemp_5]
     type = SideAverageValue
-    boundary = '9'
+    boundary = '5'
+    variable = temp
+  [../]
+  [./boundarytemp_6]
+    type = SideAverageValue
+    boundary = '6'
     variable = temp
   [../]
 []

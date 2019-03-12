@@ -16,7 +16,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 500
+    initial_condition = 400
   [../]
 []
 # [AuxVariables]
@@ -91,7 +91,7 @@
   solve_type = PJFNK
   start_time = 0
   end_time = 100
-  # dt = 1e-3
+  dt = 1e-3
   # dtmin = 1e-6
   nl_abs_tol = 1e-15
 []

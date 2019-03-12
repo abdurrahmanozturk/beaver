@@ -100,7 +100,7 @@ mesh volume 1 3 5
 ##curve 92 97 89 91 113 104 115 109 101 103 interval 4
 ##curve 106 110 105 108 interval 8
 ##volume 9 scheme sweep source surface 51 target 46
-##mesh volume 9 
+##mesh volume 9
 ##volume 10 scheme sweep source surface 56 surface 54
 ##mesh volume 10
 ##volume 11 scheme sweep source surface 62 surface 60
@@ -198,13 +198,4 @@ block all element type HEX8
 
 export mesh "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
 export mesh "~/projects/moose/modules/heat_conduction/test/tests/heat_conduction/radiative_heat_transfer/experiment.e" overwrite
-#export genesis "~/pojects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
-
-
-
-
-
-
-
-
-
+#export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite

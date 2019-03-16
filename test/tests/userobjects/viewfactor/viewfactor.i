@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = coaxial_disks_coarse.e
+  file = parallel_blocks.e
   # type = GeneratedMesh
   # xmax = 1
   # xmin = 0
@@ -40,25 +40,23 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  [./TimeDerivative]
-    type = TimeDerivative
-    variable = temp
-  []
-  [./HeatSource]
-    type = HeatSource
-    variable = temp
-    value = 360
-    block = 'disk2'
-  [../]
-[]
-[NodalNormals]
+  # [./TimeDerivative]
+  #   type = TimeDerivative
+  #   variable = temp
+  # []
+  # [./HeatSource]
+  #   type = HeatSource
+  #   variable = temp
+  #   value = 360
+  #   block = 'disk2'
+  # [../]
 []
 [BCs]
   [./master]
     type = DirichletBC
     value = 400 #K
     variable = temp
-    boundary = 3
+    boundary = 5
   [../]
   # [./slave]
   #   type = DirichletBC
@@ -66,13 +64,13 @@
   #   variable = temp
   #   boundary = 7
   # [../]
-  [./RadiationHeatTransfer]
-    type = RadiationHeatTransferBC
-    variable = temp
-    boundary = '2 6'
-    emissivity = '1 1'
-    viewfactor_userobject = ViewFactor
-  [../]
+  # [./RadiationHeatTransfer]
+  #   type = RadiationHeatTransferBC
+  #   variable = temp
+  #   boundary = '2 6'
+  #   emissivity = '1 1'
+  #   viewfactor_userobject = ViewFactor
+  # [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
   #   variable = temp
@@ -90,13 +88,13 @@
   [../]
 []
 [Executioner]
-  type = Transient
+  type = Steady
   solve_type = PJFNK
-  start_time = 0
-  end_time = 100
-  dt = 1e-3
-  dtmin = 1e-6
-  nl_abs_tol = 1e-15
+  # start_time = 0
+  # end_time = 100
+  # dt = 1e-3
+  # dtmin = 1e-6
+  # nl_abs_tol = 1e-15
 []
 [UserObjects]
   # [./ViewFactor]
@@ -108,10 +106,10 @@
   # [../]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '2 6'
+    boundary = '5 2'
     method = MONTECARLO
-    sampling_number = 1000
-    source_number = 100
+    sampling_number = 10
+    source_number = 10
     print_screen = true
     execute_on = INITIAL
   [../]

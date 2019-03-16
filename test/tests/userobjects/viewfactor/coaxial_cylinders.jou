@@ -25,4 +25,5 @@ sideset 6 name "innercylinder_bottom"
 sideset 7 add surface 6
 sideset 7 name "innercylinder_top"
 export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/coaxial_cylinders.e" overwrite
+export genesis "~/projects/moose/modules/heat_conduction/test/tests/heat_conduction/radiative_heat_transfer/cylinder.e overwrite"
 

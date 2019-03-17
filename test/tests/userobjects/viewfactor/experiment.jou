@@ -40,11 +40,11 @@ create vertex 0 0 0.06
 create vertex 0.03 0 0.06
 create curve vertex 9 10
 #
-sweep curve 1 zaxis angle 180
-sweep curve 2 zaxis angle 180
-sweep curve 3 zaxis angle 180
-sweep curve 4 zaxis angle 180
-sweep curve 5 zaxis angle 180
+sweep curve 1 zaxis angle 0.2
+sweep curve 2 zaxis angle 0.2
+sweep curve 3 zaxis angle 0.2
+sweep curve 4 zaxis angle 0.2
+sweep curve 5 zaxis angle 0.2
 #
 sweep surface 1 direction 0 0 1 distance 0.01
 sweep surface 2 3 4 direction 0 0 1 distance 0.01
@@ -65,8 +65,9 @@ sweep surface 5 direction 0 0 1 distance 0.001
 #sweep surface 1 6 7 all yaxis angle 15
 #curve 4 29 21 39 12 35 24 47 20 43 interval 5
 #curve 28 30 34 38 33 36 42 46 41 44 interval 1
-volume 1 2 3 4 size 0.003
-volume 5 size 0.006
+#volume 1 2 3 4 size 0.003
+#volume 5 size 0.006
+volume 1 2 3 4 5 size 0.001
 mesh volume 1 2 3 4 5
 
 ##blocks/sidesets
@@ -130,7 +131,8 @@ sideset 24 add surface 24
 sideset 24 name "wall_outer"
 sideset 25 add surface 25
 sideset 25 name "wall_symmetry"
-sideset 26 add surface 26
+# if angular sweep angle < 180 wall_bottom = surface28  else wall_bottom=surface26
+sideset 26 add surface 28
 sideset 26 name "wall_bottom"
 #block all element type HEX8
 #delete volume 2 3 4
@@ -138,5 +140,6 @@ sideset 26 name "wall_bottom"
 #export mesh "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
 export mesh "~/projects/moose/modules/heat_conduction/test/tests/heat_conduction/radiative_heat_transfer/experiment.e" overwrite
 export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
+
 
 

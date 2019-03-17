@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = parallel_blocks.e
+  file = coaxial_disks.e
   # type = GeneratedMesh
   # xmax = 1
   # xmin = 0
@@ -56,7 +56,7 @@
     type = DirichletBC
     value = 400 #K
     variable = temp
-    boundary = 5
+    boundary = 2
   [../]
   # [./slave]
   #   type = DirichletBC
@@ -106,7 +106,7 @@
   # [../]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '5 2'
+    boundary = '2 6'
     method = MONTECARLO
     sampling_number = 10
     source_number = 10

@@ -1,8 +1,8 @@
 #coaxial disks
 reset
+create Cylinder height 1 radius 6
 create Cylinder height 1 radius 2
-create Cylinder height 1 radius 2
-move volume 1 z 3
+move volume 1 z 5
 volume 1 2 scheme tetmesh proximity layers off geometry approximation angle 15 geometric sizing on
 volume 1 2 tetmesh growth_factor 1
 trimesher surface gradation 1.3
@@ -26,3 +26,4 @@ sideset 5 name "disk2_bottom"
 sideset 6 add surface 6
 sideset 6 name "disk2_top"
 export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/coaxial_disks/coaxial_disks.e" overwrite
+

@@ -59,8 +59,8 @@ ViewFactor::execute()
     // std::cout<<"checkpoint1"<<std::endl;
     unsigned int slave_elem = elem.first;   //slave_elem id el->id()
     // std::cout<<"master elem:"<<master_elem<<"-> slave elem:"<<slave_elem<<std::endl;
-    // if (master_elem == slave_elem)     //element can not see itself
-    //   continue;
+    if (master_elem == slave_elem)     //element side can not see itself
+      continue;
     Elem * el = _mesh.elemPtr(elem.first);  //elem ptr for slave elem
     unsigned int slave_side = elem.second;  //slave_side id
     slave_bnd = _mesh.getBoundaryIDs(el,slave_side)[0];  //slave_bnd id

@@ -69,26 +69,31 @@
   #  prop_names = 'thermal_conductivity density specific_heat'
   #  prop_values = '3.5 10431 380 '
   #[../]
-  [./density]
-    type = UO2Density
+  [./uo2_thermal]
+    type = UO2
     temp = temp
-    output = exodus
+    outputs = exodus
   [../]
-  [./specific_heat]
-    type = UO2HeatCapacity
-    temp = temp
-    output = exodus
-  [../]
+  # [./density]
+  #   type = UO2Density
+  #   temp = temp
+  #   output = exodus
+  # [../]
+  # [./specific_heat]
+  #   type = UO2HeatCapacity
+  #   temp = temp
+  #   output = exodus
+  # [../]
   [./electrical_conductivity]
     type = UO2ElectricalConductivity
     temp = temp
     output = exodus
   [../]
-  [./thermal_conductivity]
-    type = UO2ThermalConductivity
-    temp = temp
-    output = exodus
-  [../]
+  # [./thermal_conductivity]
+  #   type = UO2ThermalConductivity
+  #   temp = temp
+  #   output = exodus
+  # [../]
 []
 
 [Executioner]

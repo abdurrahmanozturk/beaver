@@ -450,8 +450,7 @@ ViewFactorBase::printViewFactors()
           elem_to_bnd_viewfactor += slave_elem.second;
           if (slave_elem.second==0)
             continue;
-          // std::cout << "Bnd " << master_boundary.first << " :\tElem " << master_elem.first << "
-          // --->  "
+          // std::cout << "Bnd " << master_boundary.first << " :\tElem " << master_elem.first << "          --->  "
           //           << "Bnd " << slave_boundary.first << " :\tElem " << slave_elem.first
           //           << "\tView Factor = " << slave_elem.second << std::endl;
         }
@@ -464,7 +463,7 @@ ViewFactorBase::printViewFactors()
         //           << "\n"<<std::endl;
       }
       viewfactor /= master_elem_number;    //take average for elements on master boundary
-      std::cout << "\t\tBnd " << master_boundary.first << "  --->  "
+      std::cout << "\t\tBnd " << master_boundary.first << "\t--->\t"
                 << "Bnd " << slave_boundary.first << "\tAverage View Factor = " << viewfactor
                 << std::endl;
       std::cout << "----------------------------------------------------------------------"

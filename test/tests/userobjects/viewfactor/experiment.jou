@@ -2,8 +2,8 @@ reset
 
 ##
 #rf_outer=0.005461 m
-#rbn2_inner=0.005588 m
-#rbn2_outer=0.007747  m
+#rbn1_inner=0.005588 m
+#rbn1_outer=0.007747  m
 #rsus_inner=0.007874 m
 #rsus_outer=0.009652 m
 #rbn2_inner=0.009906 m
@@ -36,19 +36,28 @@ create curve vertex 5 6
 create vertex 0.0099 0 0
 create vertex 0.0117 0 0
 create curve vertex 7 8
+create vertex 0.05 0 0
+create vertex 0 0 0.05
+create curve arc center vertex 1  9 10
+create vertex 0.06 0 0
 create vertex 0 0 0.06
-create vertex 0.03 0 0.06
-create curve vertex 9 10
+create curve arc center vertex 1  11 12
+#create vertex 0 0 0.06
+#create vertex 0.03 0 0.06
+#create curve vertex 9 10
 #
-sweep curve 1 zaxis angle 0.2
-sweep curve 2 zaxis angle 0.2
-sweep curve 3 zaxis angle 0.2
-sweep curve 4 zaxis angle 0.2
-sweep curve 5 zaxis angle 0.2
+sweep curve 1 zaxis angle 45
+sweep curve 2 zaxis angle 45
+sweep curve 3 zaxis angle 45
+sweep curve 4 zaxis angle 45
+create surface skin curve 5 6
+#sweep curve 6 zaxis angle 45
+
 #
 sweep surface 1 direction 0 0 1 distance 0.01
 sweep surface 2 3 4 direction 0 0 1 distance 0.01
-sweep surface 5 direction 0 0 1 distance 0.001
+sweep surface 5 zaxis angle 45
+#sweep surface 6 direction 0 0 1 distance 0.001
 #
 #create surface rectangle width 0.0055 height 0.01
 #surface 1 move 0.00275 0 0
@@ -65,11 +74,10 @@ sweep surface 5 direction 0 0 1 distance 0.001
 #sweep surface 1 6 7 all yaxis angle 15
 #curve 4 29 21 39 12 35 24 47 20 43 interval 5
 #curve 28 30 34 38 33 36 42 46 41 44 interval 1
-#volume 1 2 3 4 size 0.003
-#volume 5 size 0.006
-volume 1 2 3 4 5 size 0.001
+volume 1 2 3 4 size 0.003
+volume 5 size 0.006
+#volume 1 2 3 4 5 size 0.001
 mesh volume 1 2 3 4 5
-
 ##blocks/sidesets
 block 1 add volume 1
 block 1 name "pellet"
@@ -89,8 +97,8 @@ sideset 3 add surface 3
 sideset 3 name "susceptor_top"
 sideset 4 add surface 4
 sideset 4 name "bn2_top"
-sideset 5 add surface 5
-sideset 5 name "wall_top"
+sideset 5 add surface 5 27
+sideset 5 name "wall_symmetry"
 sideset 6 add surface 6
 sideset 6 name "pellet_outer"
 sideset 7 add surface 7
@@ -128,18 +136,20 @@ sideset 22 name "bn2_symmetry2"
 sideset 23 add surface 23
 sideset 23 name "bn2_bottom"
 sideset 24 add surface 24
-sideset 24 name "wall_outer"
+sideset 24 name "wall_symmetry2"
 sideset 25 add surface 25
-sideset 25 name "wall_symmetry"
+sideset 25 name "wall_outer"
 # if angular sweep angle < 180 wall_bottom = surface28  else wall_bottom=surface26
-sideset 26 add surface 28
-sideset 26 name "wall_bottom"
+sideset 26 add surface 26
+sideset 26 name "wall_inner"
 #block all element type HEX8
-#delete volume 2 3 4
 
 #export mesh "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
 export mesh "~/projects/moose/modules/heat_conduction/test/tests/heat_conduction/radiative_heat_transfer/experiment.e" overwrite
 export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
+
+
+
 
 
 

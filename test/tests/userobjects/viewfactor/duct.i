@@ -1,62 +1,35 @@
 [Mesh]
   type = FileMesh
-  file = pellet.e
-  # type = GeneratedMesh
-  # xmax = 1
-  # xmin = 0
-  # ymax = 1
-  # ymin = 0
-  # zmax = 1
-  # zmin = 0
-  # dim = 3
-  # nx = 1
-  # ny = 1
-  # nz = 1
-  # elem_type = HEX8
+  file = duct.e
 []
 [Variables]
   [./temp]
     initial_condition = 400
   [../]
 []
-# [AuxVariables]
-#   [./src_pt]
-#     order = FIRST
-#     family = LAGRANGE
-#   [../]
-# []
-# [AuxKernels]
-#   [./source_point]
-#     type = SpatialUserObjectAux
-#     user_object = ViewFactor
-#     variable = src_pt
-#     boundary = 2
-#     #block = 1 2
-#   [../]
-# []
 [Kernels]
   [./HeatConduction]
     type = HeatConduction
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./TimeDerivative]
-  #   type = TimeDerivative
+  # [./TimeDerivativeConduction]
+  #   type = HeatConductionTimeDerivative
   #   variable = temp
-  # []
-  [./HeatSource]
-    type = HeatSource
-    variable = temp
-    value = 597.133e6
-    block = 'pellet'
-  [../]
+  # [../]
+  # [./HeatSource]
+  #   type = HeatSource
+  #   variable = temp
+  #   value = 597.133e6
+  #   block = 'pellet'
+  # [../]
 []
 [BCs]
   [./master]
     type = DirichletBC
-    value = 420 #K
+    value = 1000 #K
     variable = temp
-    boundary = pellet_outer
+    boundary = 'top bottom'
   [../]
   # [./slave]
   #   type = DirichletBC
@@ -64,13 +37,13 @@
   #   variable = temp
   #   boundary = 1
   # [../]
-  # [./RadiationHeatTransfer]
-  #   type = RadiationHeatTransferBC
-  #   variable = temp
-  #   boundary = '2 3'
-  #   emissivity = '1 1'
-  #   viewfactor_userobject = ViewFactor
-  # [../]
+  [./RadiationHeatTransfer]
+    type = RadiationHeatTransferBC
+    variable = temp
+    boundary = 'left bottom right top'
+    emissivity = '1 1 1 1'
+    viewfactor_userobject = ViewFactor
+  [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
   #   variable = temp
@@ -111,37 +84,58 @@
   #   source_number = 100
   #   execute_on = INITIAL
   # [../]
-  # [./ViewFactor]
-  #   type = ViewFactor
-  #   boundary = '2 3'
-  #   method = MONTECARLO
-  #   sampling_number = 10
-  #   source_number = 10
-  #   print_screen = true
-  #   execute_on = INITIAL
-  # [../]
+  [./ViewFactor]
+    type = ViewFactor
+    boundary = 'left bottom right top'
+    method = MONTECARLO
+    sampling_number = 100
+    source_number = 10
+    print_screen = true
+    execute_on = INITIAL
+  [../]
 []
 [Postprocessors]
   [./thermal_conductivity_W_m-K]
     type = ElementIntegralMaterialProperty
     outputs = console
+    block = duct
     mat_prop = thermal_conductivity
-    execute_on = 'initial timestep_end'
+    # execute_on = 'initial timestep_end'
   [../]
-  [./surface_temp]
+  [./bottom_temp]
     type = SideAverageValue
-    boundary = '1'
+    boundary = 'bottom'
     variable = temp
   [../]
-  [./centerline_temp]
-    type = PointValue
-    point = '0 0 0'
+  # [./bottom_flux_ave]
+  #   type = SideFluxAverage
+  #   boundary = 'bottom'
+  #   variable = temp
+  # [../]
+  # [./bottom_flux_int]
+  #   type = SideFluxIntegral
+  #   boundary = 'bottom'
+  #   variable = temp
+  # [../]
+  [./right_temp]
+    type = SideAverageValue
+    boundary = 'right'
     variable = temp
   [../]
+  # [./right_flux_ave]
+  #   type = SideFluxAverage
+  #   boundary = 'right'
+  #   variable = temp
+  # [../]
+  # [./right_flux_int]
+  #   type = SideFluxIntegral
+  #   boundary = 'right'
+  #   variable = temp
+  # [../]
 []
 
 [Outputs]
   exodus = true
-  file_base = viewfactor
+  file_base = duct_out
   console = true
 []

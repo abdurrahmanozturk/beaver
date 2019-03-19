@@ -1,3 +1,7 @@
+# [GlobalParams]
+#   length_scale = 1
+#   time_scale = 1
+# []
 [Mesh]
   type = FileMesh
   file = pellet.e
@@ -40,10 +44,10 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./TimeDerivative]
-  #   type = TimeDerivative
+  # [./TimeDerivativeConduction]
+  #   type = HeatConductionTimeDerivative
   #   variable = temp
-  # []
+  # [../]
   [./HeatSource]
     type = HeatSource
     variable = temp
@@ -125,8 +129,9 @@
   [./thermal_conductivity_W_m-K]
     type = ElementIntegralMaterialProperty
     outputs = console
+    block = pellet
     mat_prop = thermal_conductivity
-    execute_on = 'initial timestep_end'
+    # execute_on = 'initial timestep_end'
   [../]
   [./surface_temp]
     type = SideAverageValue
@@ -142,6 +147,6 @@
 
 [Outputs]
   exodus = true
-  file_base = viewfactor
+  file_base = pellet_out
   console = true
 []

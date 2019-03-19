@@ -1,0 +1,19 @@
+reset
+brick x 0.5 y 0.4 z 0.1
+brick x 0.4 y 0.3 z 0.2
+subtract volume 2 from volume 1
+volume 1 size 0.05
+mesh volume 1
+block 1 add volume 1
+block 1 name "duct"
+sideset 1 add surface 13
+sideset 1 name "top"
+sideset 2 add surface 14
+sideset 2 name "right"
+sideset 3 add surface 15
+sideset 3 name "bottom"
+sideset 4 add surface 16
+sideset 4 name "left"
+sideset 5 add surface 3 4 5 6
+sideset 5 name "outside"
+export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/duct.e" overwrite

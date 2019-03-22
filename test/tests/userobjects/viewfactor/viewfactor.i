@@ -40,8 +40,8 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./TimeDerivative]
-  #   type = TimeDerivative
+  # [./HeatConductionTimeDerivative]
+  #   type = HeatConductionTimeDerivative
   #   variable = temp
   # []
   [./HeatSource]

@@ -44,14 +44,14 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./TimeDerivativeConduction]
-  #   type = HeatConductionTimeDerivative
-  #   variable = temp
-  # [../]
+  [./TimeDerivativeConduction]
+    type = HeatConductionTimeDerivative
+    variable = temp
+  [../]
   [./HeatSource]
     type = HeatSource
     variable = temp
-    value = 597.133e6
+    value = 809.97e6
     block = 'pellet'
   [../]
 []
@@ -99,13 +99,13 @@
   # [../]
 []
 [Executioner]
-  type = Steady
+  type = Transient
   solve_type = PJFNK
   # start_time = 0
   # end_time = 100
   # dt = 1e-3
   # dtmin = 1e-6
-  # nl_abs_tol = 1e-15
+  nl_abs_tol = 1e-10
 []
 [UserObjects]
   # [./ViewFactor]

@@ -31,17 +31,17 @@
     variable = temp
     boundary = 'top bottom'
   [../]
-  # [./slave]
-  #   type = DirichletBC
-  #   value = 600 #K
-  #   variable = temp
-  #   boundary = 1
-  # [../]
+  [./slave]
+    type = DirichletBC
+    value = 600 #K
+    variable = temp
+    boundary = 'left right'
+  [../]
   [./RadiationHeatTransfer]
     type = RadiationHeatTransferBC
     variable = temp
-    boundary = 'left bottom right top'
-    emissivity = '1 1 1 1'
+    boundary = 'bottom right'
+    emissivity = '1 1'
     viewfactor_userobject = ViewFactor
   [../]
   # [./RadiativeBC]
@@ -86,7 +86,7 @@
   # [../]
   [./ViewFactor]
     type = ViewFactor
-    boundary = 'left bottom right top'
+    boundary = 'bottom right'
     method = MONTECARLO
     sampling_number = 100
     source_number = 10

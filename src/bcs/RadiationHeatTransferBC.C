@@ -13,7 +13,7 @@ validParams<RadiationHeatTransferBC>()
       "The name of the UserObject that is used for view factor calculations.");
   params.addParam<Real>(
       "stefan_boltzmann", 5.670367e-8, "The Stefan-Boltzmann constant [kg.s^3.K^4].");
-  params.addRequiredParam<std::vector<Real>>("emissivity","The emissivities of boundaries (sort by ids).");
+  params.addParam<std::vector<Real>>("emissivity","The emissivities of boundaries (sort by ids).");
   return params;
 }
 
@@ -31,11 +31,11 @@ RadiationHeatTransferBC::RadiationHeatTransferBC(const InputParameters & paramet
     _stefan_boltzmann(getParam<Real>("stefan_boltzmann"))
 {
   std::vector<Real> emissivity = getParam<std::vector<Real>>("emissivity");
-  if (emissivity.size()!=_boundary_ids.size())
-    mooseError("The number of emissivities does not match the number of boundaries.");
+  // if (emissivity.size()!=_boundary_ids.size())
+  //   mooseError("The number of emissivities does not match the number of boundaries.");
   unsigned int i{0};
   for (const auto bid : _boundary_ids)
-    _emissivity[bid]=emissivity[i++];
+    _emissivity[bid] = 1; // emissivity[i++];   //change this for non-black radiation surfaces
 
   for (const auto & t : _mesh.buildSideList())    //buildSideList(el,side,bnd)
   {

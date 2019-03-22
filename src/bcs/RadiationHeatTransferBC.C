@@ -116,7 +116,8 @@ RadiationHeatTransferBC::computeQpResidual()
       {
         // std::cout<<"F["<<_master_elem_id<<"]["<<_slave_elem_id<<"] = "<<f_ms<<std::endl;
       }
-      Real f_sm = f_ms * (area_master / area_slave);
+      Real f_sm = f_ms * (area_master / area_slave);    //use reciprocity
+      // Real f_sm = _vf.getViewFactor(bnd_id, _slave_elem_id,current_boundary_id,_master_elem_id);
       q_ms = _emissivity[current_boundary_id] * _stefan_boltzmann * f_ms * temp_func_master; // master-slave
       q_sm = _emissivity[bnd_id] * _stefan_boltzmann * f_sm * temp_func_slave;  // slave-master
       q_net += q_ms - q_sm;

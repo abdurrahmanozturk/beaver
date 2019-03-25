@@ -66,21 +66,21 @@ ViewFactor::execute()
     slave_bnd = _mesh.getBoundaryIDs(el,slave_side)[0];  //slave_bnd id
     _slave_side_map = getSideMap(el,slave_side);   //slave side node coordinates
     // std::cout<<"checkpoint2"<<std::endl;
-    if (_viewfactors_map[slave_bnd][master_bnd][slave_elem][master_elem]!=0)    //use reciprocity of viewfactors
-    {
-      // std::cout<<"checkpoint3"<<std::endl;
-      Real master_side_area = getArea(getCenterPoint(_master_side_map),_master_side_map);
-      Real slave_side_area = getArea(getCenterPoint(_slave_side_map),_slave_side_map);
-      Real afsm = slave_side_area/master_side_area;
-      Real Fsm = _viewfactors_map[slave_bnd][master_bnd][slave_elem][master_elem];
-      // std::cout<<"F_master-slave:"<<Fsm<<std::endl;
-      _viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem] = afsm * Fsm;
-      viewfactor_elem_to_bnd += afsm * Fsm;
-      // std::cout<<"F_slave-master:"<<(afsm*Fsm)<<std::endl;
-      // std::cout<<"F_slave-master:"<<_viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem]<<std::endl;
-    }
-    else
-    {
+    // if (_viewfactors_map[slave_bnd][master_bnd][slave_elem][master_elem]!=0)    //use reciprocity of viewfactors
+    // {
+    //   // std::cout<<"checkpoint3"<<std::endl;
+    //   Real master_side_area = getArea(getCenterPoint(_master_side_map),_master_side_map);
+    //   Real slave_side_area = getArea(getCenterPoint(_slave_side_map),_slave_side_map);
+    //   Real afsm = slave_side_area/master_side_area;
+    //   Real Fsm = _viewfactors_map[slave_bnd][master_bnd][slave_elem][master_elem];
+    //   // std::cout<<"F_master-slave:"<<Fsm<<std::endl;
+    //   _viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem] = afsm * Fsm;
+    //   viewfactor_elem_to_bnd += afsm * Fsm;
+    //   // std::cout<<"F_slave-master:"<<(afsm*Fsm)<<std::endl;
+    //   // std::cout<<"F_slave-master:"<<_viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem]<<std::endl;
+    // }
+    // else
+    // {
       // std::cout<<"checkpoint4"<<std::endl;
       if (isVisible(_master_side_map,_slave_side_map))
       {
@@ -102,22 +102,22 @@ ViewFactor::execute()
         viewfactor_elem_to_bnd += 0;
         // _viewfactor[_qp] = 0;
       }
-    }
+    // }
     // std::cout<<"F["<<master_elem<<"]["<<slave_elem<<"]= "<<_viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem]<<std::endl;
   }
   // std::cout<<"Fsum="<<viewfactor_elem_to_bnd<<std::endl;
 }
 //
-void
-ViewFactor::threadJoin(const UserObject & y)
-{
-  const ViewFactor & vf = dynamic_cast<const ViewFactor &>(y);
-  for (auto it1 : vf._viewfactors_map)
-    for (auto it2 : it1.second)
-      for (auto it3 : it2.second)
-        for (auto it4 : it3.second)
-          _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
-}
+// void
+// ViewFactor::threadJoin(const UserObject & y)
+// {
+//   const ViewFactor & vf = dynamic_cast<const ViewFactor &>(y);
+//   for (auto it1 : vf._viewfactors_map)
+//     for (auto it2 : it1.second)
+//       for (auto it3 : it2.second)
+//         for (auto it4 : it3.second)
+//           _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
+// }
 
 void
 ViewFactor::finalize()
@@ -136,17 +136,17 @@ ViewFactor::finalize()
   //           gatherSum(it4.second);
   //         }
 
-  //write viewfactors to screen for debugging
-  for (auto it1 : _viewfactors_map)
-    for (auto it2 : it1.second)
-      for (auto it3 : it2.second)
-        for (auto it4 : it3.second)
-          {
-            // std::cout<<"map size ="<<_viewfactors_map.size()*it1.second.size()*it2.second.size()*it3.second.size()<<std::endl;
-            Real vf = _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
-            // std::cout<<"F["<<it1.first<<"]["<<it2.first<<"]["<<it3.first<<"]["<<it4.first<<"]
-            // ="<<vf<<std::endl;
-          }
+  // //write viewfactors to screen for debugging
+  // for (auto it1 : _viewfactors_map)
+  //   for (auto it2 : it1.second)
+  //     for (auto it3 : it2.second)
+  //       for (auto it4 : it3.second)
+  //         {
+  //           // std::cout<<"map size ="<<_viewfactors_map.size()*it1.second.size()*it2.second.size()*it3.second.size()<<std::endl;
+  //           Real vf = _viewfactors_map[it1.first][it2.first][it3.first][it4.first]=it4.second;
+  //           // std::cout<<"F["<<it1.first<<"]["<<it2.first<<"]["<<it3.first<<"]["<<it4.first<<"]
+  //           // ="<<vf<<std::endl;
+  //         }
 }
 
 Real ViewFactor::getViewFactor(BoundaryID master_bnd, unsigned int master_elem, BoundaryID slave_bnd, unsigned int slave_elem) const

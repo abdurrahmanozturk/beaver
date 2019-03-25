@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = parallel_blocks_1x2x2_size1.e
+  file = parallel_blocks.e
 []
 [Variables]
   [./temp]
@@ -38,7 +38,7 @@
     boundary = 'block1_x2 block2_x1'
     method = MONTECARLO
     sampling_number = 100
-    source_number = 100000
+    source_number = 100
     print_screen = true
     execute_on = INITIAL
   [../]

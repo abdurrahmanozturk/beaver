@@ -16,7 +16,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 320
+    initial_condition = 700
   [../]
 []
 # [AuxVariables]
@@ -47,11 +47,12 @@
   [./HeatSource]
     type = HeatSource
     variable = temp
-    value = 809.97e6
+    value = 20.2479e6
     function = 0.5
     block = 'pellet'
   [../]
 []
+
 [BCs]
   [./wall_BC]
     type = DirichletBC
@@ -59,12 +60,12 @@
     variable = temp
     boundary = 5
   [../]
-  # [./pellet_outer]
-  #   type = DirichletBC
-  #   value = 420 #K
-  #   variable = temp
-  #   boundary = 19
-  # [../]
+  [./bn2_outer]
+    type = DirichletBC
+    value = 700 #K
+    variable = temp
+    boundary = 19
+  [../]
   # [./convection_BC]
   #   type = ConvectiveFluxBC
   #   variable = temp
@@ -73,9 +74,20 @@
   [./RadiationHeatTransfer]
     type = RadiativeHeatFluxBC
     variable = temp
-    boundary = '6 11 9 16 14 21 19 26'#'1 2 3 4 6 10 12 15 17 20 22'
-    # emissivity = '1 1'#'1 1 1 1 1 1 1 1 1 1 1'
+    boundary = '6 11 14 21'
     viewfactor_userobject = ViewFactor
+  [../]
+  [./RadiationHeatTransfer2]
+    type = RadiativeHeatFluxBC
+    variable = temp
+    boundary = '9 16'
+    viewfactor_userobject = ViewFactor2
+  [../]
+  [./RadiationHeatTransfer3]
+    type = RadiativeHeatFluxBC
+    variable = temp
+    boundary = '1 2 3 26'
+    viewfactor_userobject = ViewFactor3
   [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
@@ -125,7 +137,27 @@
   # [../]
   [./ViewFactor]
     type = ViewFactor
-    boundary = '6 11 9 16 14 21 19 26'
+    boundary = '6 11 14 21'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
+  [./ViewFactor2]
+    type = ViewFactor
+    boundary = '9 16'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
+  [./ViewFactor3]
+    type = ViewFactor
+    boundary = '1 2 3 26'
     method = MONTECARLO
     sampling_number = 10
     source_number = 10

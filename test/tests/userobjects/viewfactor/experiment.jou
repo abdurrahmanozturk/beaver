@@ -43,7 +43,7 @@ create curve vertex 7 8
 #create vertex 0 0 0.06
 #create curve arc center vertex 1  11 12
 create vertex 0 0 0.06
-create vertex 0.03 0 0.06
+create vertex 0.06 0 0.06
 create curve vertex 9 10
 #
 sweep curve 1 zaxis angle 180
@@ -147,6 +147,7 @@ sideset 26 name "wall_inner"
 #export mesh "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
 export mesh "~/projects/moose/modules/heat_conduction/test/tests/heat_conduction/radiative_heat_transfer/experiment.e" overwrite
 export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
+
 
 
 

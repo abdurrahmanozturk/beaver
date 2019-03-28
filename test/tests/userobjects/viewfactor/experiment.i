@@ -60,12 +60,12 @@
     variable = temp
     boundary = 5
   [../]
-  [./bn2_outer]
-    type = DirichletBC
-    value = 700 #K
-    variable = temp
-    boundary = 19
-  [../]
+  # [./bn2_outer]
+  #   type = DirichletBC
+  #   value = 500 #K
+  #   variable = temp
+  #   boundary = 19
+  # [../]
   # [./convection_BC]
   #   type = ConvectiveFluxBC
   #   variable = temp
@@ -89,6 +89,12 @@
     boundary = '1 2 3 26'
     viewfactor_userobject = ViewFactor3
   [../]
+  [./RadiationHeatTransfer4]
+    type = RadiativeHeatFluxBC
+    variable = temp
+    boundary = '19 26'
+    viewfactor_userobject = ViewFactor4
+  [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
   #   variable = temp
@@ -100,11 +106,26 @@
   # [../]
 []
 [Materials]
-  [./constant_thermal_properties]
+  [./constant_thermal_properties_UO2]
    type = GenericConstantMaterial
    prop_names = 'thermal_conductivity density specific_heat'
    prop_values = '2.8 10431 380'
    outputs = exodus
+   block = pellet
+  [../]
+  [./constant_thermal_properties_BN]
+   type = GenericConstantMaterial
+   prop_names = 'thermal_conductivity density specific_heat'
+   prop_values = '30 3000 720'
+   outputs = exodus
+   block = 'bn1 bn2'
+  [../]
+  [./constant_thermal_properties_Mo]
+   type = GenericConstantMaterial
+   prop_names = 'thermal_conductivity density specific_heat'
+   prop_values = '138 10220 250'
+   outputs = exodus
+   block = 'susceptor wall'
   [../]
   # [./uo2_thermal]
   #   type = UO2
@@ -158,6 +179,16 @@
   [./ViewFactor3]
     type = ViewFactor
     boundary = '1 2 3 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
+  [./ViewFactor4]
+    type = ViewFactor
+    boundary = '19 26'
     method = MONTECARLO
     sampling_number = 10
     source_number = 10

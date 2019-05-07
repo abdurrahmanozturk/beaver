@@ -47,7 +47,7 @@
   [./HeatSource]
     type = HeatSource
     variable = temp
-    value = 597.133e6
+    value = 6e7
     block = 'pellet'
   [../]
 []

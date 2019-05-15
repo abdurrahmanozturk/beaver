@@ -25,10 +25,12 @@ return params;
 
 RadiationHeatTransferBC::RadiationHeatTransferBC(const InputParameters & parameters)
   : IntegratedBC(parameters),
-    _var_number(_subproblem.getVariable(_tid,
+    _var_number(_subproblem
+                    .getVariable(_tid,
                                  parameters.get<NonlinearVariableName>("variable"),
                                  Moose::VarKindType::VAR_ANY,
-                                 Moose::VarFieldType::VAR_FIELD_STANDARD).number()),
+                                 Moose::VarFieldType::VAR_FIELD_STANDARD)
+                    .number()),
     _system(_subproblem.getSystem(getParam<NonlinearVariableName>("variable"))),
     _vf(getUserObject<ViewFactor>("viewfactor_userobject")),
     _boundary_ids(boundaryIDs()),

@@ -44,12 +44,12 @@
   #   type = HeatConductionTimeDerivative
   #   variable = temp
   # []
-  # [./HeatSource]
-  #   type = HeatSource
-  #   variable = temp
-  #   value = 597.133e6
-  #   block = 'pellet'
-  # [../]
+  [./HeatSource]
+    type = HeatSource
+    variable = temp
+    value = 6e7
+    block = 'pellet'
+  [../]
 []
 [BCs]
   [./master]

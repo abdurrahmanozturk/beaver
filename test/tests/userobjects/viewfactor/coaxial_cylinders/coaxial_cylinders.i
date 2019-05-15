@@ -13,12 +13,12 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  [./HeatSource]
-    type = HeatSource
-    value = 1000
-    variable = temp
-    block = innercylinder
-  [../]
+  # [./HeatSource]
+  #   type = HeatSource
+  #   value = 1000
+  #   variable = temp
+  #   block = innercylinder
+  # [../]
 []
 [BCs]
   # [./master]
@@ -27,13 +27,13 @@
   #   variable = temp
   #   boundary = outercylinder_outer
   # [../]
-  [./RadiationHeatTransfer]
-    type = RadiationHeatTransferBC
-    variable = temp
-    boundary = 'innercylinder_outer outercylinder_inner'
-    emissivity = '1 1'
-    viewfactor_userobject = ViewFactor
-  [../]
+  # [./RadiationHeatTransfer]
+  #   type = RadiationHeatTransferBC
+  #   variable = temp
+  #   boundary = 'innercylinder_outer outercylinder_inner'
+  #   emissivity = '1 1'
+  #   viewfactor_userobject = ViewFactor
+  # [../]
 []
 [Materials]
   [./uo2_thermal]
@@ -50,8 +50,8 @@
     type = ViewFactor
     boundary = 'innercylinder_outer outercylinder_inner'
     method = MONTECARLO
-    sampling_number = 10
-    source_number = 10
+    sampling_number = 100
+    source_number = 100
     print_screen = true
     execute_on = INITIAL
   [../]

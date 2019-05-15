@@ -18,6 +18,13 @@
   # nz = 1
   # elem_type = HEX8
 []
+# [MeshModifiers]
+#   [./centerBC]
+#     type = AddExtraNodeset
+#     new_boundary = 'center'
+#     coord = '0 0'
+#   [../]
+# []
 [Variables]
   [./temp]
     initial_condition = 400
@@ -38,6 +45,15 @@
 #     #block = 1 2
 #   [../]
 # []
+[Functions]
+  [./Power]
+    type = PiecewiseLinear
+    data_file = 'joule_power.csv' # Time in seconds
+    y_index_in_file = 2
+    xy_in_file_only = false
+    format = columns
+  [../]
+[]
 [Kernels]
   [./HeatConduction]
     type = HeatConduction
@@ -51,14 +67,15 @@
   [./HeatSource]
     type = HeatSource
     variable = temp
-    value = 809.97e6
+    # value = 8.2e7
+    function = Power   #W/m3
     block = 'pellet'
   [../]
 []
 [BCs]
   [./master]
     type = DirichletBC
-    value = 420 #K
+    value = 850 #K
     variable = temp
     boundary = pellet_outer
   [../]
@@ -101,8 +118,8 @@
 [Executioner]
   type = Transient
   solve_type = PJFNK
-  # start_time = 0
-  # end_time = 100
+  start_time = 0
+  end_time = 300
   # dt = 1e-3
   # dtmin = 1e-6
   nl_abs_tol = 1e-10
@@ -135,7 +152,7 @@
   [../]
   [./surface_temp]
     type = SideAverageValue
-    boundary = '1'
+    boundary = pellet_outer
     variable = temp
   [../]
   [./centerline_temp]

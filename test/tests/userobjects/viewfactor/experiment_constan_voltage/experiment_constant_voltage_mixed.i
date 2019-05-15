@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = experiment.e
+  file = experiment_fine.e
   # type = GeneratedMesh
   # xmax = 1
   # xmin = 0
@@ -16,7 +16,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 1000
+    initial_condition = 700
   [../]
 []
 # [AuxVariables]
@@ -34,15 +34,15 @@
 #     #block = 1 2
 #   [../]
 # []
-[Functions]
-  [./Power]
-    type = PiecewiseLinear
-    data_file = 'joule_power.csv' # Time in seconds
-    y_index_in_file = 3
-    xy_in_file_only = false
-    format = columns
-  [../]
-[]
+# [Functions]
+#   [./Power]
+#     type = PiecewiseLinear
+#     data_file = 'joule_power.csv' # Time in seconds
+#     y_index_in_file = 3
+#     xy_in_file_only = false
+#     format = columns
+#   [../]
+# []
 [Kernels]
   [./HeatConduction]
     type = HeatConduction
@@ -56,8 +56,9 @@
   [./HeatSource]
     type = HeatSource
     variable = temp
-    # value = 8.2e7
-    function = Power   #W/m3
+    value = 8.2e7    #W/m3
+    function = 0.5   #half geometry
+    # function = Power   #W/m3
     block = 'pellet'
   [../]
 []
@@ -65,9 +66,9 @@
 [BCs]
   [./wall_BC]
     type = DirichletBC
-    value = 1000 #K
+    value = 320 #K
     variable = temp
-    boundary = 19
+    boundary = 25
   [../]
   # [./bn2_outer]
   #   type = DirichletBC
@@ -80,30 +81,36 @@
   #   variable = temp
   #   boundary = 8
   # [../]
-  [./RadiationHeatTransfer]
-    type = RadiativeHeatFluxBC
-    variable = temp
-    boundary = '6 11 14 21'
-    viewfactor_userobject = ViewFactor
-  [../]
-  [./RadiationHeatTransfer2]
-    type = RadiativeHeatFluxBC
-    variable = temp
-    boundary = '9 16'
-    viewfactor_userobject = ViewFactor2
-  [../]
-  # [./RadiationHeatTransfer3]
+  # [./RadiationHeatTransfer]
   #   type = RadiativeHeatFluxBC
   #   variable = temp
-  #   boundary = '1 2 3 26'
-  #   viewfactor_userobject = ViewFactor3
+  #   boundary = '6 11 14 21'
+  #   viewfactor_userobject = ViewFactor
   # [../]
-  # [./RadiationHeatTransfer4]
+  # [./RadiationHeatTransfer2]
   #   type = RadiativeHeatFluxBC
   #   variable = temp
-  #   boundary = '19 26'
-  #   viewfactor_userobject = ViewFactor4
+  #   boundary = '9 16'
+  #   viewfactor_userobject = ViewFactor2
   # [../]
+  [./RadiationHeatTransfer3]
+    type = RadiationHeatTransferBC
+    variable = temp
+    boundary = '1 2 26'
+    viewfactor_userobject = ViewFactor3
+  [../]
+  [./RadiationHeatTransfer4]
+    type = RadiationHeatTransferBC
+    variable = temp
+    boundary = '3 4 26'
+    viewfactor_userobject = ViewFactor4
+  [../]
+  [./RadiationHeatTransfer5]
+    type = RadiationHeatTransferBC
+    variable = temp
+    boundary = '19 26'
+    viewfactor_userobject = ViewFactor5
+  [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
   #   variable = temp
@@ -112,6 +119,84 @@
   #   emissivity = '1 1'
   #   sampling_number = 10
   #   source_number = 10
+  # [../]
+[]
+[ThermalContact]
+  # [./radht1]
+  #   type = GapHeatTransfer
+  #   variable = temp
+  #   master = 26
+  #   slave = 1
+  #   gap_conductivity = 0.0
+  #   gap_geometry_type = PLATE
+  #   emissivity_1 = 1
+  #   emissivity_2 = 1
+  # [../]
+  # [./radht1a]
+  #   type = GapHeatTransfer
+  #   variable = temp
+  #   master = 26
+  #   slave = 2
+  #   gap_conductivity = 0.0
+  #   gap_geometry_type = PLATE
+  #   emissivity_1 = 1
+  #   emissivity_2 = 1
+  # [../]
+  # [./radht1b]
+  #   type = GapHeatTransfer
+  #   variable = temp
+  #   master = 26
+  #   slave = 3
+  #   gap_conductivity = 0.0
+  #   gap_geometry_type = PLATE
+  #   emissivity_1 = 1
+  #   emissivity_2 = 1
+  # [../]
+  # [./radht1c]
+  #   type = GapHeatTransfer
+  #   variable = temp
+  #   master = 26
+  #   slave = 4
+  #   gap_conductivity = 0.0
+  #   gap_geometry_type = PLATE
+  #   emissivity_1 = 1
+  #   emissivity_2 = 1
+  # [../]
+  [./radht2]
+    type = GapHeatTransfer
+    variable = temp
+    master = 11
+    slave = 6
+    gap_conductivity = 1e-11
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht3]
+    type = GapHeatTransfer
+    variable = temp
+    master = 16
+    slave = 9
+    gap_conductivity = 1e-11
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht4]
+    type = GapHeatTransfer
+    variable = temp
+    master = 21
+    slave = 14
+    gap_conductivity = 1e-11
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  # [./radht5]
+  #   type = GapHeatTransfer
+  #   variable = temp
+  #   master = 26
+  #   slave = 19
+  #   gap_conductivity = 0.0
+  #   emissivity_1 = 1
+  #   emissivity_2 = 1
   # [../]
 []
 [Materials]
@@ -166,29 +251,9 @@
   #   source_number = 100
   #   execute_on = INITIAL
   # [../]
-  [./ViewFactor]
-    type = ViewFactor
-    boundary = '6 11 14 21'
-    method = MONTECARLO
-    sampling_number = 10
-    source_number = 10
-    print_screen = true
-    debug_mode = false
-    execute_on = INITIAL
-  [../]
-  [./ViewFactor2]
-    type = ViewFactor
-    boundary = '9 16'
-    method = MONTECARLO
-    sampling_number = 10
-    source_number = 10
-    print_screen = true
-    debug_mode = false
-    execute_on = INITIAL
-  [../]
-  # [./ViewFactor3]
+  # [./ViewFactor]
   #   type = ViewFactor
-  #   boundary = '1 2 3 26'
+  #   boundary = '6 11 14 21'
   #   method = MONTECARLO
   #   sampling_number = 10
   #   source_number = 10
@@ -196,9 +261,9 @@
   #   debug_mode = false
   #   execute_on = INITIAL
   # [../]
-  # [./ViewFactor4]
+  # [./ViewFactor2]
   #   type = ViewFactor
-  #   boundary = '19 26'   #add boundar 4
+  #   boundary = '9 16'
   #   method = MONTECARLO
   #   sampling_number = 10
   #   source_number = 10
@@ -206,6 +271,36 @@
   #   debug_mode = false
   #   execute_on = INITIAL
   # [../]
+  [./ViewFactor3]
+    type = ViewFactor
+    boundary = '1 2 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
+  [./ViewFactor4]
+    type = ViewFactor
+    boundary = '3 4 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
+  [./ViewFactor5]
+    type = ViewFactor
+    boundary = '19 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
 []
 [Postprocessors]
   [./pellet_top]
@@ -244,9 +339,8 @@
     variable = temp
   [../]
 []
-
 [Outputs]
   exodus = true
-  file_base = experiment_notoprht_1000K_out
+  file_base = experiment_fine_mixed_700K__constvolt_out
   console = true
 []

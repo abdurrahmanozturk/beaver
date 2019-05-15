@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = pellet.e
+  file = parallel_blocks.e
   # type = GeneratedMesh
   # xmax = 1
   # xmin = 0
@@ -12,7 +12,7 @@
   # nx = 1
   # ny = 1
   # nz = 1
-  # elem_type = HEX8
+  # elem_type = HEX20
 []
 [Variables]
   [./temp]
@@ -44,30 +44,30 @@
   #   type = HeatConductionTimeDerivative
   #   variable = temp
   # []
-  [./HeatSource]
-    type = HeatSource
-    variable = temp
-    value = 597.133e6
-    block = 'pellet'
-  [../]
+  # [./HeatSource]
+  #   type = HeatSource
+  #   variable = temp
+  #   value = 597.133e6
+  #   block = 'pellet'
+  # [../]
 []
 [BCs]
   [./master]
     type = DirichletBC
-    value = 420 #K
+    value = 1000 #K
     variable = temp
-    boundary = pellet_outer
+    boundary = 1
   [../]
-  # [./slave]
-  #   type = DirichletBC
-  #   value = 600 #K
-  #   variable = temp
-  #   boundary = 1
-  # [../]
+  [./slave]
+    type = DirichletBC
+    value = 600 #K
+    variable = temp
+    boundary = 8
+  [../]
   # [./RadiationHeatTransfer]
   #   type = RadiationHeatTransferBC
   #   variable = temp
-  #   boundary = '2 3'
+  #   boundary = '2 7'
   #   emissivity = '1 1'
   #   viewfactor_userobject = ViewFactor
   # [../]
@@ -111,15 +111,16 @@
   #   source_number = 100
   #   execute_on = INITIAL
   # [../]
-  # [./ViewFactor]
-  #   type = ViewFactor
-  #   boundary = '2 3'
-  #   method = MONTECARLO
-  #   sampling_number = 10
-  #   source_number = 10
-  #   print_screen = true
-  #   execute_on = INITIAL
-  # [../]
+  [./ViewFactor]
+    type = ViewFactor
+    boundary = '2 7'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
 []
 [Postprocessors]
   [./thermal_conductivity_W_m-K]

@@ -80,7 +80,7 @@ ViewFactor::execute()
     //   // std::cout<<"F_slave-master:"<<_viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem]<<std::endl;
     // }
     // else
-    // {
+    // {    //reciprocity
       // std::cout<<"checkpoint4"<<std::endl;
       if (isVisible(_master_side_map,_slave_side_map))
       {
@@ -102,7 +102,7 @@ ViewFactor::execute()
         viewfactor_elem_to_bnd += 0;
         // _viewfactor[_qp] = 0;
       }
-    // }
+    // }//reciprocity
     // std::cout<<"F["<<master_elem<<"]["<<slave_elem<<"]= "<<_viewfactors_map[master_bnd][slave_bnd][master_elem][slave_elem]<<std::endl;
   }
   // std::cout<<"Fsum="<<viewfactor_elem_to_bnd<<std::endl;
@@ -158,8 +158,12 @@ Real ViewFactor::getViewFactor(BoundaryID master_bnd, unsigned int master_elem, 
         if (_viewfactors_map.find(master_bnd)->second.find(slave_bnd)->second.find(master_elem)->second.find(slave_elem) != _viewfactors_map.find(master_bnd)->second.find(slave_bnd)->second.find(master_elem)->second.end())
           return (_viewfactors_map.find(master_bnd)->second.find(slave_bnd)->second.find(master_elem)->second.find(slave_elem)->second);
     else
+    {
+      std::cout<<"Boundaries: "<<master_bnd<<"->"<<slave_bnd<<std::endl;
       mooseError("Viewfactor requested for unknown slave boundary. Make sure UserObject is executed on INITIAL and boundaries are defined correctly in UserObject block.");
+    }
   }
-  mooseError("Viewfactor requested for unknown slave boundary. Make sure UserObject is executed on INITIAL and boundaries are defined correctly in UserObject block.");
+  std::cout<<"Boundaries: "<<master_bnd<<"-> "<<slave_bnd<<std::endl;
+  mooseError("Viewfactor requested for unknown master boundary. Make sure UserObject is executed on INITIAL and boundaries are defined correctly in UserObject block.");
   return 0;   //satisfy compiler
 }

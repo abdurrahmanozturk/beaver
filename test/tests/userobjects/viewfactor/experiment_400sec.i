@@ -16,7 +16,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 1000
+    initial_condition = 700
   [../]
 []
 # [AuxVariables]
@@ -37,7 +37,7 @@
 [Functions]
   [./Power]
     type = PiecewiseLinear
-    data_file = 'joule_power.csv' # Time in seconds
+    data_file = 'joule_power_400sec.csv' # Time in seconds
     y_index_in_file = 3
     xy_in_file_only = false
     format = columns
@@ -65,9 +65,9 @@
 [BCs]
   [./wall_BC]
     type = DirichletBC
-    value = 1000 #K
+    value = 320 #K
     variable = temp
-    boundary = 19
+    boundary = 25
   [../]
   # [./bn2_outer]
   #   type = DirichletBC
@@ -92,18 +92,18 @@
     boundary = '9 16'
     viewfactor_userobject = ViewFactor2
   [../]
-  # [./RadiationHeatTransfer3]
-  #   type = RadiativeHeatFluxBC
-  #   variable = temp
-  #   boundary = '1 2 3 26'
-  #   viewfactor_userobject = ViewFactor3
-  # [../]
-  # [./RadiationHeatTransfer4]
-  #   type = RadiativeHeatFluxBC
-  #   variable = temp
-  #   boundary = '19 26'
-  #   viewfactor_userobject = ViewFactor4
-  # [../]
+  [./RadiationHeatTransfer3]
+    type = RadiativeHeatFluxBC
+    variable = temp
+    boundary = '1 2 3 26'
+    viewfactor_userobject = ViewFactor3
+  [../]
+  [./RadiationHeatTransfer4]
+    type = RadiativeHeatFluxBC
+    variable = temp
+    boundary = '19 26'
+    viewfactor_userobject = ViewFactor4
+  [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
   #   variable = temp
@@ -115,13 +115,13 @@
   # [../]
 []
 [Materials]
-  # [./constant_thermal_properties_UO2]
-  #  type = GenericConstantMaterial
-  #  prop_names = 'thermal_conductivity density specific_heat'
-  #  prop_values = '2.8 10431 380'
-  #  outputs = exodus
-  #  block = pellet
-  # [../]
+  [./constant_thermal_properties_UO2]
+   type = GenericConstantMaterial
+   prop_names = 'thermal_conductivity density specific_heat'
+   prop_values = '2.8 10431 380'
+   outputs = exodus
+   block = pellet
+  [../]
   [./constant_thermal_properties_BN]
    type = GenericConstantMaterial
    prop_names = 'thermal_conductivity density specific_heat'
@@ -136,18 +136,17 @@
    outputs = exodus
    block = 'susceptor wall'
   [../]
-  [./uo2_thermal]
-    type = UO2
-    temp = temp
-    block = pellet
-    outputs = exodus
-  [../]
+  # [./uo2_thermal]
+  #   type = UO2
+  #   temp = temp
+  #   outputs = exodus
+  # [../]
 []
 [Executioner]
   type = Transient
   solve_type = PJFNK
   start_time = 0
-  end_time = 300
+  end_time = 400
   # dt = 1e-3
   # [./TimeStepper]
   #   type = IterationAdaptiveDT
@@ -186,26 +185,26 @@
     debug_mode = false
     execute_on = INITIAL
   [../]
-  # [./ViewFactor3]
-  #   type = ViewFactor
-  #   boundary = '1 2 3 26'
-  #   method = MONTECARLO
-  #   sampling_number = 10
-  #   source_number = 10
-  #   print_screen = true
-  #   debug_mode = false
-  #   execute_on = INITIAL
-  # [../]
-  # [./ViewFactor4]
-  #   type = ViewFactor
-  #   boundary = '19 26'   #add boundar 4
-  #   method = MONTECARLO
-  #   sampling_number = 10
-  #   source_number = 10
-  #   print_screen = true
-  #   debug_mode = false
-  #   execute_on = INITIAL
-  # [../]
+  [./ViewFactor3]
+    type = ViewFactor
+    boundary = '1 2 3 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
+  [./ViewFactor4]
+    type = ViewFactor
+    boundary = '19 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
 []
 [Postprocessors]
   [./pellet_top]
@@ -247,6 +246,6 @@
 
 [Outputs]
   exodus = true
-  file_base = experiment_notoprht_1000K_out
+  file_base = experiment_400sec_out
   console = true
 []

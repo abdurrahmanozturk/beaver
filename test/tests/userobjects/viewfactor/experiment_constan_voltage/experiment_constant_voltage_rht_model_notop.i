@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = experiment.e
+  file = experiment_fine.e
   # type = GeneratedMesh
   # xmax = 1
   # xmin = 0
@@ -16,7 +16,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 1000
+    initial_condition = 700
   [../]
 []
 # [AuxVariables]
@@ -34,15 +34,15 @@
 #     #block = 1 2
 #   [../]
 # []
-[Functions]
-  [./Power]
-    type = PiecewiseLinear
-    data_file = 'joule_power.csv' # Time in seconds
-    y_index_in_file = 3
-    xy_in_file_only = false
-    format = columns
-  [../]
-[]
+# [Functions]
+#   [./Power]
+#     type = PiecewiseLinear
+#     data_file = 'joule_power.csv' # Time in seconds
+#     y_index_in_file = 3
+#     xy_in_file_only = false
+#     format = columns
+#   [../]
+# []
 [Kernels]
   [./HeatConduction]
     type = HeatConduction
@@ -56,8 +56,9 @@
   [./HeatSource]
     type = HeatSource
     variable = temp
-    # value = 8.2e7
-    function = Power   #W/m3
+    value = 8.2e7    #W/m3
+    function = 0.5   #half geometry
+    # function = Power   #W/m3
     block = 'pellet'
   [../]
 []
@@ -65,9 +66,9 @@
 [BCs]
   [./wall_BC]
     type = DirichletBC
-    value = 1000 #K
+    value = 320 #K
     variable = temp
-    boundary = 19
+    boundary = 25
   [../]
   # [./bn2_outer]
   #   type = DirichletBC
@@ -81,13 +82,13 @@
   #   boundary = 8
   # [../]
   [./RadiationHeatTransfer]
-    type = RadiativeHeatFluxBC
+    type = RadiationHeatTransferBC
     variable = temp
     boundary = '6 11 14 21'
     viewfactor_userobject = ViewFactor
   [../]
   [./RadiationHeatTransfer2]
-    type = RadiativeHeatFluxBC
+    type = RadiationHeatTransferBC
     variable = temp
     boundary = '9 16'
     viewfactor_userobject = ViewFactor2
@@ -95,14 +96,20 @@
   # [./RadiationHeatTransfer3]
   #   type = RadiativeHeatFluxBC
   #   variable = temp
-  #   boundary = '1 2 3 26'
+  #   boundary = '1 2 26'
   #   viewfactor_userobject = ViewFactor3
   # [../]
   # [./RadiationHeatTransfer4]
   #   type = RadiativeHeatFluxBC
   #   variable = temp
-  #   boundary = '19 26'
+  #   boundary = '3 4 26'
   #   viewfactor_userobject = ViewFactor4
+  # [../]
+  # [./RadiationHeatTransfer5]
+  #   type = RadiativeHeatFluxBC
+  #   variable = temp
+  #   boundary = '19 26'
+  #   viewfactor_userobject = ViewFactor5
   # [../]
   # [./RadiativeBC]
   #   type = RadiativeBC
@@ -186,26 +193,36 @@
     debug_mode = false
     execute_on = INITIAL
   [../]
-  # [./ViewFactor3]
-  #   type = ViewFactor
-  #   boundary = '1 2 3 26'
-  #   method = MONTECARLO
-  #   sampling_number = 10
-  #   source_number = 10
-  #   print_screen = true
-  #   debug_mode = false
-  #   execute_on = INITIAL
-  # [../]
-  # [./ViewFactor4]
-  #   type = ViewFactor
-  #   boundary = '19 26'   #add boundar 4
-  #   method = MONTECARLO
-  #   sampling_number = 10
-  #   source_number = 10
-  #   print_screen = true
-  #   debug_mode = false
-  #   execute_on = INITIAL
-  # [../]
+  [./ViewFactor3]
+    type = ViewFactor
+    boundary = '1 2 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
+  [./ViewFactor4]
+    type = ViewFactor
+    boundary = '3 4 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
+  [./ViewFactor5]
+    type = ViewFactor
+    boundary = '19 26'
+    method = MONTECARLO
+    sampling_number = 10
+    source_number = 10
+    print_screen = true
+    debug_mode = false
+    execute_on = INITIAL
+  [../]
 []
 [Postprocessors]
   [./pellet_top]
@@ -244,9 +261,8 @@
     variable = temp
   [../]
 []
-
 [Outputs]
   exodus = true
-  file_base = experiment_notoprht_1000K_out
+  file_base = experiment_fine_rht_model_700K_constvolt_notop_out
   console = true
 []

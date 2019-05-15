@@ -36,28 +36,30 @@ create curve vertex 5 6
 create vertex 0.0099 0 0
 create vertex 0.0117 0 0
 create curve vertex 7 8
-#create vertex 0.05 0 0
-#create vertex 0 0 0.05
-#create curve arc center vertex 1  9 10
-#create vertex 0.06 0 0
-#create vertex 0 0 0.06
-#create curve arc center vertex 1  11 12
+#hemisphere
+create vertex 0.05 0 0
+create vertex 0 0 0.05
+create curve arc center vertex 1  9 10
+create vertex 0.06 0 0
 create vertex 0 0 0.06
-create vertex 0.06 0 0.06
-create curve vertex 9 10
-#
+create curve arc center vertex 1  11 12
+##plate
+#create vertex 0 0 0.06
+#create vertex 0.06 0 0.06
+#create curve vertex 9 10
+##
 sweep curve 1 zaxis angle 180
 sweep curve 2 zaxis angle 180
 sweep curve 3 zaxis angle 180
 sweep curve 4 zaxis angle 180
-sweep curve 5 zaxis angle 180
-#create surface skin curve 5 6
+#sweep curve 5 zaxis angle 180
+create surface skin curve 5 6
 
 #
 sweep surface 1 direction 0 0 1 distance 0.01
 sweep surface 2 3 4 direction 0 0 1 distance 0.01
-#sweep surface 5 zaxis angle 45
-sweep surface 5 direction 0 0 1 distance 0.001
+sweep surface 5 zaxis angle 180
+#sweep surface 5 direction 0 0 1 distance 0.001
 #
 #create surface rectangle width 0.0055 height 0.01
 #surface 1 move 0.00275 0 0
@@ -75,7 +77,7 @@ sweep surface 5 direction 0 0 1 distance 0.001
 #curve 4 29 21 39 12 35 24 47 20 43 interval 5
 #curve 28 30 34 38 33 36 42 46 41 44 interval 1
 volume 1 2 3 4 size 0.003
-volume 5 size 0.006
+volume 5 size 0.01
 #volume 1 2 3 4 5 size 0.001
 mesh volume 1 2 3 4 5
 ##blocks/sidesets
@@ -98,7 +100,7 @@ sideset 3 name "susceptor_top"
 sideset 4 add surface 4
 sideset 4 name "bn2_top"
 sideset 5 add surface 5 27
-sideset 5 name "wall_outer"
+sideset 5 name "wall_symmetry1"
 sideset 6 add surface 6
 sideset 6 name "pellet_outer"
 sideset 7 add surface 7
@@ -147,6 +149,7 @@ sideset 26 name "wall_inner"
 #export mesh "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
 export mesh "~/projects/moose/modules/heat_conduction/test/tests/heat_conduction/radiative_heat_transfer/experiment.e" overwrite
 export genesis "~/projects/beaver/test/tests/userobjects/viewfactor/experiment.e" overwrite
+
 
 
 

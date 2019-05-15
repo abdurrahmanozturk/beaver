@@ -14,30 +14,29 @@ class ViewFactorBase : public SideUserObject
 public:
   ViewFactorBase(const InputParameters & parameters);
 
-  const Real getVectorLength(const std::vector<Real> & v) const;
-  const Real getAngleBetweenVectors(const std::vector<Real> v1, const std::vector<Real> v2) const;
-  const Real getDistanceBetweenPoints(const std::vector<Real> v1, const std::vector<Real> v2) const;
-  const Real getAnalyticalViewFactor(const std::vector<Real> & v);
-  const Real getArea(const std::vector<Real> &p, std::map<unsigned int, std::vector<Real> > map) const;
-  const std::vector<Real> getNormal(std::map<unsigned int, std::vector<Real>> map) const;
-  const std::vector<Real> getCenterPoint(std::map<unsigned int, std::vector<Real> > map) const;
-  const std::vector<Real> getRandomPoint(std::map<unsigned int, std::vector<Real> > map) const;
-  const std::vector<Real> getRandomDirection(const std::vector<Real> & n, const int dim=3) const;
+  // const Real getVectorLength(const Point & v) const;
+  // const Real getAngleBetweenVectors(const Point v1, const Point v2) const;
+  // const Real getDistanceBetweenPoints(const Point v1, const Point v2) const;
+  const Real getArea(const Point &p, std::map<unsigned int, std::vector<Point> > map) const;
+  const Point getNormal(std::map<unsigned int, std::vector<Point>> map) const;
+  const Point getCenterPoint(std::map<unsigned int, std::vector<Point> > map) const;
+  const Point getRandomPoint(std::map<unsigned int, std::vector<Point> > map) const;
+  const Point getRandomDirection(const Point & n, const int dim=3) const;
   const std::set<BoundaryID> & getMasterBoundaries() const;
   const std::set<BoundaryID> & getSlaveBoundaries() const;
-  const std::map<unsigned int, std::vector<Real>> getSideMap(const Elem * elem,
+  const std::map<unsigned int, std::vector<Point>> getSideMap(const Elem * elem,
                                                              const unsigned int side) const;
-  const bool isOnSurface(const std::vector<Real> & p,
-                         std::map<unsigned int, std::vector<Real>> map) const;
-  const bool isIntersected(const std::vector<Real> & p1,
-                           const std::vector<Real> & dir,
-                           std::map<unsigned int, std::vector<Real>> map) const;
-  const bool isSidetoSide(const std::map<unsigned int, std::vector<Real>> & master_side_map,
-                          const std::map<unsigned int, std::vector<Real>> & slave_side_map) const;
-  const bool isVisible(const std::map<unsigned int, std::vector<Real>> & master_side_map,
-                       const std::map<unsigned int, std::vector<Real>> & slave_side_map) const;
-  const Real doMonteCarlo(std::map<unsigned int, std::vector<Real>> master_side_map,
-                          std::map<unsigned int, std::vector<Real>> slave_side_map,
+  const bool isOnSurface(const Point & p,
+                         std::map<unsigned int, std::vector<Point>> map) const;
+  const bool isIntersected(const Point & p1,
+                           const Point & dir,
+                           std::map<unsigned int, std::vector<Point>> map) const;
+  const bool isSidetoSide(const std::map<unsigned int, std::vector<Point>> & master_side_map,
+                          const std::map<unsigned int, std::vector<Point>> & slave_side_map) const;
+  const bool isVisible(const std::map<unsigned int, std::vector<Point>> & master_side_map,
+                       const std::map<unsigned int, std::vector<Point>> & slave_side_map) const;
+  const Real doMonteCarlo(std::map<unsigned int, std::vector<Point>> master_side_map,
+                          std::map<unsigned int, std::vector<Point>> slave_side_map,
                           unsigned int _sourceNumber,
                           unsigned int _samplingNumber);
   void printViewFactors();
@@ -53,7 +52,7 @@ protected:
   const bool _printScreen;
   const Real _error_tol;   //tolerance
   std::map<BoundaryID, std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, Real>>>> _viewfactors_map;
-  std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Real> > > > _coordinates_map;
+  std::map<BoundaryID, std::map<unsigned int, std::map<unsigned int, std::vector<Point> > > > _coordinates_map;
   std::vector<BoundaryName> _master_boundary_names,_slave_boundary_names;
   std::set<BoundaryID> _master_boundary_ids,_slave_boundary_ids;
   std::map<BoundaryID, std::map<BoundaryID, Real>> _F;   //bnd-bnd viewfactors

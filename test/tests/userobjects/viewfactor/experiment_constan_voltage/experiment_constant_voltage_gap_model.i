@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = experiment.e
+  file = experiment_fine.e
   # type = GeneratedMesh
   # xmax = 1
   # xmin = 0
@@ -16,7 +16,7 @@
 []
 [Variables]
   [./temp]
-    initial_condition = 1000
+    initial_condition = 700
   [../]
 []
 # [AuxVariables]
@@ -34,15 +34,15 @@
 #     #block = 1 2
 #   [../]
 # []
-[Functions]
-  [./Power]
-    type = PiecewiseLinear
-    data_file = 'joule_power.csv' # Time in seconds
-    y_index_in_file = 3
-    xy_in_file_only = false
-    format = columns
-  [../]
-[]
+# [Functions]
+#   [./Power]
+#     type = PiecewiseLinear
+#     data_file = 'joule_power.csv' # Time in seconds
+#     y_index_in_file = 3
+#     xy_in_file_only = false
+#     format = columns
+#   [../]
+# []
 [Kernels]
   [./HeatConduction]
     type = HeatConduction
@@ -56,8 +56,9 @@
   [./HeatSource]
     type = HeatSource
     variable = temp
-    # value = 8.2e7
-    function = Power   #W/m3
+    value = 8.2e7    #W/m3
+    function = 0.5   #half geometry
+    # function = Power   #W/m3
     block = 'pellet'
   [../]
 []
@@ -65,9 +66,9 @@
 [BCs]
   [./wall_BC]
     type = DirichletBC
-    value = 1000 #K
+    value = 320 #K
     variable = temp
-    boundary = 19
+    boundary = 25
   [../]
   # [./bn2_outer]
   #   type = DirichletBC
@@ -80,18 +81,18 @@
   #   variable = temp
   #   boundary = 8
   # [../]
-  [./RadiationHeatTransfer]
-    type = RadiativeHeatFluxBC
-    variable = temp
-    boundary = '6 11 14 21'
-    viewfactor_userobject = ViewFactor
-  [../]
-  [./RadiationHeatTransfer2]
-    type = RadiativeHeatFluxBC
-    variable = temp
-    boundary = '9 16'
-    viewfactor_userobject = ViewFactor2
-  [../]
+  # [./RadiationHeatTransfer]
+  #   type = RadiativeHeatFluxBC
+  #   variable = temp
+  #   boundary = '6 11 14 21'
+  #   viewfactor_userobject = ViewFactor
+  # [../]
+  # [./RadiationHeatTransfer2]
+  #   type = RadiativeHeatFluxBC
+  #   variable = temp
+  #   boundary = '9 16'
+  #   viewfactor_userobject = ViewFactor2
+  # [../]
   # [./RadiationHeatTransfer3]
   #   type = RadiativeHeatFluxBC
   #   variable = temp
@@ -114,6 +115,96 @@
   #   source_number = 10
   # [../]
 []
+#
+[ThermalContact]
+  [./radht1]
+    type = GapHeatTransfer
+    variable = temp
+    master = 26
+    slave = 1
+    gap_conductivity = 1e-11
+    gap_geometry_type = PLATE
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht1a]
+    type = GapHeatTransfer
+    variable = temp
+    master = 26
+    slave = 2
+    gap_conductivity = 1e-11
+    gap_geometry_type = PLATE
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht1b]
+    type = GapHeatTransfer
+    variable = temp
+    master = 26
+    slave = 3
+    gap_conductivity = 1e-11
+    gap_geometry_type = PLATE
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht1c]
+    type = GapHeatTransfer
+    variable = temp
+    master = 26
+    slave = 4
+    gap_conductivity = 1e-11
+    gap_geometry_type = PLATE
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht2]
+    type = GapHeatTransfer
+    variable = temp
+    master = 11
+    slave = 6
+    gap_conductivity = 1e-11
+    gap_geometry_type = CYLINDER
+    cylinder_axis_point_1 = '0 0 0'
+    cylinder_axis_point_2 = '0 0 0.01'
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht3]
+    type = GapHeatTransfer
+    variable = temp
+    master = 16
+    slave = 9
+    gap_conductivity = 1e-11
+    gap_geometry_type = CYLINDER
+    cylinder_axis_point_1 = '0 0 0'
+    cylinder_axis_point_2 = '0 0 0.01'
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht4]
+    type = GapHeatTransfer
+    variable = temp
+    master = 21
+    slave = 14
+    gap_conductivity = 1e-11
+    gap_geometry_type = CYLINDER
+    cylinder_axis_point_1 = '0 0 0'
+    cylinder_axis_point_2 = '0 0 0.01'
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+  [./radht5]
+    type = GapHeatTransfer
+    variable = temp
+    master = 26
+    slave = 19
+    gap_conductivity = 1e-11
+    gap_geometry_type = PLATE
+    emissivity_1 = 1
+    emissivity_2 = 1
+  [../]
+[]
+
 [Materials]
   # [./constant_thermal_properties_UO2]
   #  type = GenericConstantMaterial
@@ -166,26 +257,26 @@
   #   source_number = 100
   #   execute_on = INITIAL
   # [../]
-  [./ViewFactor]
-    type = ViewFactor
-    boundary = '6 11 14 21'
-    method = MONTECARLO
-    sampling_number = 10
-    source_number = 10
-    print_screen = true
-    debug_mode = false
-    execute_on = INITIAL
-  [../]
-  [./ViewFactor2]
-    type = ViewFactor
-    boundary = '9 16'
-    method = MONTECARLO
-    sampling_number = 10
-    source_number = 10
-    print_screen = true
-    debug_mode = false
-    execute_on = INITIAL
-  [../]
+  # [./ViewFactor]
+  #   type = ViewFactor
+  #   boundary = '6 11 14 21'
+  #   method = MONTECARLO
+  #   sampling_number = 10
+  #   source_number = 10
+  #   print_screen = true
+  #   debug_mode = false
+  #   execute_on = INITIAL
+  # [../]
+  # [./ViewFactor2]
+  #   type = ViewFactor
+  #   boundary = '9 16'
+  #   method = MONTECARLO
+  #   sampling_number = 10
+  #   source_number = 10
+  #   print_screen = true
+  #   debug_mode = false
+  #   execute_on = INITIAL
+  # [../]
   # [./ViewFactor3]
   #   type = ViewFactor
   #   boundary = '1 2 3 26'
@@ -198,7 +289,7 @@
   # [../]
   # [./ViewFactor4]
   #   type = ViewFactor
-  #   boundary = '19 26'   #add boundar 4
+  #   boundary = '19 26'
   #   method = MONTECARLO
   #   sampling_number = 10
   #   source_number = 10
@@ -244,9 +335,8 @@
     variable = temp
   [../]
 []
-
 [Outputs]
   exodus = true
-  file_base = experiment_notoprht_1000K_out
+  file_base = experiment_fine_gap_model_700K_nocond_out
   console = true
 []

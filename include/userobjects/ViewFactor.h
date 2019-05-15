@@ -26,8 +26,8 @@ protected:
   const std::string _method;
   // MaterialProperty<Real> & _viewfactor;
   std::map<unsigned int, unsigned int> _elem_side_map;
-  std::map<unsigned int, std::vector<Real>> _master_side_map;
-  std::map<unsigned int, std::vector<Real>> _slave_side_map;
+  std::map<unsigned int, std::vector<Point>> _master_side_map;
+  std::map<unsigned int, std::vector<Point>> _slave_side_map;
 };
 
 #endif // VIEWFACTOR_H

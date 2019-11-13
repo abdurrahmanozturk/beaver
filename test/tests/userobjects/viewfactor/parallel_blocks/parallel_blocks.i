@@ -31,19 +31,19 @@
   #   variable = temp
   #   boundary = block3_x2
   # [../]
-  [./RadiationHeatTransferBC]
-    type = RadiationHeatTransferBC
-    boundary = 'block1_x2 block2_x1 block2_x2 block3_x1'
-    viewfactor_userobject = ViewFactor
-    variable = temp
-  [../]
-  [./RadiationHeatTransferHeatLoss]
-    type = RadiationHeatTransferBC
-    boundary = block3_x2
-    viewfactor_userobject = ViewFactor
-    variable = temp
-    ambient_temperature = 320
-  [../]
+  # [./RadiationHeatTransferBC]
+  #   type = RadiationHeatTransferBC
+  #   boundary = 'block1_x2 block2_x1 block2_x2 block3_x1'
+  #   viewfactor_userobject = ViewFactor
+  #   variable = temp
+  # [../]
+  # [./RadiationHeatTransferHeatLoss]
+  #   type = RadiationHeatTransferBC
+  #   boundary = block3_x2
+  #   viewfactor_userobject = ViewFactor
+  #   variable = temp
+  #   ambient_temperature = 320
+  # [../]
 []
 [Materials]
   [./constant_thermal_properties]
@@ -107,6 +107,6 @@
 
 [Outputs]
   exodus = true
-  file_base = parallel_blocks_out_1x2x2_size1
+  file_base = parallel_blocks_out_tamu
   console = true
 []

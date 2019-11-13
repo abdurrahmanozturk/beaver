@@ -4,6 +4,8 @@ alias beaver=$beaverPath"/beaver-opt -i"
 alias beaver2="mpiexec -n 2 "$beaverPath"/beaver-opt -i"
 alias beaver3="mpiexec -n 3 "$beaverPath"/beaver-opt -i"
 alias beaver4="mpiexec -n 4 "$beaverPath"/beaver-opt -i"
+alias beaver8="mpiexec -n 8 "$beaverPath"/beaver-opt -i"
+
 
 
 # -----------------------------------beaver DBG----------------------------------------------------
@@ -22,6 +24,12 @@ alias beavertestfolder="cd "$beaverPath"/test/tests"
 alias beaverviewfactorfolder="cd "$beaverPath"/test/tests/userobjects/viewfactor"
 alias bul="find . -name "*.C" | xargs grep"
 alias GetBlockInfo=$beaverPath"/beaver-opt --dump"
+alias paraview=/Applications/ParaView-5.7.0-RC4.app/Contents/MacOS/paraview
+alias atom=/Users/aozturk/Downloads/Atom.app/Contents/MacOS/Atom
+combinedPath="/Users/aozturk/projects/moose/modules/combined"
+alias combined=$combinedPath"/combined-opt -i"
+peacockPath="/Users/aozturk/projects/moose/python/peacock"
+alias peacock=$peacockPath"/peacock -e"$combinedPath"/combined-opt"
 
 # ------------------------------------makebeaver---------------------------------------------------
 makebeaver()

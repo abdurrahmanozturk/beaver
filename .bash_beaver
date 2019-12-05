@@ -34,8 +34,9 @@ alias peacock=$peacockPath"/peacock -e"$combinedPath"/combined-opt"
 # ------------------------------------makebeaver---------------------------------------------------
 makebeaver()
 {
+  export current="$(pwd) \$"
   beaverfolder
   make
-  beaverviewfactorfolder
+  cd $current
 }
 # -------------------------------------------------------------------------------------------------

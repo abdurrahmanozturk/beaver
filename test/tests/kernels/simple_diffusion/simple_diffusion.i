@@ -3,6 +3,8 @@
   dim = 2
   nx = 10
   ny = 10
+  xmax = 1
+  ymax = 1
 []
 
 [Variables]

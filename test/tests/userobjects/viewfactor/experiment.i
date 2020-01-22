@@ -81,13 +81,13 @@
   #   boundary = 8
   # [../]
   [./RadiationHeatTransfer]
-    type = RadiativeHeatFluxBC
+    type = RadiationHeatTransferBC
     variable = temp
     boundary = '6 11 14 21'
     viewfactor_userobject = ViewFactor
   [../]
   [./RadiationHeatTransfer2]
-    type = RadiativeHeatFluxBC
+    type = RadiationHeatTransferBC
     variable = temp
     boundary = '9 16'
     viewfactor_userobject = ViewFactor2

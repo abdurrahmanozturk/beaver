@@ -2,7 +2,7 @@
 #define RADIATIONHEATTRANSFERBC_H
 
 #include "IntegratedBC.h"
-#include "ViewFactor.h"
+#include "MonteCarloViewFactor.h"
 
 // Forward declarations
 class RadiationHeatTransferBC;
@@ -26,7 +26,7 @@ protected:
   // Real _value;
 
 private:
-  const ViewFactor & _vf;
+  const MonteCarloViewFactor & _vf;
   const std::set<BoundaryID> & _boundary_ids;
   const std::set<BoundaryID> & _master_boundary_ids;
   const std::set<BoundaryID> & _slave_boundary_ids;

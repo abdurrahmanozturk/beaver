@@ -2,7 +2,7 @@
 #define RadiationHeatTransfer_H
 
 #include "Kernel.h"
-#include "ViewFactor.h"
+#include "MonteCarloViewFactor.h"
 
 class RadiationHeatTransfer;
 
@@ -22,7 +22,7 @@ protected:
   virtual Real computeQpJacobian() override;
 
   // const VariableValue & _temp;
-  const ViewFactor & _viewfactor;
+  const MonteCarloViewFactor & _viewfactor;
   const std::set<BoundaryID> & _master_boundary_ids;
   const std::set<BoundaryID> & _slave_boundary_ids;
   unsigned int _master_elem_id,_slave_elem_id;

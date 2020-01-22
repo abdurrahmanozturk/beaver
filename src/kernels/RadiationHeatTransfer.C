@@ -17,7 +17,7 @@ validParams<RadiationHeatTransfer>()
 
 RadiationHeatTransfer::RadiationHeatTransfer(const InputParameters & parameters)
   : Kernel(parameters),
-    _viewfactor(getUserObject<ViewFactor>("viewfactor_userobject")),
+    _viewfactor(getUserObject<MonteCarloViewFactor>("viewfactor_userobject")),
     _master_boundary_ids(_viewfactor.getMasterBoundaries()),
     _slave_boundary_ids(_viewfactor.getSlaveBoundaries()),
     _current_side(_assembly.side()),

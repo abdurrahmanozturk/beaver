@@ -32,7 +32,7 @@ RadiationHeatTransferBC::RadiationHeatTransferBC(const InputParameters & paramet
                                  Moose::VarFieldType::VAR_FIELD_STANDARD)
                     .number()),
     _system(_subproblem.getSystem(getParam<NonlinearVariableName>("variable"))),
-    _vf(getUserObject<ViewFactor>("viewfactor_userobject")),
+    _vf(getUserObject<MonteCarloViewFactor>("viewfactor_userobject")),
     _boundary_ids(boundaryIDs()),
     _master_boundary_ids(_vf.getMasterBoundaries()),
     _slave_boundary_ids(_vf.getSlaveBoundaries()),
@@ -43,7 +43,7 @@ RadiationHeatTransferBC::RadiationHeatTransferBC(const InputParameters & paramet
   std::vector<Real> emissivity = getParam<std::vector<Real>>("emissivity");
   // if (emissivity.size()!=_boundary_ids.size())
   //   mooseError("The number of emissivities does not match the number of boundaries.");
-  unsigned int i{0};
+  // unsigned int i{0};
   for (const auto bid : _boundary_ids)
     _emissivity[bid] = 1; // emissivity[i++];   //change this for non-black radiation surfaces
 
@@ -94,7 +94,7 @@ RadiationHeatTransferBC::computeQpResidual()
   if (_boundary_ids.find(current_boundary_id)!=_boundary_ids.end())
   {
     _master_elem_id = _current_elem->id();
-    Real area_master = getArea(_current_elem,_current_side);
+    // Real area_master = getArea(_current_elem,_current_side);
     // std::cout<<"q_net:"<<q_net<<std::endl;
     // std::cout<<"Master:"<<_master_elem_id<<std::endl;
     // std::cout<<"qp "<<_qp<<std::endl;
@@ -117,7 +117,7 @@ RadiationHeatTransferBC::computeQpResidual()
         _slave_elem_id = el->id();   //elem.first
         if (_master_elem_id == _slave_elem_id)
           continue;
-        Real area_slave = getArea(el,side);
+        // Real area_slave = getArea(el,side);
         std::map<unsigned int, std::vector<Point>> side_map{getSideMap(el,side)};
         const Point center = _vf.getCenterPoint(side_map);
         _u_slave = _system.point_value(_var_number, center, false);

@@ -13,10 +13,10 @@
     variable = temp
     diffusion_coefficient = thermal_conductivity
   [../]
-  # [./HeatConductionTimeDerivative]
-  #   type = HeatConductionTimeDerivative
-  #   variable = temp
-  # [../]
+  [./HeatConductionTimeDerivative]
+    type = HeatConductionTimeDerivative
+    variable = temp
+  [../]
 []
 [BCs]
   [./master]
@@ -25,18 +25,18 @@
     variable = temp
     boundary = block1_x1
   [../]
-  # [./slave]
-  #   type = DirichletBC
-  #   value = 600
-  #   variable = temp
-  #   boundary = block3_x2
-  # [../]
-  # [./RadiationHeatTransferBC]
-  #   type = RadiationHeatTransferBC
-  #   boundary = 'block1_x2 block2_x1 block2_x2 block3_x1'
-  #   viewfactor_userobject = ViewFactor
-  #   variable = temp
-  # [../]
+  [./slave]
+    type = DirichletBC
+    value = 600
+    variable = temp
+    boundary = block3_x2
+  [../]
+  [./RadiationHeatTransferBC]
+    type = RadiationHeatTransferBC
+    boundary = 'block1_x2 block2_x1 block2_x2 block3_x1'
+    viewfactor_userobject = ViewFactor
+    variable = temp
+  [../]
   # [./RadiationHeatTransferHeatLoss]
   #   type = RadiationHeatTransferBC
   #   boundary = block3_x2
@@ -58,12 +58,23 @@
   # [../]
 []
 [Executioner]
-  type = Steady
+  # type = Steady
+  # solve_type = PJFNK
+  type = Transient
   solve_type = PJFNK
+  start_time = 0
+  end_time = 300
+  # dt = 1e-3
+  # [./TimeStepper]
+  #   type = IterationAdaptiveDT
+  #   dt = 1e-2 #s
+  #   growth_factor = 1.5
+  #   cutback_factor = 0.5
+  # [../]
 []
 [UserObjects]
   [./ViewFactor]
-    type = ViewFactor
+    type = MonteCarloViewFactor
     boundary = 'block1_x2 block2_x1 block2_x2 block3_x1'
     method = MONTECARLO
     sampling_number = 100

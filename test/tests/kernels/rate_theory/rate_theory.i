@@ -133,18 +133,30 @@
 
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
- # [./outside_conc_dec]
- #   type = DirichletBC
- #   variable = conc
- #   value = 0
- #   boundary = '1'
- # [../]
- # [./outside_conc_gen]
- #   type = DirichletBC
- #   variable = gen
- #   value = 0
- #   boundary = '1'
- # [../]
+ [./ci_bottom]
+   type = DirichletBC
+   variable = ci
+   value = 1
+   boundary = '0'
+ [../]
+ [./cv_bottom]
+   type = DirichletBC
+   variable = cv
+   value = 1
+   boundary = '0'
+ [../]
+ [./ci_top]
+   type = DirichletBC
+   variable = ci
+   value = 0
+   boundary = '2'
+ [../]
+ [./cv_top]
+   type = DirichletBC
+   variable = cv
+   value = 0
+   boundary = '2'
+ [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
 
@@ -284,7 +296,7 @@
   # exodus = true
   [./exodus]
     type = Exodus
-    file_base = rate_theory_randomIC
+    file_base = rate_theory_randomIC_bottom_top
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true

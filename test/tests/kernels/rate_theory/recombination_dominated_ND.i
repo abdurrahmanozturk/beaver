@@ -110,13 +110,13 @@
 [BCs]
   # [./xi_bc]
   #   type = DirichletBC
-  #   variable = ci
+  #   variable = xi
   #   value = 0
   #   boundary = '0 2'
   # [../]
   # [./xv_bc]
   #   type = DirichletBC
-  #   variable = cv
+  #   variable = xv
   #   value = 0
   #   boundary = '0 2'
   # [../]

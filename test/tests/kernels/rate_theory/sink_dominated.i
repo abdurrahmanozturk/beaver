@@ -20,10 +20,10 @@
 
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]
-  [./xi]
+  [./ci]
     # initial_condition = 1
   [../]
-  [./xv]
+  [./cv]
     # initial_condition = 1
   [../]
 []
@@ -33,9 +33,9 @@
 
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
-  [./ci]
+  [./xi]
   [../]
-  [./cv]
+  [./xv]
   [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -50,20 +50,20 @@
 
 #--------------------------------------------------Kernels-----------------------------------------------
 [Kernels]
-  [./xi]
-    type = PointDefectND
-    variable = xi
-    coupled = xv
+  [./ci]
+    type = PointDefect
+    variable = ci
+    coupled = cv
     ks = 38729.8
     k = 1e-7
     kiv = 4e16
     D = 7e-2
     # disable_diffusion = true
   [../]
-  [./xv]
-    type = PointDefectND
-    variable = xv
-    coupled = xi
+  [./cv]
+    type = PointDefect
+    variable = cv
+    coupled = ci
     ks = 38729.8
     k = 1e-7
     kiv = 4e16
@@ -80,13 +80,13 @@
   #   variable = cv
   #   D_name = Dv
   # [../]
-  [./dxi_dt]
+  [./dci_dt]
     type = TimeDerivative
-    variable = xi
+    variable = ci
   [../]
-  [./dxv_dt]
+  [./dcv_dt]
     type = TimeDerivative
-    variable = xv
+    variable = cv
   [../]
 []
 #--------------------------------------------------Kernels-----------------------------------------------
@@ -95,17 +95,17 @@
 
 #------------------------------------------------AuxKernels----------------------------------------------
 [AuxKernels]
-  [./ci]
+  [./xi]
     type = ParsedAux
-    variable = ci
-    args = xi
-    function = 'kiv:=4e16;k:=1e-7;xi/sqrt(kiv/k)'
+    variable = xi
+    args = ci
+    function = 'kiv:=4e16;k:=1e-7;ci*sqrt(kiv/k)'
   [../]
   [./cv]
     type = ParsedAux
-    variable = cv
-    args = xv
-    function = 'kiv:=4e16;k:=1e-7;xv/sqrt(kiv/k)'
+    variable = xv
+    args = cv
+    function = 'kiv:=4e16;k:=1e-7;cv*sqrt(kiv/k)'
   [../]
 []
 #------------------------------------------------AuxKernels----------------------------------------------
@@ -114,15 +114,15 @@
 
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
- [./xi_bc]
+ [./ci_bc]
    type = DirichletBC
-   variable = xi
+   variable = ci
    value = 0
    boundary = '0 2'
  [../]
- [./xv_bc]
+ [./cv_bc]
    type = DirichletBC
-   variable = xv
+   variable = cv
    value = 0
    boundary = '0 2'
  [../]
@@ -143,22 +143,22 @@
 #     # radius = '0.28'
 #     # height = 1.47
 #   [../]
-[./xv_ic]
+[./cv_ic]
   type = RandomIC
   min = 0
   max = 1
-  variable = xi
+  variable = ci
   # x1 = 0.5
   # y1 = 0.5
   # invalue = 1
   # outvalue = 0
   # radius = '0.25'
 [../]
-[./xi_ic]
+[./ci_ic]
   type = RandomIC
   min = 0
   max = 1
-  variable = xv
+  variable = cv
   # x1 = 0.5
   # y1 = 0.5
   # invalue = 1

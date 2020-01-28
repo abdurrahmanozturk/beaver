@@ -20,15 +20,12 @@
 
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]
-  [./ci]
-    initial_condition = 0
+  [./xi]
+    # initial_condition = 0
   [../]
-  [./cv]
-    initial_condition = 0
+  [./xv]
+    # initial_condition = 0
   [../]
-  # [./gen]
-  #   initial_condition = 0
-  # [../]
 []
 #-------------------------------------------------Variables----------------------------------------------
 
@@ -36,6 +33,10 @@
 
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
+  [./ci]
+  [../]
+  [./cv]
+  [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
 
@@ -51,56 +52,42 @@
 [Kernels]
   [./defect_i]
     type = PointDefectND
-    variable = ci
-    coupled = cv
-    ks = 1e4
-    k = 1e-7
-    kiv = 1.7e4
-    D = 5e-14
+    variable = xi
+    coupled = xv
+    ks = 38490
+    k = 1e-2
+    kiv = 7.49e10
+    D = 1.35e-7
+    # disable_diffusion = true
   [../]
   [./defect_v]
     type = PointDefectND
-    variable = cv
-    coupled = ci
-    ks = 1e4
-    k = 1e-7
-    kiv = 1.7e4
-    D = 1.3e-28
+    variable = xv
+    coupled = xi
+    ks = 36580
+    k = 1e-2
+    kiv = 7.49e10
+    D = 9.4e-13
+    # disable_diffusion = true
   [../]
-  # [./decay]
-  #   type = RadioactiveDecay
-  #   variable = decay
-  #   half_life = 30.1
-  # [../]
-  # [./diff_decay]
+  # [./diff_ci]
   #   type = MatDiffusion
-  #   variable = decay
-  #   D_name = D_A
+  #   variable = ci
+  #   D_name = Di
+  # [../]
+  # [./diff_cv]
+  #   type = MatDiffusion
+  #   variable = cv
+  #   D_name = Dv
   # [../]
   [./ci_time]
     type = TimeDerivative
-    variable = ci
+    variable = xi
   [../]
   [./cv_time]
     type = TimeDerivative
-    variable = cv
+    variable = xv
   [../]
-  #
-  # [./gen]
-  #   type = RadioactiveGeneration
-  #   variable = gen
-  #   coupled = decay
-  #   half_life = 30.1
-  # [../]
-  # [./gen_time]
-  #   type = TimeDerivative
-  #   variable = gen
-  # [../]
-  # [./diff_gen]
-  #   type = MatDiffusion
-  #   variable = gen
-  #   D_name = D_B
-  # [../]
 []
 #--------------------------------------------------Kernels-----------------------------------------------
 
@@ -108,6 +95,18 @@
 
 #------------------------------------------------AuxKernels----------------------------------------------
 [AuxKernels]
+  [./ci]
+    type = ParsedAux
+    variable = ci
+    args = xi
+    function = 'kiv:=7.49e10;k:=1e-2;xi/sqrt(kiv/k)'
+  [../]
+  [./cv]
+    type = ParsedAux
+    variable = cv
+    args = xv
+    function = 'kiv:=7.49e10;k:=1e-2;xv/sqrt(kiv/k)'
+  [../]
 []
 #------------------------------------------------AuxKernels----------------------------------------------
 
@@ -115,47 +114,73 @@
 
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
- # [./outside_conc_dec]
- #   type = DirichletBC
- #   variable = conc
- #   value = 0
- #   boundary = '1'
- # [../]
- # [./outside_conc_gen]
- #   type = DirichletBC
- #   variable = gen
- #   value = 0
- #   boundary = '1'
- # [../]
+  [./ci_bottom]
+    type = DirichletBC
+    variable = xi
+    value = 1
+    boundary = '0 2'
+  [../]
+  [./cv_bottom]
+    type = DirichletBC
+    variable = xv
+    value = 1
+    boundary = '0 2'
+  [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
 
 
 #--------------------------------------------------ICs---------------------------------------------------
-# [ICs]
-#   [./conc]
-#     # type = BoundingCircleIC
-#     type = ConstantIC
-#     variable = ci
-#     value = 10
-#     block = 0
-#     # inside = '1'
-#     # outside = 0
-#     # radius = '0.28'
-#     # height = 1.47
-#   [../]
-# []
+[ICs]
+  [./xi_ic]
+    type = RandomIC
+    min = 0
+    max = 1
+    variable = xi
+    #     # x1 = 0.5
+    #     # y1 = 0.5
+    #     # invalue = 1
+    #     # outvalue = 0
+    #     # radius = '0.25'
+  [../]
+  [./xv_ic]
+    type = RandomIC
+    min = 0
+    max = 1
+    variable = xv
+#     # x1 = 0.5
+#     # y1 = 0.5
+#     # invalue = 1
+#     # outvalue = 0
+#     # radius = '0.25'
+  [../]
+[]
 #--------------------------------------------------ICs---------------------------------------------------
 
 
 #-----------------------------------------------Materials-------------------------------------------------
 [Materials]
-   # [./D]
-   #   type = GenericConstantMaterial # diffusion coeficient was found in
-   #   prop_names = 'D_A D_B'
-   #   prop_values = '0.0055 0.0065' # m/year
-   #   block = '0'
-   # [../]
+  [./t]
+    type = TimeStepMaterial
+    prop_time = time
+ [../]
+ [./tau]
+   type = ParsedMaterial
+   material_property_names = time
+   function = 'kiv:=7.49e10;k:=1e-2;time*sqrt(kiv*k)'
+ [../]
+ # [./D]
+ #   type = GenericConstantMaterial # diffusion coeficients
+ #   prop_names = 'Di Dv'
+ #   prop_values = '1.35e-7 9.4e-13' # cm2/sec
+ #   block = '0'
+ # [../]
+ # [./k_values]
+ #   type = GenericConstantMaterial
+ #   prop_names = 'k ki kv kiv'
+ #   prop_values = '1e-2 38490 36580 7.49e10'
+ #   block = '0'
+ # [../]
 []
 #-----------------------------------------------Materials-------------------------------------------------
 
@@ -164,6 +189,16 @@
 
 #--------------------------------------------Postprocessors------------------------------------------------
 [Postprocessors]
+  [./center_xi]
+    type = PointValue
+    point = '0.5 0.5 0.0'
+    variable = xi
+  [../]
+  [./center_xv]
+    type = PointValue
+    point = '0.5 0.5 0.0'
+    variable = xv
+  [../]
   [./center_ci]
     type = PointValue
     point = '0.5 0.5 0.0'
@@ -174,6 +209,30 @@
     point = '0.5 0.5 0.0'
     variable = cv
   [../]
+  # [./ci]  # should be equal 0.5,0.5
+  #   type = ElementIntegralVariablePostprocessor
+  #   variable = ci
+  #   execute_on = 'initial timestep_end'
+  # [../]
+  # [./cv]  # should be equal 0.5,0.5
+  #   type = ElementIntegralVariablePostprocessor
+  #   variable = cv
+  #   execute_on = 'initial timestep_end'
+  # [../]
+  # [./flux_ci]  # should be equal 0.5,0.5
+  #   type = SideFluxIntegral
+  #   variable = ci
+  #   diffusivity = 'Di'
+  #   boundary = '1'
+  #   execute_on = 'initial timestep_end'
+  # [../]
+  # [./flux_cv]  # should be equal 0.5,0.5
+  #   type = SideFluxIntegral
+  #   variable = cv
+  #   diffusivity = 'Dv'
+  #   boundary = '1'
+  #   execute_on = 'initial timestep_end'
+  # [../]
 []
 #--------------------------------------------Postprocessors------------------------------------------------
 
@@ -199,9 +258,14 @@
   nl_abs_tol = 1e-10 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-11 # Absolute tolerance for nonlienar solves
   start_time = 0
-  end_time = 100
-  # dt = 0.5
-  # postprocessor = gen
+  end_time = 30000000
+  # dt = 1
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 1e-2 #s
+    growth_factor = 1.1
+    cutback_factor = 0.5
+  [../]
   # skip = 25
   # criteria = 0.01
   # below = true
@@ -216,12 +280,12 @@
   # exodus = true
   [./exodus]
     type = Exodus
-    file_base = recombination_dominated
+    file_base = rate_theory_ND
     # show_material_properties = 'D' # set material properite to a variable so it can be output
-    # output_material_properties = 1
+    output_material_properties = 1
     output_postprocessors = true
   [../]
-  # csv = true
+  csv = true
   #xda = true
 [] # Outputs
 #----------------------------------------------Outputs----------------------------------------------------

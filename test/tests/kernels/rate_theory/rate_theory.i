@@ -8,14 +8,14 @@
   xmax = 1
   ymin = 0
   ymax = 1
-[] # Mesh
+[]
 #----------------------------------------------------Mesh------------------------------------------------
+
 
 #----------------------------------------------------MeshModifiers------------------------------------------------
 [MeshModifiers]
 []
 #----------------------------------------------------MeshModifiers------------------------------------------------
-
 
 
 #-------------------------------------------------Variables----------------------------------------------
@@ -26,19 +26,15 @@
   [./cv]
     # initial_condition = 0
   [../]
-  # [./gen]
-  #   initial_condition = 0
-  # [../]
 []
 #-------------------------------------------------Variables----------------------------------------------
 
 
-
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
-  # [./ci]
+  # [./xi]
   # [../]
-  # [./cv]
+  # [./xv]
   # [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -61,7 +57,7 @@
     k = 1e-2
     kiv = 7.49e10
     D = 1.35e-7
-    # disable_diffusion = true
+    disable_diffusion = true
   [../]
   [./defect_v]
     type = PointDefect
@@ -71,18 +67,8 @@
     k = 1e-2
     kiv = 7.49e10
     D = 9.4e-13
-    # disable_diffusion = true
+    disable_diffusion = true
   [../]
-  # [./decay]
-  #   type = RadioactiveDecay
-  #   variable = decay
-  #   half_life = 30.1
-  # [../]
-  # [./diff_decay]
-  #   type = MatDiffusion
-  #   variable = decay
-  #   D_name = D_A
-  # [../]
   [./ci_time]
     type = TimeDerivative
     variable = ci
@@ -91,22 +77,6 @@
     type = TimeDerivative
     variable = cv
   [../]
-  #
-  # [./gen]
-  #   type = RadioactiveGeneration
-  #   variable = gen
-  #   coupled = decay
-  #   half_life = 30.1
-  # [../]
-  # [./gen_time]
-  #   type = TimeDerivative
-  #   variable = gen
-  # [../]
-  # [./diff_gen]
-  #   type = MatDiffusion
-  #   variable = gen
-  #   D_name = D_B
-  # [../]
 []
 #--------------------------------------------------Kernels-----------------------------------------------
 
@@ -114,18 +84,18 @@
 
 #------------------------------------------------AuxKernels----------------------------------------------
 [AuxKernels]
-  # [./ci]
-  #   type = ParsedAux
-  #   variable = ci
-  #   args = xi
-  #   function = 'kiv:=7.49e10;k:=1e-2;xi/sqrt(kiv/k)'
-  # [../]
-  # [./cv]
-  #   type = ParsedAux
-  #   variable = cv
-  #   args = xv
-  #   function = 'kiv:=7.49e10;k:=1e-2;xv/sqrt(kiv/k)'
-  # [../]
+  [./xi]
+    type = ParsedAux
+    variable = xi
+    args = ci
+    function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'
+  [../]
+  [./cv]
+    type = ParsedAux
+    variable = xv
+    args = cv
+    function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'
+  [../]
 []
 #------------------------------------------------AuxKernels----------------------------------------------
 
@@ -136,26 +106,14 @@
  [./ci_bottom]
    type = DirichletBC
    variable = ci
-   value = 1
-   boundary = '0'
+   value = 0
+   boundary = '0 1 2 3'
  [../]
  [./cv_bottom]
    type = DirichletBC
    variable = cv
-   value = 1
-   boundary = '0'
- [../]
- [./ci_top]
-   type = DirichletBC
-   variable = ci
    value = 0
-   boundary = '2'
- [../]
- [./cv_top]
-   type = DirichletBC
-   variable = cv
-   value = 0
-   boundary = '2'
+   boundary = '0 1 2 3'
  [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
@@ -191,21 +149,27 @@
 
 #-----------------------------------------------Materials-------------------------------------------------
 [Materials]
-  [./t]
-    type = TimeStepMaterial
-    prop_time = time
-   # [./D]
-   #   type = GenericConstantMaterial # diffusion coeficient was found in
-   #   prop_names = 'D_A D_B'
-   #   prop_values = '0.0055 0.0065' # m/year
-   #   block = '0'
-   # [../]
- [../]
- [./t1]
-   type = ParsedMaterial
-   material_property_names = time
-   function = 'kiv:=7.49e10;k:=1e-2;time*sqrt(kiv*k)'
- [../]
+ # [./D]
+ #   type = GenericConstantMaterial # diffusion coeficients
+ #   prop_names = 'Di Dv'
+ #   prop_values = '1.35e-7 9.4e-13' # cm2/sec
+ #   block = '0'
+ # [../]
+ # [./k_values]
+ #   type = GenericConstantMaterial
+ #   prop_names = 'k ki kv kiv'
+ #   prop_values = '1e-2 38490 36580 7.49e10'
+ #   block = '0'
+ # [../]
+ # [./t]
+ #   type = TimeStepMaterial
+ #   prop_time = time
+ # [../]
+ # [./t1]
+ #   type = ParsedMaterial
+ #   material_property_names = time
+ #   function = 'kiv:=7.49e10;k:=1e-2;time*sqrt(kiv*k)'
+ # [../]
 []
 #-----------------------------------------------Materials-------------------------------------------------
 
@@ -224,27 +188,37 @@
     point = '0.5 0.5 0.0'
     variable = cv
   [../]
-  # [./decay]  # should be equal 0.5,0.5
+  [./center_xi]
+    type = PointValue
+    point = '0.5 0.5 0.0'
+    variable = xi
+  [../]
+  [./center_xv]
+    type = PointValue
+    point = '0.5 0.5 0.0'
+    variable = xv
+  [../]
+  # [./ci]  # should be equal 0.5,0.5
   #   type = ElementIntegralVariablePostprocessor
-  #   variable = decay
+  #   variable = ci
   #   execute_on = 'initial timestep_end'
   # [../]
-  # [./gen]  # should be equal 0.5,0.5
+  # [./cv]  # should be equal 0.5,0.5
   #   type = ElementIntegralVariablePostprocessor
-  #   variable = gen
+  #   variable = cv
   #   execute_on = 'initial timestep_end'
   # [../]
-  # [./flux_decay]  # should be equal 0.5,0.5
+  # [./flux_ci]  # should be equal 0.5,0.5
   #   type = SideFluxIntegral
-  #   variable = decay
-  #   diffusivity = 'D_A'
+  #   variable = ci
+  #   diffusivity = 'Di'
   #   boundary = '1'
   #   execute_on = 'initial timestep_end'
   # [../]
-  # [./flux_gen]  # should be equal 0.5,0.5
+  # [./flux_cv]  # should be equal 0.5,0.5
   #   type = SideFluxIntegral
-  #   variable = gen
-  #   diffusivity = 'D_B'
+  #   variable = cv
+  #   diffusivity = 'Dv'
   #   boundary = '1'
   #   execute_on = 'initial timestep_end'
   # [../]
@@ -281,7 +255,7 @@
     growth_factor = 1.2
     cutback_factor = 0.8
   [../]
-  # postprocessor = gen
+  # postprocessor = cv
   # skip = 25
   # criteria = 0.01
   # below = true
@@ -303,5 +277,5 @@
   [../]
   csv = true
   #xda = true
-[] # Outputs
+[]
 #----------------------------------------------Outputs----------------------------------------------------

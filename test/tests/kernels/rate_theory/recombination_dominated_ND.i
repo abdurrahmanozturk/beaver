@@ -20,15 +20,12 @@
 
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]
-  [./ci]
-    initial_condition = 0
+  [./xi]
+    # initial_condition = 1
   [../]
-  [./cv]
-    initial_condition = 0
+  [./xv]
+    # initial_condition = 1
   [../]
-  # [./gen]
-  #   initial_condition = 0
-  # [../]
 []
 #-------------------------------------------------Variables----------------------------------------------
 
@@ -36,6 +33,10 @@
 
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
+  [./ci]
+  [../]
+  [./cv]
+  [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
 
@@ -49,57 +50,37 @@
 
 #--------------------------------------------------Kernels-----------------------------------------------
 [Kernels]
-  [./defect_i]
+  [./xi]
     type = PointDefectND
-    variable = ci
-    coupled = cv
-    ks = 38729.8
+    variable = xi  #xi
+    coupled = xi   #xv=xi for recombination dominated condition
+    ks = 0
     k = 1e-7
-    kiv = 4e16
-    D = 7e-2
+    kiv = 1.7e4
+    D = 5e-14
+    disable_diffusion = true
   [../]
-  [./defect_v]
-    type = PointDefectND
-    variable = cv
-    coupled = ci
-    ks = 38729.8
-    k = 1e-7
-    kiv = 4e16
-    D = 5e-6
-  [../]
-  # [./decay]
-  #   type = RadioactiveDecay
-  #   variable = decay
-  #   half_life = 30.1
+  # [./defect_v]
+  #   type = PointDefectND
+  #   variable = cv
+  #   coupled = ci
+  #   ks = 1e4
+  #   k = 1e-7
+  #   kiv = 1.7e4
+  #   D = 1.3e-28
   # [../]
-  # [./diff_decay]
-  #   type = MatDiffusion
-  #   variable = decay
-  #   D_name = D_A
-  # [../]
-  [./ci_time]
+  [./dxi_dt]
     type = TimeDerivative
-    variable = ci
+    variable = xi
   [../]
-  [./cv_time]
-    type = TimeDerivative
-    variable = cv
-  [../]
-  #
-  # [./gen]
-  #   type = RadioactiveGeneration
-  #   variable = gen
-  #   coupled = decay
-  #   half_life = 30.1
-  # [../]
-  # [./gen_time]
+  # [./dxv_dt]
   #   type = TimeDerivative
-  #   variable = gen
+  #   variable = xv
   # [../]
-  # [./diff_gen]
+  # [./diff]
   #   type = MatDiffusion
-  #   variable = gen
-  #   D_name = D_B
+  #   variable = ci
+  #   D_name = Di
   # [../]
 []
 #--------------------------------------------------Kernels-----------------------------------------------
@@ -108,6 +89,18 @@
 
 #------------------------------------------------AuxKernels----------------------------------------------
 [AuxKernels]
+  [./ci]
+    type = ParsedAux
+    variable = ci
+    args = xi
+    function = 'kiv:=1.7e4;k:=1e-7;xi/sqrt(kiv/k)'
+  [../]
+  [./cv]
+    type = ParsedAux
+    variable = cv
+    args = xv
+    function = 'kiv:=1.7e4;k:=1e-7;xv/sqrt(kiv/k)'
+  [../]
 []
 #------------------------------------------------AuxKernels----------------------------------------------
 
@@ -115,18 +108,18 @@
 
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
- # [./outside_conc_dec]
- #   type = DirichletBC
- #   variable = conc
- #   value = 0
- #   boundary = '1'
- # [../]
- # [./outside_conc_gen]
- #   type = DirichletBC
- #   variable = gen
- #   value = 0
- #   boundary = '1'
- # [../]
+  # [./xi_bc]
+  #   type = DirichletBC
+  #   variable = ci
+  #   value = 0
+  #   boundary = '0 2'
+  # [../]
+  # [./xv_bc]
+  #   type = DirichletBC
+  #   variable = cv
+  #   value = 0
+  #   boundary = '0 2'
+  # [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
 
@@ -144,18 +137,51 @@
 #     # radius = '0.28'
 #     # height = 1.47
 #   [../]
+#   [./xv_ic]
+#     type = RandomIC
+#     min = 0
+#     max = 1
+#     variable = xi
+#     # x1 = 0.5
+#     # y1 = 0.5
+#     # invalue = 1
+#     # outvalue = 0
+#     # radius = '0.25'
+#   [../]
+#   [./xi_ic]
+#     type = RandomIC
+#     min = 0
+#     max = 1
+#     variable = xv
+#     # x1 = 0.5
+#     # y1 = 0.5
+#     # invalue = 1
+#     # outvalue = 0
+#     # radius = '0.25'
+#   [../]
 # []
 #--------------------------------------------------ICs---------------------------------------------------
 
 
 #-----------------------------------------------Materials-------------------------------------------------
 [Materials]
-   # [./D]
-   #   type = GenericConstantMaterial # diffusion coeficient was found in
-   #   prop_names = 'D_A D_B'
-   #   prop_values = '0.0055 0.0065' # m/year
-   #   block = '0'
-   # [../]
+  # [./D]
+  #   type = GenericConstantMaterial # diffusion coeficients
+  #   prop_names = 'Di Dv'
+  #   prop_values = '5e-14 1.3e-28' # cm2/sec
+  #   block = '0'
+  # [../]
+  # [./k_values]
+  #   type = GenericConstantMaterial
+  #   prop_names = 'k ki kv kiv'
+  #   prop_values = '1e-7 0 0 1.7e4'
+  #   block = '0'
+  # [../]
+   [./tau]
+     type = ParsedMaterial
+     material_property_names = time
+     function = 'kiv:=1.7e4;k:=1e-7;time*sqrt(kiv*k)'
+   [../]
 []
 #-----------------------------------------------Materials-------------------------------------------------
 
@@ -164,16 +190,26 @@
 
 #--------------------------------------------Postprocessors------------------------------------------------
 [Postprocessors]
+  [./center_xi]
+    type = PointValue
+    point = '0.5 0.5 0.0'
+    variable = xi
+  [../]
+  # [./center_xv]
+  #   type = PointValue
+  #   point = '0.5 0.5 0.0'
+  #   variable = xv
+  # [../]
   [./center_ci]
     type = PointValue
     point = '0.5 0.5 0.0'
     variable = ci
   [../]
-  [./center_cv]
-    type = PointValue
-    point = '0.5 0.5 0.0'
-    variable = cv
-  [../]
+  # [./center_cv]
+  #   type = PointValue
+  #   point = '0.5 0.5 0.0'
+  #   variable = cv
+  # [../]
 []
 #--------------------------------------------Postprocessors------------------------------------------------
 
@@ -216,12 +252,12 @@
   # exodus = true
   [./exodus]
     type = Exodus
-    file_base = sink_dominated
+    file_base = recombination_dominated_ND
     # show_material_properties = 'D' # set material properite to a variable so it can be output
-    # output_material_properties = 1
-    output_postprocessors = true
+    output_material_properties = true
+    # output_postprocessors = true
   [../]
-  # csv = true
+  csv = true
   #xda = true
 [] # Outputs
 #----------------------------------------------Outputs----------------------------------------------------

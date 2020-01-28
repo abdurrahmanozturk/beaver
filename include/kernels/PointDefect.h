@@ -14,7 +14,8 @@ public:
   PointDefect(const InputParameters & parameters);
 
 protected:
-  virtual Real computeQpResidual();
+  virtual Real computeQpResidual() override;
+  virtual Real computeQpJacobian() override;
 
   const VariableValue & _conc;
   Real _k;

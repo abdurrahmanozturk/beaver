@@ -1,9 +1,13 @@
+import sys
 import csv
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-filename = 'sink_dominated_ND_out'
+# print 'Number of arguments:', len(sys.argv), 'arguments.'
+# print 'Argument List:', str(sys.argv)
+
+filename = sys.argv[1]
 with open(filename+".csv", 'r') as f:
     reader = csv.reader(f, delimiter=',')
     headers = next(reader)

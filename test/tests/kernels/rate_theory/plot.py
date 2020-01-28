@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-filename = 'recombination_dominated_ND_out'
+filename = 'sink_dominated_ND_out'
 with open(filename+".csv", 'r') as f:
     reader = csv.reader(f, delimiter=',')
     headers = next(reader)
@@ -11,7 +11,7 @@ with open(filename+".csv", 'r') as f:
 
 print(headers)
 print(data.shape)
-print(data[:3])
+print(data[:5])
 
 # create fig
 fig = plt.figure()
@@ -19,20 +19,21 @@ fig = plt.figure()
 plt.style.use('seaborn-whitegrid')
 # Plot the data
 plt.title(filename, loc='center', fontsize=12, fontweight=0, color='black')
-plt.axis('equal')
-plt.xlabel(headers[0])
-plt.ylabel(headers[2])
+# plt.axis('equal')
+# plt.xlabel(headers[0])
+# plt.ylabel(headers[2])
+# plt.autoscale(enable=True, axis='x', tight=True)
 plt.xlim(np.min(data[:, 0]),np.max(data[:, 0]))
-plt.ylim(np.min(data[:, 2]),np.max(data[:, 2]))
-plt.plot(data[:, 0], data[:, 2],marker='', color='blue', linewidth=1, alpha=1)
+plt.ylim(np.min(data[:, 4]),np.max(data[:, 4])*1.05)
+plt.plot(data[:, 0], data[:, 3],marker='', color='blue', linewidth=1, alpha=1,label=headers[3])
+plt.plot(data[:, 0],data[:, 4],marker='', color='red', linewidth=1, alpha=1,label=headers[4])
+plt.xlabel('tau')
+plt.ylabel('X')
+# Add legend
+plt.legend(loc=4, ncol=1)
 plt.show()
 fig.savefig(filename+".png", box_inches='tight')
 
-#
-# plt.plot(data[:, 0],data[:, 1])
-# plt.xlabel(headers[0])
-# plt.ylabel(headers[1])
-# plt.show()
 
 
 # import numpy as np

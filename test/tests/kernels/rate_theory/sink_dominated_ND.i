@@ -234,8 +234,8 @@
   nl_abs_tol = 1e-10 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-11 # Absolute tolerance for nonlienar solves
   start_time = 0
-  end_time = 300
-  dt = 0.1
+  end_time = 100
+  # dt = 0.1
   # postprocessor = gen
   # skip = 25
   # criteria = 0.01
@@ -253,7 +253,7 @@
     type = Exodus
     file_base = sink_dominated_ND
     # show_material_properties = 'D' # set material properite to a variable so it can be output
-    # output_material_properties = 1
+    output_material_properties = true
     output_postprocessors = true
   [../]
   csv = true

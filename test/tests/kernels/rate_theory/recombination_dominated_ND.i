@@ -23,9 +23,9 @@
   [./xi]
     initial_condition = 0
   [../]
-  # [./xv]
-    # initial_condition = 0
-  # [../]
+  [./xv]
+    initial_condition = 0
+  [../]
 []
 #-------------------------------------------------Variables----------------------------------------------
 
@@ -35,8 +35,8 @@
 [AuxVariables]
   [./ci]
   [../]
-  # [./cv]
-  # [../]
+  [./cv]
+  [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
 
@@ -53,30 +53,31 @@
   [./xi]
     type = PointDefectND
     variable = xi  #xi
-    coupled = xi   #xv=xi for recombination dominated condition
+    coupled = xv   #xv=xi for recombination dominated condition
     ks = 0
     k = 1e-7
     kiv = 1.7e4
     D = 5e-14
     disable_diffusion = true
   [../]
-  # [./defect_v]
-  #   type = PointDefectND
-  #   variable = cv
-  #   coupled = ci
-  #   ks = 1e4
-  #   k = 1e-7
-  #   kiv = 1.7e4
-  #   D = 1.3e-28
-  # [../]
+  [./xv]
+    type = PointDefectND
+    variable = xv
+    coupled = xi
+    ks = 0
+    k = 1e-7
+    kiv = 1.7e4
+    D = 1.3e-28
+    disable_diffusion = true
+  [../]
   [./dxi_dt]
     type = TimeDerivative
     variable = xi
   [../]
-  # [./dxv_dt]
-  #   type = TimeDerivative
-  #   variable = xv
-  # [../]
+  [./dxv_dt]
+    type = TimeDerivative
+    variable = xv
+  [../]
   # [./diff]
   #   type = MatDiffusion
   #   variable = ci
@@ -95,12 +96,12 @@
     args = xi
     function = 'kiv:=1.7e4;k:=1e-7;xi/sqrt(kiv/k)'
   [../]
-  # [./cv]
-  #   type = ParsedAux
-  #   variable = cv
-  #   args = xv
-  #   function = 'kiv:=1.7e4;k:=1e-7;xv/sqrt(kiv/k)'
-  # [../]
+  [./cv]
+    type = ParsedAux
+    variable = cv
+    args = xv
+    function = 'kiv:=1.7e4;k:=1e-7;xv/sqrt(kiv/k)'
+  [../]
 []
 #------------------------------------------------AuxKernels----------------------------------------------
 
@@ -195,21 +196,21 @@
     point = '0.5 0.5 0.0'
     variable = xi
   [../]
-  # [./center_xv]
-  #   type = PointValue
-  #   point = '0.5 0.5 0.0'
-  #   variable = xv
-  # [../]
+  [./center_xv]
+    type = PointValue
+    point = '0.5 0.5 0.0'
+    variable = xv
+  [../]
   [./center_ci]
     type = PointValue
     point = '0.5 0.5 0.0'
     variable = ci
   [../]
-  # [./center_cv]
-  #   type = PointValue
-  #   point = '0.5 0.5 0.0'
-  #   variable = cv
-  # [../]
+  [./center_cv]
+    type = PointValue
+    point = '0.5 0.5 0.0'
+    variable = cv
+  [../]
 []
 #--------------------------------------------Postprocessors------------------------------------------------
 
@@ -235,7 +236,7 @@
   nl_abs_tol = 1e-10 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-11 # Absolute tolerance for nonlienar solves
   start_time = 0
-  end_time = 30
+  end_time = 100
   # dt = 0.5
   # postprocessor = gen
   # skip = 25
@@ -255,7 +256,7 @@
     file_base = recombination_dominated_ND
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = true
-    # output_postprocessors = true
+    output_postprocessors = true
   [../]
   csv = true
   #xda = true

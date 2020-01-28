@@ -51,15 +51,3 @@ PointDefect::computeQpJacobian()
   else
     return _D*_grad_phi[_j][_qp]*_grad_test[_i][_qp] + _test[_i][_qp]*_ks*_ks*_D*_phi[_j][_qp] + _test[_i][_qp]*_kiv*_phi[_j][_qp]*_conc[_qp];
 }
-
-// Real
-// PointDefect::computeQpResidual()
-// {
-//   return _D*_grad_u[_qp]*_grad_test[_i][_qp];
-// }
-//
-// Real
-// PointDefect::computeQpJacobian()
-// {
-//   return _D*_grad_phi[_j][_qp]*_grad_test[_i][_qp];
-// }

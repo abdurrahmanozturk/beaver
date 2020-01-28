@@ -56,9 +56,8 @@
     coupled = cv
     ks = 38729.8
     k = 1e-7
-    kiv = 4e16
+    kiv = 4e6
     D = 7e-2
-    # disable_diffusion = true
   [../]
   [./cv]
     type = PointDefect
@@ -66,9 +65,8 @@
     coupled = ci
     ks = 38729.8
     k = 1e-7
-    kiv = 4e16
+    kiv = 4e6
     D = 5e-6
-    # disable_diffusion = true
   [../]
   # [./ci_diff]
   #   type = MatDiffusion
@@ -118,13 +116,13 @@
    type = DirichletBC
    variable = ci
    value = 0
-   boundary = '0 2'
+   boundary = '0 1 2 3'
  [../]
  [./cv_bc]
    type = DirichletBC
    variable = cv
    value = 0
-   boundary = '0 2'
+   boundary = '0 1 2 3'
  [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
@@ -236,8 +234,13 @@
   nl_abs_tol = 1e-10 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-11 # Absolute tolerance for nonlienar solves
   start_time = 0
-  end_time = 300
-  dt = 0.1
+  end_time = 3000
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 1e-8 #s
+    growth_factor = 1.2
+    cutback_factor = 0.8
+  [../]
   # postprocessor = gen
   # skip = 25
   # criteria = 0.01
@@ -253,7 +256,7 @@
   # exodus = true
   [./exodus]
     type = Exodus
-    file_base = sink_dominated_ND
+    file_base = sink_dominated
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     # output_material_properties = 1
     output_postprocessors = true

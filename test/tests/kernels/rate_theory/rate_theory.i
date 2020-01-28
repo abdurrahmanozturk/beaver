@@ -57,7 +57,7 @@
     k = 1e-2
     kiv = 7.49e10
     D = 1.35e-7
-    disable_diffusion = true
+    # disable_diffusion = true
   [../]
   [./defect_v]
     type = PointDefect
@@ -67,7 +67,7 @@
     k = 1e-2
     kiv = 7.49e10
     D = 9.4e-13
-    disable_diffusion = true
+    # disable_diffusion = true
   [../]
   [./ci_time]
     type = TimeDerivative

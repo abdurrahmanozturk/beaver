@@ -21,11 +21,11 @@
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]
   [./xi]
-    # initial_condition = 1
+    initial_condition = 0
   [../]
-  [./xv]
-    # initial_condition = 1
-  [../]
+  # [./xv]
+    # initial_condition = 0
+  # [../]
 []
 #-------------------------------------------------Variables----------------------------------------------
 
@@ -35,8 +35,8 @@
 [AuxVariables]
   [./ci]
   [../]
-  [./cv]
-  [../]
+  # [./cv]
+  # [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
 
@@ -95,12 +95,12 @@
     args = xi
     function = 'kiv:=1.7e4;k:=1e-7;xi/sqrt(kiv/k)'
   [../]
-  [./cv]
-    type = ParsedAux
-    variable = cv
-    args = xv
-    function = 'kiv:=1.7e4;k:=1e-7;xv/sqrt(kiv/k)'
-  [../]
+  # [./cv]
+  #   type = ParsedAux
+  #   variable = cv
+  #   args = xv
+  #   function = 'kiv:=1.7e4;k:=1e-7;xv/sqrt(kiv/k)'
+  # [../]
 []
 #------------------------------------------------AuxKernels----------------------------------------------
 
@@ -112,13 +112,13 @@
   #   type = DirichletBC
   #   variable = xi
   #   value = 0
-  #   boundary = '0 2'
+  #   boundary = '0 1 2 3'
   # [../]
   # [./xv_bc]
   #   type = DirichletBC
   #   variable = xv
   #   value = 0
-  #   boundary = '0 2'
+  #   boundary = '0 1 2 3'
   # [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
@@ -235,7 +235,7 @@
   nl_abs_tol = 1e-10 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-11 # Absolute tolerance for nonlienar solves
   start_time = 0
-  end_time = 100
+  end_time = 30
   # dt = 0.5
   # postprocessor = gen
   # skip = 25

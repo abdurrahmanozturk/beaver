@@ -58,7 +58,6 @@
     k = 1e-7
     kiv = 4e16
     D = 7e-2
-    # disable_diffusion = true
   [../]
   [./xv]
     type = PointDefectND
@@ -68,7 +67,6 @@
     k = 1e-7
     kiv = 4e16
     D = 5e-6
-    # disable_diffusion = true
   [../]
   # [./ci_diff]
   #   type = MatDiffusion
@@ -118,13 +116,13 @@
    type = DirichletBC
    variable = xi
    value = 0
-   boundary = '0 2'
+   boundary = '0 1 2 3'
  [../]
  [./xv_bc]
    type = DirichletBC
    variable = xv
    value = 0
-   boundary = '0 2'
+   boundary = '0 1 2 3'
  [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------

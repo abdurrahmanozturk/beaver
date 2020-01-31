@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 # print 'Number of arguments:', len(sys.argv), 'arguments.'
 # print 'Argument List:', str(sys.argv)
 filename = sys.argv[1]
+figname=filename[:-4]+".png"
 csvfile = [filename]
 fmode=0
 n=len(sys.argv)
@@ -90,7 +91,7 @@ for fid in range(0,len(csvfile)):
         num+=1
         if fmode==1:
             lbl = csvfile[fid][-10:-4]
-            print(lbl)
+            figname = ylbl
         else:
             lbl = headers[int(sys.argv[column])]
         if log[column]==1:
@@ -116,4 +117,4 @@ plt.ylabel(ylbl)
 # Add legend
 plt.legend(loc=0, ncol=1)
 plt.show()
-fig.savefig(filename[:-4]+".png", box_inches='tight')
+fig.savefig(figname, box_inches='tight')

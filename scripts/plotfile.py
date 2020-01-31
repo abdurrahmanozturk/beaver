@@ -56,3 +56,22 @@ fig.savefig("plots.png", box_inches='tight')
 f1.close()
 f2.close()
 f3.close()
+
+#Plot single data
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+# f = open('recombination_dominated_ND_out.csv', 'r')
+# lines = f.readlines()
+# t = [float(line.split()[0]) for line in lines]
+# x = [float(line.split()[1]) for line in lines]
+# fig = plt.figure()
+# ax1=fig.add_subplot(111)
+# ax1.plot(x,u)
+# ax1.set_title('gauss-seidel_10')
+# ax1.set_xlabel('x')
+# ax1.set_ylabel('u(x)')
+# plt.grid()
+# plt.show()
+# fig.savefig("recombination_dominated_ND_out.png", box_inches='tight')
+# f.close()

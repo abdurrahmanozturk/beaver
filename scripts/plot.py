@@ -39,18 +39,6 @@ for fid in range(0,len(csvfile)):
     print(data.shape)
     print(data[:5])
 
-    #labels
-    xlbl = headers[int(sys.argv[2])]
-    ylbl = headers[int(sys.argv[3])]
-    # xlbl = "x [unit]"          # define x label manually
-    # ylbl = "y(x) [unit]"
-    #axis limits
-    xmin=np.min(data[:, int(sys.argv[2])])
-    xmax=np.max(data[:, int(sys.argv[2])])
-    ymin=np.min(data[:, int(sys.argv[3])])
-    ymax=np.max(data[:, int(sys.argv[3])])*1.05
-    plt.xlim(xmin,xmax)
-
     # Make a data frame
     df=pd.DataFrame(data,columns=headers)
 
@@ -74,6 +62,17 @@ for fid in range(0,len(csvfile)):
                         break
     print(sys.argv)
 
+    #labels
+    xlbl = headers[int(sys.argv[2])]
+    ylbl = headers[int(sys.argv[3])]
+    # xlbl = "x [unit]"          # define x label manually
+    # ylbl = "y(x) [unit]"
+    #axis limits
+    xmin=np.min(data[:, int(sys.argv[2])])
+    xmax=np.max(data[:, int(sys.argv[2])])
+    ymin=np.min(data[:, int(sys.argv[3])])
+    ymax=np.max(data[:, int(sys.argv[3])])*1.05
+
     # Plot the data
 
     # #Using DataFrame
@@ -90,7 +89,7 @@ for fid in range(0,len(csvfile)):
     for column in range(3,n):
         num+=1
         if fmode==1:
-            lbl = csvfile[fid][-10:-4]
+            lbl = csvfile[fid][-16:-4]     ## CHANGE THIS ACCORDING TO PARAMETER IN THE END OF FILENAME
             figname = ylbl
         else:
             lbl = headers[int(sys.argv[column])]
@@ -110,6 +109,7 @@ for fid in range(0,len(csvfile)):
 # title
 plt.title(filename, loc='center', fontsize=12, fontweight=0, color='black')
 # labels
+plt.xlim(xmin,xmax)
 plt.xlabel(xlbl)
 plt.ylabel(ylbl)
 # plt.axis('equal')               # fix x and y axis

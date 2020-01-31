@@ -58,7 +58,6 @@
     k = 1e-7
     kiv = 4e16
     D = 7e-2
-    disable_diffusion = true
   [../]
   [./xv]
     type = PointDefectND
@@ -67,8 +66,7 @@
     ks = 38729.8
     k = 1e-7
     kiv = 4e16
-    D = 5e-6
-    disable_diffusion = true
+    D = 5e-8
   [../]
   # [./ci_diff]
   #   type = MatDiffusion
@@ -250,14 +248,15 @@
 
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
-  # exodus = true
-  [./exodus]
-    type = Exodus
-    file_base = sink_dominated_ND
-    # show_material_properties = 'D' # set material properite to a variable so it can be output
-    output_material_properties = true
-    output_postprocessors = true
-  [../]
+  # [./exodus]
+  #   type = Exodus
+  #   file_base = sink_dominated_ND_test_k=1e-4
+  #   # show_material_properties = 'D' # set material properite to a variable so it can be output
+  #   output_material_properties = true
+  #   output_postprocessors = true
+  # [../]
+  file_base = sink_dominated_ND_test_Dv=5e-8
+  exodus = true
   csv = true
   #xda = true
 [] # Outputs

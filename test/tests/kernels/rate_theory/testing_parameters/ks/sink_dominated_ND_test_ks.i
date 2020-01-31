@@ -54,21 +54,19 @@
     type = PointDefectND
     variable = xi
     coupled = xv
-    ks = 38729.8
+    ks = 3.87298
     k = 1e-7
     kiv = 4e16
     D = 7e-2
-    disable_diffusion = true
   [../]
   [./xv]
     type = PointDefectND
     variable = xv
     coupled = xi
-    ks = 38729.8
+    ks = 3.87298
     k = 1e-7
     kiv = 4e16
     D = 5e-6
-    disable_diffusion = true
   [../]
   # [./ci_diff]
   #   type = MatDiffusion
@@ -250,14 +248,15 @@
 
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
-  # exodus = true
-  [./exodus]
-    type = Exodus
-    file_base = sink_dominated_ND
-    # show_material_properties = 'D' # set material properite to a variable so it can be output
-    output_material_properties = true
-    output_postprocessors = true
-  [../]
+  # [./exodus]
+  #   type = Exodus
+  #   file_base = sink_dominated_ND_test_k=1e-4
+  #   # show_material_properties = 'D' # set material properite to a variable so it can be output
+  #   output_material_properties = true
+  #   output_postprocessors = true
+  # [../]
+  file_base = sink_dominated_ND_test_ks=3.87298
+  exodus = true
   csv = true
   #xda = true
 [] # Outputs

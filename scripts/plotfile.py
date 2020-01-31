@@ -5,6 +5,8 @@ import pandas as pd
 import matplotlib.backends.backend_pdf
 
 # Open data file
+file = open('csvfiles.txt')
+lines = file.readlines()
 f1 = open('gauss-seidel_1000.txt', 'r')
 f2 = open('jacobi_1000.txt', 'r')
 f3 = open('cg_data_N_1000.txt', 'r')

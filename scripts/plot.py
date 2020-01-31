@@ -4,42 +4,22 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-print 'Number of arguments:', len(sys.argv), 'arguments.'
+# print 'Number of arguments:', len(sys.argv), 'arguments.'
 # print 'Argument List:', str(sys.argv)
-
-# Read Data from file
 filename = sys.argv[1]
-with open(filename+".csv", 'r') as f:
-    reader = csv.reader(f, delimiter=',')
-    headers = next(reader)
-    data = np.array(list(reader)).astype(float)
+csvfile = [filename]
+fmode=0
+n=len(sys.argv)
+if sys.argv[-1]=="-"+"f":
+    print("-f mode on")
+    fmode = 1
+    n=len(sys.argv)-1
+    # Read file names from file
+    file = open(filename)
+    csvfile = file.readlines()
+    for i in range(0,len(csvfile)):
+        csvfile[i]=csvfile[i][:-1]
 
-print(headers)
-print(data.shape)
-print(data[:5])
-
-# Make a data frame
-df=pd.DataFrame(data,columns=headers)
-
-# Read Command Line Arguments
-print(sys.argv)
-log = [0]*len(sys.argv)
-for i in range(2,len(sys.argv)):
-    c=0
-    if isinstance(sys.argv[i][0],str):
-        if len(sys.argv[i])>1 and sys.argv[i][0]+sys.argv[i][1]+sys.argv[i][2]+sys.argv[i][3]=="log-":
-            sys.argv[i]=sys.argv[i][4:len(sys.argv[i])]
-            log[i]=1
-        for j in range(0,len(headers)):
-            c=0
-            if len(headers[j])==len(sys.argv[i]):
-                for k in range(0,len(headers[j])):
-                    if headers[j][k]==sys.argv[i][k]:
-                        c+=1
-                if c==len(headers[j]):
-                    sys.argv[i]=str(j)
-                    break
-print(sys.argv)
 # create fig
 fig = plt.figure()
 # create a color palette
@@ -47,41 +27,93 @@ palette = plt.get_cmap('Set2')
 # style
 plt.style.use('seaborn-whitegrid')
 
-# Plot the data
+for fid in range(0,len(csvfile)):
+    print(csvfile)
+    with open(csvfile[fid], 'r') as f:
+        reader = csv.reader(f, delimiter=',')
+        headers = next(reader)
+        data = np.array(list(reader)).astype(float)
 
-# #Using DataFrame
-# num=0
-# for column in df.drop(arg[2], axis=1):
-#     num+=1
-#     plt.plot(df[arg[2], df[column], marker='', color=palette(num), linewidth=1, alpha=0.9, label=column)
+    print(headers)
+    print(data.shape)
+    print(data[:5])
+
+    #labels
+    xlbl = headers[int(sys.argv[2])]
+    ylbl = headers[int(sys.argv[3])]
+    # xlbl = "x [unit]"          # define x label manually
+    # ylbl = "y(x) [unit]"
+    #axis limits
+    xmin=np.min(data[:, int(sys.argv[2])])
+    xmax=np.max(data[:, int(sys.argv[2])])
+    ymin=np.min(data[:, int(sys.argv[3])])
+    ymax=np.max(data[:, int(sys.argv[3])])*1.05
+    plt.xlim(xmin,xmax)
+
+    # Make a data frame
+    df=pd.DataFrame(data,columns=headers)
+
+    # Read Command Line Arguments
+    print(sys.argv)
+    log = [0]*n
+    for i in range(2,n):
+        c=0
+        if isinstance(sys.argv[i][0],str):
+            if len(sys.argv[i])>1 and sys.argv[i][0]+sys.argv[i][1]+sys.argv[i][2]+sys.argv[i][3]=="log-":
+                sys.argv[i]=sys.argv[i][4:len(sys.argv[i])]
+                log[i]=1
+            for j in range(0,len(headers)):
+                c=0
+                if len(headers[j])==len(sys.argv[i]):
+                    for k in range(0,len(headers[j])):
+                        if headers[j][k]==sys.argv[i][k]:
+                            c+=1
+                    if c==len(headers[j]):
+                        sys.argv[i]=str(j)
+                        break
+    print(sys.argv)
+
+    # Plot the data
+
+    # #Using DataFrame
+    # num=0
+    # for column in df.drop(arg[2], axis=1):
+    #     num+=1
+    #     plt.plot(df[arg[2], df[column], marker='', color=palette(num), linewidth=1, alpha=0.9, label=column)
 
 
-# Plot the data
-# Multiple lines plot
-num=0
-for column in range(3,len(sys.argv)):
-    num+=1
-    if log[column]==1:
-        plt.semilogy(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num), linewidth=1, alpha=1,label=headers[int(sys.argv[column])])
-    else:
-        plt.plot(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num), linewidth=1, alpha=1,label=headers[int(sys.argv[column])])
-    if log[2]==1:
-        plt.xscale('log',basex=10)
-    plt.xlim(np.min(data[:, int(sys.argv[2])]),np.max(data[:, int(sys.argv[2])]))
-    plt.ylim(np.min(data[:, int(sys.argv[column])]),np.max(data[:, int(sys.argv[column])])*1.05)
-
+    # Plot the data
+    # Multiple lines plot
+    num=0
+    # lbl=""
+    for column in range(3,n):
+        num+=1
+        if fmode==1:
+            lbl = csvfile[fid][-10:-4]
+            print(lbl)
+        else:
+            lbl = headers[int(sys.argv[column])]
+        if log[column]==1:
+            plt.semilogy(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num+fid), linewidth=1, alpha=1,label=lbl)
+        else:
+            plt.plot(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num+fid), linewidth=1, alpha=1,label=lbl)
+        if log[2]==1:
+            plt.xscale('log',basex=10)
+        if np.min(data[:, int(sys.argv[column])])<ymin:
+            ymin=np.min(data[:, int(sys.argv[column])])
+            plt.ylim(ymin,ymax)
+        if np.max(data[:, int(sys.argv[column])])*1.05>ymax:
+            ymax=np.max(data[:, int(sys.argv[column])])*1.05
+            plt.ylim(ymin,ymax)
 # Plot settings
 # title
 plt.title(filename, loc='center', fontsize=12, fontweight=0, color='black')
 # labels
-plt.xlabel(headers[int(sys.argv[2])])
-plt.ylabel(headers[int(sys.argv[3])])
-# plt.xlabel('x [unit]')          # define x label manually
-# plt.ylabel('y(x) [unit]')       # define y label manually
-# axis options
+plt.xlabel(xlbl)
+plt.ylabel(ylbl)
 # plt.axis('equal')               # fix x and y axis
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 # Add legend
-plt.legend(loc=4, ncol=1)
+plt.legend(loc=0, ncol=1)
 plt.show()
-fig.savefig(filename+".png", box_inches='tight')
+fig.savefig(filename[:-4]+".png", box_inches='tight')

@@ -21,30 +21,6 @@ print(data[:5])
 # Make a data frame
 df=pd.DataFrame(data,columns=headers)
 
-# # Read Command Line Arguments
-# arg = sys.argv
-# col = []
-# log = []
-# for i in range(2,len(arg)):
-#     print(arg[i])
-#     if isinstance(arg[i][0],str):
-#         str1=""
-#         str2=""
-#         if len(arg[i])>1 and arg[i][0]+arg[i][1]+arg[i][2]+arg[i][3]=="log-":
-#             arg[i]=arg[i][4:len(arg[i])]
-#             log.append(1)
-#         for j in range(0,len(headers)):
-#             if len(arg[i])==len(headers[j]):
-#                 for k in range(0,len(headers[j])):
-#                     str1+=headers[j][k]
-#                     str2+=arg[i][k]
-#                     if str1==str2:
-#                         col.append(j)
-#                     else:
-#                         print("Requested variable is not exist.")
-#     else:
-#         col.append(int(arg[i]))
-
 # Read Command Line Arguments
 print(sys.argv)
 log = [0]*len(sys.argv)

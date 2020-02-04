@@ -237,7 +237,7 @@
   nl_rel_tol = 1e-11 # Absolute tolerance for nonlienar solves
   start_time = 0
   end_time = 100
-  # dt = 0.1
+  dt = 0.1
   # postprocessor = gen
   # skip = 25
   # criteria = 0.01

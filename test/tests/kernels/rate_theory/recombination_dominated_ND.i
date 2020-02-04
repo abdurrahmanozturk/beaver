@@ -54,21 +54,19 @@
     type = PointDefectND
     variable = xi  #xi
     coupled = xv   #xv=xi for recombination dominated condition
-    ks = 0
+    ks = 1e-4
     k = 1e-7
     kiv = 1.7e4
     D = 5e-14
-    disable_diffusion = true
   [../]
   [./xv]
     type = PointDefectND
     variable = xv
     coupled = xi
-    ks = 0
+    ks = 1e-4
     k = 1e-7
     kiv = 1.7e4
     D = 1.3e-28
-    disable_diffusion = true
   [../]
   [./dxi_dt]
     type = TimeDerivative
@@ -109,18 +107,18 @@
 
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
-  # [./xi_bc]
-  #   type = DirichletBC
-  #   variable = xi
-  #   value = 0
-  #   boundary = '0 1 2 3'
-  # [../]
-  # [./xv_bc]
-  #   type = DirichletBC
-  #   variable = xv
-  #   value = 0
-  #   boundary = '0 1 2 3'
-  # [../]
+  [./xi_bc]
+    type = DirichletBC
+    variable = xi
+    value = 0
+    boundary = '0 1 2 3'
+  [../]
+  [./xv_bc]
+    type = DirichletBC
+    variable = xv
+    value = 0
+    boundary = '0 1 2 3'
+  [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
 
@@ -236,8 +234,8 @@
   nl_abs_tol = 1e-10 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-11 # Absolute tolerance for nonlienar solves
   start_time = 0
-  end_time = 100
-  # dt = 0.5
+  end_time = 10
+  dt = 0.1
   # postprocessor = gen
   # skip = 25
   # criteria = 0.01

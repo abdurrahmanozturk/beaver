@@ -117,13 +117,13 @@
   [./ci_bottom]
     type = DirichletBC
     variable = xi
-    value = 1
+    value = 0
     boundary = '0 2'
   [../]
   [./cv_bottom]
     type = DirichletBC
     variable = xv
-    value = 1
+    value = 0
     boundary = '0 2'
   [../]
 []
@@ -132,28 +132,28 @@
 
 #--------------------------------------------------ICs---------------------------------------------------
 [ICs]
-  [./xi_ic]
-    type = RandomIC
-    min = 0
-    max = 1
-    variable = xi
-    #     # x1 = 0.5
-    #     # y1 = 0.5
-    #     # invalue = 1
-    #     # outvalue = 0
-    #     # radius = '0.25'
-  [../]
-  [./xv_ic]
-    type = RandomIC
-    min = 0
-    max = 1
-    variable = xv
-#     # x1 = 0.5
-#     # y1 = 0.5
-#     # invalue = 1
-#     # outvalue = 0
-#     # radius = '0.25'
-  [../]
+#   [./xi_ic]
+#     type = RandomIC
+#     min = 0
+#     max = 1
+#     variable = xi
+#     #     # x1 = 0.5
+#     #     # y1 = 0.5
+#     #     # invalue = 1
+#     #     # outvalue = 0
+#     #     # radius = '0.25'
+#   [../]
+#   [./xv_ic]
+#     type = RandomIC
+#     min = 0
+#     max = 1
+#     variable = xv
+# #     # x1 = 0.5
+# #     # y1 = 0.5
+# #     # invalue = 1
+# #     # outvalue = 0
+# #     # radius = '0.25'
+#   [../]
 []
 #--------------------------------------------------ICs---------------------------------------------------
 

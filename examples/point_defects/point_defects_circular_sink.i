@@ -1,13 +1,13 @@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
-  type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
+  type = GeneratedMesh
   dim = 2
   nx = 100
   ny = 100
-  xmin = -0.5
-  xmax = 0.5
-  ymin = -0.5
-  ymax = 0.5
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
 []
 #----------------------------------------------------Mesh------------------------------------------------
 
@@ -32,12 +32,8 @@
 
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
-  [./xi]
-  [../]
-  [./xv]
-  [../]
   [./cs]
-    # initial_condition = 1
+    initial_condition = 1
   [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -53,7 +49,7 @@
 #--------------------------------------------------Kernels-----------------------------------------------
 [Kernels]
   [./defect_generation_i]
-    type = BodyForce  #maskedbodyforce
+    type = BodyForce
     variable = ci
     # value = 1e-7   #dpa/s   recombination dominated case
     value = 1e-2   #dpa/s   regular case
@@ -133,23 +129,12 @@
 
 #------------------------------------------------AuxKernels----------------------------------------------
 [AuxKernels]
-  [./xi]
+  [./cs]
     type = ParsedAux
-    variable = xi
-    args = ci
-    function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'
+    variable = cs
+    # args = cv
+    function = 'cs/time'
   [../]
-  [./xv]
-    type = ParsedAux
-    variable = xv
-    args = cv
-    function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'
-  [../]
-  # [./cs]
-  #   type = ParsedAux
-  #   variable = cs
-  #   function = 'R:=0.707;if(x*x+y*y<=R*R,1,0)'
-  # [../]
 []
 #------------------------------------------------AuxKernels----------------------------------------------
 
@@ -157,29 +142,24 @@
 
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
- # [./ci_bottom]
- #   type = DirichletBC
- #   variable = ci
- #   value = 0
- #   boundary = '0 1 2 3'
- # [../]
- # [./cv_bottom]
- #   type = DirichletBC
- #   variable = cv
- #   value = 0
- #   boundary = '0 1 2 3'
- # [../]
+ [./ci_bottom]
+   type = DirichletBC
+   variable = ci
+   value = 0
+   boundary = '0 1 2 3'
+ [../]
+ [./cv_bottom]
+   type = DirichletBC
+   variable = cv
+   value = 0
+   boundary = '0 1 2 3'
+ [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
 
 
 #--------------------------------------------------ICs---------------------------------------------------
-[ICs]
-  [./cs_ic]
-    type = FunctionIC
-    variable = cs
-    function = 'R:=0.25;if(pow(x,2)+pow(y,2)<=R*R,1,0)'
-  [../]
+# [ICs]
 #   [./cv]
 #     type = RandomIC
 #     min = 0
@@ -202,7 +182,7 @@
 #     # outvalue = 0
 #     # radius = '0.25'
 #   [../]
-[]
+# []
 #--------------------------------------------------ICs---------------------------------------------------
 
 
@@ -275,16 +255,6 @@
     type = PointValue
     point = '0.5 0.5 0.0'
     variable = cv
-  [../]
-  [./center_xi]
-    type = PointValue
-    point = '0.5 0.5 0.0'
-    variable = xi
-  [../]
-  [./center_xv]
-    type = PointValue
-    point = '0.5 0.5 0.0'
-    variable = xv
   [../]
   [./center_cs]
     type = PointValue

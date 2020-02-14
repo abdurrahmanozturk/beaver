@@ -4,6 +4,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# ------------------------------------------------------- #
+# ======================================================= #
+# Pyhton script to plot data from MOOSE csv output files. #
+# ======================================================= #
+# ----------------------------------------------eigenturk #
+
 # print 'Number of arguments:', len(sys.argv), 'arguments.'
 # print 'Argument List:', str(sys.argv)
 filename = sys.argv[1]
@@ -21,11 +27,11 @@ if sys.argv[-1]=="-"+"f":
     for i in range(0,len(csvfile)):
         csvfile[i]=csvfile[i][:-1]
 
-# create fig
+# Create fig
 fig = plt.figure()
-# create a color palette
+# Create a color palette
 palette = plt.get_cmap('Set2')
-# style
+# Style
 plt.style.use('seaborn-whitegrid')
 
 for fid in range(0,len(csvfile)):
@@ -62,18 +68,19 @@ for fid in range(0,len(csvfile)):
                         break
     print(sys.argv)
 
-    #labels
+    #Labels
     xlbl = headers[int(sys.argv[2])]
     ylbl = headers[int(sys.argv[3])]
     # xlbl = "x [unit]"          # define x label manually
-    # ylbl = "y(x) [unit]"
-    #axis limits
+    # ylbl = "y(x) [unit]"       # define y label manually
+
+    #Axis Limits
     xmin=np.min(data[:, int(sys.argv[2])])
     xmax=np.max(data[:, int(sys.argv[2])])
     ymin=np.min(data[:, int(sys.argv[3])])
     ymax=np.max(data[:, int(sys.argv[3])])*1.05
 
-    # Plot the data
+    # Plot the data  ::  CHECK THIS !!!
 
     # #Using DataFrame
     # num=0
@@ -82,14 +89,14 @@ for fid in range(0,len(csvfile)):
     #     plt.plot(df[arg[2], df[column], marker='', color=palette(num), linewidth=1, alpha=0.9, label=column)
 
 
-    # Plot the data
+    # PLOT DATA
     # Multiple lines plot
     num=0
     # lbl=""
     for column in range(3,n):
         num+=1
         if fmode==1:
-            lbl = csvfile[fid][9:28]     ## CHANGE THIS ACCORDING TO PARAMETER IN THE END OF FILENAME
+            lbl = csvfile[fid][-16:-4]     ## CHANGE THIS ACCORDING TO PARAMETER IN THE END OF FILENAME
             figname = ylbl
         else:
             lbl = headers[int(sys.argv[column])]
@@ -105,16 +112,17 @@ for fid in range(0,len(csvfile)):
         if np.max(data[:, int(sys.argv[column])])*1.05>ymax:
             ymax=np.max(data[:, int(sys.argv[column])])*1.05
             plt.ylim(ymin,ymax)
-# Plot settings
-# title
+
+# Plot Settings
+# Title
 plt.title(filename, loc='center', fontsize=12, fontweight=0, color='black')
-# labels
+# Labels
 plt.xlim(xmin,xmax)
 plt.xlabel(xlbl)
 plt.ylabel(ylbl)
 # plt.axis('equal')               # fix x and y axis
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
-# Add legend
+# Add Legend
 plt.legend(loc=0, ncol=1)
 plt.show()
 fig.savefig(figname, box_inches='tight')

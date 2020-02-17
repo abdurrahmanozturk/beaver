@@ -1,13 +1,14 @@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 100
-  ny = 100
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 1
+  type = FileMesh
+  file = square.msh
+  # dim = 2
+  # nx = 100
+  # ny = 100
+  # xmin = 0
+  # xmax = 1
+  # ymin = 0
+  # ymax = 1
 []
 #----------------------------------------------------Mesh------------------------------------------------
 
@@ -22,9 +23,11 @@
 [Variables]
   [./ci]
     initial_condition = 0
+    block = domain
   [../]
   [./cv]
     initial_condition = 0
+    block = domain
   [../]
 []
 #-------------------------------------------------Variables----------------------------------------------
@@ -32,8 +35,13 @@
 
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
+  [./xi]
+  [../]
+  [./xv]
+  [../]
   [./cs]
-    initial_condition = 1
+    block = domain
+    # initial_condition = 1
   [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -49,58 +57,68 @@
 #--------------------------------------------------Kernels-----------------------------------------------
 [Kernels]
   [./defect_generation_i]
-    type = BodyForce
+    type = BodyForce  #maskedbodyforce
     variable = ci
     # value = 1e-7   #dpa/s   recombination dominated case
     value = 1e-2   #dpa/s   regular case
+    block = domain
   [../]
   [./defect_generation_v]
     type = BodyForce
     variable = cv
     # value = 1e-7   #dpa/s   recombination dominated case
     value = 1e-2   #dpa/s   regular case
+    block = domain
   [../]
   [./recombination_i]
     type = MatReaction
     variable = ci
     args = cv     #coupled on materials block
     mob_name = Kiv
+    block = domain
   [../]
   [./recombination_v]
     type = MatReaction
     variable = cv
     args = ci    #coupled in materials block
     mob_name = Kvi
+    block = domain
   [../]
   [./sink_reaction_i]
     type = MatReaction
     variable = ci
     mob_name = Kis
     args = cs     #coupled on materials block
+    block = domain
   [../]
   [./sink_reaction_v]
     type = MatReaction
     variable = cv
     mob_name = Kvs
     args = cs    #coupled in materials block
+    block = domain
   [../]
   [./ci_diff]
     type = MatDiffusion
     variable = ci
     D_name = Di
+    block = domain
   [../]
   [./cv_diff]
     type = MatDiffusion
     variable = cv
     D_name = Dv
+    block = domain
   [../]
   [./ci_time]
     type = TimeDerivative
     variable = ci
+    block = domain
   [../]
   [./cv_time]
     type = TimeDerivative
     variable = cv
+    block = domain
   [../]
   # [./defect_i]
   #   type = PointDefect
@@ -129,12 +147,25 @@
 
 #------------------------------------------------AuxKernels----------------------------------------------
 [AuxKernels]
-  [./cs]
+  [./xi]
     type = ParsedAux
-    variable = cs
-    # args = cv
-    function = 'cs/time'
+    variable = xi
+    args = ci
+    function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'
+    block = domain
   [../]
+  [./xv]
+    type = ParsedAux
+    variable = xv
+    args = cv
+    function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'
+    block = domain
+  [../]
+  # [./cs]
+  #   type = ParsedAux
+  #   variable = cs
+  #   function = 'R:=0.707;if(x*x+y*y<=R*R,1,0)'
+  # [../]
 []
 #------------------------------------------------AuxKernels----------------------------------------------
 
@@ -142,24 +173,35 @@
 
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
- [./ci_bottom]
+ [./ci_5]
    type = DirichletBC
    variable = ci
    value = 0
-   boundary = '0 1 2 3'
+   boundary = void
  [../]
- [./cv_bottom]
+ [./cv_5]
    type = DirichletBC
    variable = cv
-   value = 0
-   boundary = '0 1 2 3'
+   value = 1
+   boundary = void
  [../]
+ # [./cs_5]
+ #   type = DirichletBC
+ #   variable = cs
+ #   value = 1
+ #   boundary = outside
+ # [../]
 []
 #--------------------------------------------------BCs---------------------------------------------------
 
 
 #--------------------------------------------------ICs---------------------------------------------------
-# [ICs]
+[ICs]
+  # [./cs_ic]
+  #   type = FunctionIC
+  #   variable = cs
+  #   function = 'R:=0.25;if(pow(x,2)+pow(y,2)<=R*R,1,0)'
+  # [../]
 #   [./cv]
 #     type = RandomIC
 #     min = 0
@@ -182,7 +224,7 @@
 #     # outvalue = 0
 #     # radius = '0.25'
 #   [../]
-# []
+[]
 #--------------------------------------------------ICs---------------------------------------------------
 
 
@@ -193,7 +235,7 @@
    prop_names = 'Di Dv'
    # prop_values = '5e-14 1.3e-28'   # cm2/sec      recombination dominated case
    prop_values = '1.35e-7 9.4e-13' # cm2/sec      regular case
-   block = '0'
+   block = domain
  [../]
  [./Kiv]
    type = DerivativeParsedMaterial
@@ -201,6 +243,7 @@
    args = cv
    # function = 'kiv:=1.7e4;kiv*cv'    # 1/s recombination dominated
    function = 'kiv:=7.49e10;-kiv*cv'  # 1/s regular case
+   block = domain
  [../]
  [./Kvi]
    type = DerivativeParsedMaterial
@@ -208,6 +251,7 @@
    args = ci
    # function = 'kiv:=1.7e4;kiv*ci'    # 1/s recombination dominated
    function = 'kiv:=7.49e10;-kiv*ci'  # 1/s regular case
+   block = domain
  [../]
  [./Kis]
    type = DerivativeParsedMaterial
@@ -215,6 +259,7 @@
    args = cs
    # function = 'Di:=5e-14;ki:=38490;Di*ki*ki*cs' # 1/s      recombination dominated case
    function = 'Di:=1.35e-7;ki:=38490;-Di*ki*ki*cs' # 1/s      regular case
+   block = domain
  [../]
  [./Kvs]
    type = DerivativeParsedMaterial
@@ -222,6 +267,7 @@
    args = cs
    # function = 'Dv:=1.3e-28;kv:=36580;Dv*Dv*kv*cs' # 1/s      recombination dominated case
    function = 'Dv:=9.4e-13;kv:=36580;-Dv*kv*kv*cs' # 1/s      regular case
+   block = domain
  [../]
  # [./k_values]
  #   type = GenericConstantMaterial
@@ -248,17 +294,27 @@
 [Postprocessors]
   [./center_ci]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '1 1 0.0'
     variable = ci
   [../]
   [./center_cv]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '1 1 0.0'
     variable = cv
+  [../]
+  [./center_xi]
+    type = PointValue
+    point = '1 1 0.0'
+    variable = xi
+  [../]
+  [./center_xv]
+    type = PointValue
+    point = '1 1 0.0'
+    variable = xv
   [../]
   [./center_cs]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '1 1 0.0'
     variable = cs
   [../]
   # [./ci]  # should be equal 0.5,0.5
@@ -337,7 +393,7 @@
   # exodus = true
   [./exodus]
     type = Exodus
-    file_base = point_defects
+    file_base = point_defects_circular_sink
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true

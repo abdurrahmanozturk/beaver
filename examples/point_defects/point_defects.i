@@ -37,7 +37,7 @@
   [./xv]
   [../]
   [./cs]
-    # initial_condition = 1
+    # initial_condition = 0
   [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -166,7 +166,7 @@
  # [./cv_bottom]
  #   type = DirichletBC
  #   variable = cv
- #   value = 0
+ #   value = 1
  #   boundary = '0 1 2 3'
  # [../]
 []
@@ -178,7 +178,8 @@
   [./cs_ic]
     type = FunctionIC
     variable = cs
-    function = 'R:=0.25;if(pow(x,2)+pow(y,2)<=R*R,1,0)'
+    # function = 'R:=0.25;if(pow(x,2)+pow(y,2)<=R*R,1,0)'
+    function = 'if(((x=0.5)|(x=-0.5)|(y=0.5)|(y=-0.5)),1,0)'
   [../]
 #   [./cv]
 #     type = RandomIC

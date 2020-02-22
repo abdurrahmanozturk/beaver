@@ -37,7 +37,7 @@
   [./xv]
   [../]
   [./cs]
-    # initial_condition = 0
+    initial_condition = 1
   [../]
 []
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -166,7 +166,7 @@
  # [./cv_bottom]
  #   type = DirichletBC
  #   variable = cv
- #   value = 1
+ #   value = 0
  #   boundary = '0 1 2 3'
  # [../]
 []
@@ -175,34 +175,45 @@
 
 #--------------------------------------------------ICs---------------------------------------------------
 [ICs]
-  [./cs_ic]
-    type = FunctionIC
-    variable = cs
-    # function = 'R:=0.25;if(pow(x,2)+pow(y,2)<=R*R,1,0)'
-    function = 'if(((x=0.5)|(x=-0.5)|(y=0.5)|(y=-0.5)),1,0)'
-  [../]
-#   [./cv]
-#     type = RandomIC
-#     min = 0
-#     max = 1
-#     variable = ci
-#     # x1 = 0.5
-#     # y1 = 0.5
-#     # invalue = 1
-#     # outvalue = 0
-#     # radius = '0.25'
-#   [../]
-#   [./ci]
-#     type = RandomIC
-#     min = 0
-#     max = 1
-#     variable = cv
-#     # x1 = 0.5
-#     # y1 = 0.5
-#     # invalue = 1
-#     # outvalue = 0
-#     # radius = '0.25'
-#   [../]
+  # [./cs_ic]
+  #   type = FunctionIC
+  #   variable = cs
+  #   # function = 'R:=0.25;if(pow(x,2)+pow(y,2)<=R*R,1,0)'
+  #   function = 'if(((x=0.5)|(x=-0.5)|(y=0.5)|(y=-0.5)),1,0)'
+  # [../]
+  # [./cv]
+  #   type = RandomIC
+  #   min = 0
+  #   max = 1
+  #   variable = cv
+  #   # x1 = 0.5
+  #   # y1 = 0.5
+  #   # invalue = 1
+  #   # outvalue = 0
+  #   # radius = '0.25'
+  # [../]
+  # [./ci]
+  #   type = RandomIC
+  #   min = 0
+  #   max = 1
+  #   variable = ci
+  #   # x1 = 0.5
+  #   # y1 = 0.5
+  #   # invalue = 1
+  #   # outvalue = 0
+  #   # radius = '0.25'
+  # [../]
+  # [./cs]
+  #   type = RandomIC
+  #   min = 0
+  #   max = 1
+  #   variable = cs
+  #   # x1 = 0.5
+  #   # y1 = 0.5
+  #   # invalue = 1
+  #   # outvalue = 0
+  #   # radius = '0.25'
+  # [../]
 []
 #--------------------------------------------------ICs---------------------------------------------------
 
@@ -235,14 +246,14 @@
    f_name = Kis
    args = cs
    # function = 'Di:=5e-14;ki:=38490;Di*ki*ki*cs' # 1/s      recombination dominated case
-   function = 'Di:=1.35e-7;ki:=38490;-Di*ki*ki*cs' # 1/s      regular case
+   function = 'Di:=1.35e-7;ki:=38490;-Di*ki*ki/cs' # 1/s      regular case
  [../]
  [./Kvs]
    type = DerivativeParsedMaterial
    f_name = Kvs
    args = cs
    # function = 'Dv:=1.3e-28;kv:=36580;Dv*Dv*kv*cs' # 1/s      recombination dominated case
-   function = 'Dv:=9.4e-13;kv:=36580;-Dv*kv*kv*cs' # 1/s      regular case
+   function = 'Dv:=9.4e-13;kv:=36580;-Dv*kv*kv/cs' # 1/s      regular case
  [../]
  # [./k_values]
  #   type = GenericConstantMaterial
@@ -366,12 +377,14 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
+  file_base = point_defects
   [./exodus]
     type = Exodus
-    file_base = point_defects
+    # file_base = point_defects
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true
+    interval = 100
   [../]
   csv = true
   #xda = true

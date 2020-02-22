@@ -1,7 +1,7 @@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
   type = FileMesh
-  file = square.msh
+  file = void.msh
   # dim = 2
   # nx = 100
   # ny = 100
@@ -60,14 +60,14 @@
     type = BodyForce  #maskedbodyforce
     variable = ci
     # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case
+    value = 1e-6   #dpa/s   regular case
     block = domain
   [../]
   [./defect_generation_v]
     type = BodyForce
     variable = cv
     # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case
+    value = 1e-6   #dpa/s   regular case
     block = domain
   [../]
   [./recombination_i]
@@ -84,20 +84,20 @@
     mob_name = Kvi
     block = domain
   [../]
-  [./sink_reaction_i]
-    type = MatReaction
-    variable = ci
-    mob_name = Kis
-    args = cs     #coupled on materials block
-    block = domain
-  [../]
-  [./sink_reaction_v]
-    type = MatReaction
-    variable = cv
-    mob_name = Kvs
-    args = cs    #coupled in materials block
-    block = domain
-  [../]
+  # [./sink_reaction_i]
+  #   type = MatReaction
+  #   variable = ci
+  #   mob_name = Kis
+  #   args = cs     #coupled on materials block
+  #   block = domain
+  # [../]
+  # [./sink_reaction_v]
+  #   type = MatReaction
+  #   variable = cv
+  #   mob_name = Kvs
+  #   args = cs    #coupled in materials block
+  #   block = domain
+  # [../]
   [./ci_diff]
     type = MatDiffusion
     variable = ci
@@ -182,7 +182,7 @@
  [./cv_5]
    type = DirichletBC
    variable = cv
-   value = 1
+   value = 0
    boundary = void
  [../]
  # [./cs_5]
@@ -258,7 +258,7 @@
    f_name = Kis
    args = cs
    # function = 'Di:=5e-14;ki:=38490;Di*ki*ki*cs' # 1/s      recombination dominated case
-   function = 'Di:=1.35e-7;ki:=38490;-Di*ki*ki*cs' # 1/s      regular case
+   function = 'Di:=1.35e-7;ki:=38490;-Di*ki*ki/cs' # 1/s      regular case
    block = domain
  [../]
  [./Kvs]
@@ -266,7 +266,7 @@
    f_name = Kvs
    args = cs
    # function = 'Dv:=1.3e-28;kv:=36580;Dv*Dv*kv*cs' # 1/s      recombination dominated case
-   function = 'Dv:=9.4e-13;kv:=36580;-Dv*kv*kv*cs' # 1/s      regular case
+   function = 'Dv:=9.4e-13;kv:=36580;-Dv*kv*kv/cs' # 1/s      regular case
    block = domain
  [../]
  # [./k_values]
@@ -294,27 +294,27 @@
 [Postprocessors]
   [./center_ci]
     type = PointValue
-    point = '1 1 0.0'
+    point = '0.75 0.75 0.0'
     variable = ci
   [../]
   [./center_cv]
     type = PointValue
-    point = '1 1 0.0'
+    point = '0.75 0.75 0.0'
     variable = cv
   [../]
   [./center_xi]
     type = PointValue
-    point = '1 1 0.0'
+    point = '0.75 0.75 0.0'
     variable = xi
   [../]
   [./center_xv]
     type = PointValue
-    point = '1 1 0.0'
+    point = '0.75 0.75 0.0'
     variable = xv
   [../]
   [./center_cs]
     type = PointValue
-    point = '1 1 0.0'
+    point = '0.75 0.75 0.0'
     variable = cs
   [../]
   # [./ci]  # should be equal 0.5,0.5
@@ -367,9 +367,9 @@
   nl_rel_tol = 1e-9 # Absolute tolerance for nonlienar solves
   scheme = bdf2   #try crank-nicholson
   start_time = 0
-  num_steps = 4294967295
-  steady_state_detection = true
-  # end_time = 1200
+  # num_steps = 4294967295
+  # steady_state_detection = true
+  end_time = 1200
   # dt = 1e-8
   [./TimeStepper]
     type = IterationAdaptiveDT
@@ -391,12 +391,14 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
+  file_base = point_defects_circular_sink_1e-6
   [./exodus]
     type = Exodus
-    file_base = point_defects_circular_sink
+    # file_base = point_defects_circular_sink
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true
+    interval = 100
   [../]
   csv = true
   #xda = true

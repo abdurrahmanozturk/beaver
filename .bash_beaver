@@ -28,6 +28,7 @@ combinedPath="~/projects/moose/modules/combined"
 alias combined=$combinedPath"/combined-opt -i"
 peacockPath="~/projects/moose/python/peacock"
 alias plot="python "$beaverPath"/scripts/plot.py"
+alias beavermulti="python "$beaverPath"/scripts/multirun.py"
 alias peacock=$peacockPath"/peacock -e"$combinedPath"/combined-opt"
 
 # ------------------------------------makebeaver---------------------------------------------------

@@ -73,7 +73,7 @@
   [../]
   [./eta_langevin] # stochastic noise term to stimulate nucleation
     type = LangevinNoise
-    amplitude = 0.09
+    amplitude = 0.100
     variable = eta
   [../]
 []
@@ -144,7 +144,7 @@
 []
 
 [Outputs]
-  file_base = nucleation_model_A
+  file_base = nucleation_model_A_0.100/nucleation_model_A_0.100
   exodus = true
   csv = true
   interval = 1

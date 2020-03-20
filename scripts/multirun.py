@@ -123,7 +123,8 @@ def main():
             else:
                 f.write(line)
         f.close()
-        # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+        os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
 
 #Run
 main()
+# os.system("python ~/projects/beaver/scripts/plot.py csvfiles log-0 log-1 -f")

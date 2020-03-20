@@ -83,24 +83,45 @@ def newfile(values,runid,param,file):
     return file[:-2:]+"_"+param+"_"+values[runid]
 
 def main():
+
     #Read Command Line Arguments
     _file = sys.argv[1]
     _param = sys.argv[2]
     _range = sys.argv[3]
-
+    [l,u,dlu] =_range.split(':')
+    n_max = 10
+    [lower,upper,incre] = [float(l),float(u),float(dlu)]
+    print(upper,math.log(lower,10))
+    print(upper,math.log(upper,10))
+    print((upper-lower)/incre)
+    print(n_max*n_max*n_max)
     #Calculate Values based on given range
-    index = []
-    for i in range(0,len(_range)):
-        if _range[i]==":":
-            index.append(i)
-    lower = float(_range[0:index[0]])
-    upper = float(_range[index[0]+1:index[1]])
-    incre = float(_range[index[1]+1:])
+    log_mode = False
+    if (upper-lower)/incre > (n_max*n_max*n_max):
+        incre = (math.log(upper,10)-math.log(lower,10))/n_max
+        print("log mode")
+        log_mode = True
+    elif (upper-lower)/incre > n_max:
+        incre = (upper-lower)/n_max
+        print("linear mode")
     print(incre)
-    print(len(str((upper-lower)/incre)))
+    # for i in range(0,len(_range)):
+    #     if _range[i]==":":
+    #         index.append(i)
+    # lower = float(_range[0:index[0]])
+    # upper = float(_range[index[0]+1:index[1]])
+    # incre = float(_range[index[1]+1:])
     values = []
-    for _val in np.arange(lower,upper,incre):
-        values.append("%.*e"%(len(str((upper-lower)/incre)),_val))
+    for i in range(0,n_max+1):
+        if log_mode == True:
+            _val = 10**(math.log(lower,10)+i*incre)
+            _dec = len(str((math.log(upper,10)-math.log(lower,10))/incre))
+        else:
+            _val = lower + i*incre
+            _dec = len(str((upper-lower)/incre))
+        values.append("%.*e"%(_dec,_val))
+    # for _val in np.arange(lower,upper+incre,incre):
+        # values.append("%.*e"%(len(str((upper-lower)/incre)),_val))
 
     #Open Files
     fcsv = open("csvfiles",'w')
@@ -123,7 +144,7 @@ def main():
             else:
                 f.write(line)
         f.close()
-        os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+        # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
 
 #Run
 main()

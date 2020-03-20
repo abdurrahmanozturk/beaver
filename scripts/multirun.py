@@ -35,56 +35,7 @@ import re
 #             temp.append([val]+name(n+1))
 #         return temp
 
-# #Read Command Line Arguments
-# _file = sys.argv[1]
-# _param = sys.argv[2]
-# _range = sys.argv[3]
-# # print(name(3))
-# index = []
-# for i in range(0,len(_range)):
-#     if _range[i]==":":
-#         index.append(i)
-# lower = float(_range[0:index[0]])
-# upper = float(_range[index[0]+1:index[1]])
-# incre = float(_range[index[1]+1:])
-# newline = []
-# newfile = []
-# for _val in np.arange(lower,upper,incre):
-#     val = "%.*f"%(len(str(incre)),_val)
-#     newline.append(_param+" = "+val)
-#     newfile.append(_file[:-2:]+"_"+val)
-#
-# #Create and Run Input Files
-# fcsv = open("csvfiles",'w')
-# f = open(_file,'r')
-# lines= f.readlines()
-# f.close()
-# for runid in range(0,len(newfile)):
-#     os.system("mkdir "+newfile[runid])
-#     f = open(newfile[runid]+"/"+newfile[runid]+".i",'w')
-#     fcsv.write(newfile[runid]+"/"+newfile[runid]+".csv\n")
-#     for line in lines:
-#         if re.search(_param,line) and re.search("parametric study",line):
-#             #offset intendation
-#             offset = 0
-#             for s in range(0,len(line)):
-#                 if line[s]!=" ":
-#                     offset = " "*s
-#                     break
-#             f.write(offset+newline[runid]+"\n")
-#         elif re.search("file_base",line):
-#             #offset intendation
-#             offset = 0
-#             for s in range(0,len(line)):
-#                 if line[s]!=" ":
-#                     offset = " "*s
-#                     break
-#             f.write(offset+"file_base = "+newfile[runid]+"/"+newfile[runid]+"\n")
-#         else:
-#             f.write(line)
-#     f.close()
-#     # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+newfile[runid]+"/"+newfile[runid]+".i")
-
+#Find Index
 def get_index(values,runid,param,line):
     index = []
     _param = ""
@@ -112,6 +63,7 @@ def get_index(values,runid,param,line):
         # ending= ' '
     return index
 
+#Generate New Line
 def newline(values,runid,param,line,file):
     if param == "function" or param == "prop_values":
         sys.exit("Error! : Specify variable name instead of "+param)
@@ -124,61 +76,54 @@ def newline(values,runid,param,line,file):
     else:
         return line[:index[0]]+values[runid]+line[index[1]:]
 
+#Generate New Filename
 def newfile(values,runid,param,file):
     if param == "function" or param == "prop_values":
         sys.exit("Error! : Specify variable name instead of "+param)
     return file[:-2:]+"_"+param+"_"+values[runid]
 
-    #     newline.append(_param+" = "+val)
-    #     newfile.append(_file[:-2:]+"_"+val)
-    #
-    # #offset intendation
-    # offset = 0
-    # for s in range(0,len(line)):
-    #     if line[s]!=" ":
-    #         offset = " "*s
-    #         break
+def main():
+    #Read Command Line Arguments
+    _file = sys.argv[1]
+    _param = sys.argv[2]
+    _range = sys.argv[3]
 
+    #Calculate Values based on given range
+    index = []
+    for i in range(0,len(_range)):
+        if _range[i]==":":
+            index.append(i)
+    lower = float(_range[0:index[0]])
+    upper = float(_range[index[0]+1:index[1]])
+    incre = float(_range[index[1]+1:])
+    print(incre)
+    print(len(str((upper-lower)/incre)))
+    values = []
+    for _val in np.arange(lower,upper,incre):
+        values.append("%.*e"%(len(str((upper-lower)/incre)),_val))
 
+    #Open Files
+    fcsv = open("csvfiles",'w')
+    f = open(_file,'r')
 
-#Read Command Line Arguments
-_file = sys.argv[1]
-_param = sys.argv[2]
-_range = sys.argv[3]
-
-#Calculate Values based on given range
-index = []
-for i in range(0,len(_range)):
-    if _range[i]==":":
-        index.append(i)
-lower = float(_range[0:index[0]])
-upper = float(_range[index[0]+1:index[1]])
-incre = float(_range[index[1]+1:])
-print(incre)
-print(len(str((upper-lower)/incre)))
-values = []
-for _val in np.arange(lower,upper,incre):
-    values.append("%.*e"%(len(str((upper-lower)/incre)),_val))
-
-#Open Files
-fcsv = open("csvfiles",'w')
-f = open(_file,'r')
-
-#Read Input File
-lines= f.readlines()
-f.close()
-
-for runid in range(0,len(values)):
-    _newfile = newfile(values,runid,_param,_file)
-    os.system("mkdir "+_newfile)
-    f = open(_newfile+"/"+_newfile+".i",'w')
-    fcsv.write(_newfile+"/"+_newfile+".csv\n")
-    #Loop over input file
-    for line in lines:
-        if (re.search("file_base",line)) or (re.search(_param,line) and re.search("parametric study",line)):
-            _newline = newline(values,runid,_param,line,_file)
-            f.write(_newline+"\n")
-        else:
-            f.write(line)
+    #Read Input File
+    lines= f.readlines()
     f.close()
-    # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+
+    for runid in range(0,len(values)):
+        _newfile = newfile(values,runid,_param,_file)
+        os.system("mkdir "+_newfile)
+        f = open(_newfile+"/"+_newfile+".i",'w')
+        fcsv.write(_newfile+"/"+_newfile+".csv\n")
+        #Loop over input file
+        for line in lines:
+            if (re.search("file_base",line)) or (re.search(_param,line) and re.search("parametric study",line)):
+                _newline = newline(values,runid,_param,line,_file)
+                f.write(_newline+"\n")
+            else:
+                f.write(line)
+        f.close()
+        # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+
+#Run
+main()

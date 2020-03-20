@@ -91,27 +91,15 @@ def main():
     [l,u,dlu] =_range.split(':')
     n_max = 10
     [lower,upper,incre] = [float(l),float(u),float(dlu)]
-    print(upper,math.log(lower,10))
-    print(upper,math.log(upper,10))
-    print((upper-lower)/incre)
-    print(n_max*n_max*n_max)
+
     #Calculate Values based on given range
+    values = []
     log_mode = False
     if (upper-lower)/incre > (n_max*n_max*n_max):
         incre = (math.log(upper,10)-math.log(lower,10))/n_max
-        print("log mode")
         log_mode = True
     elif (upper-lower)/incre > n_max:
         incre = (upper-lower)/n_max
-        print("linear mode")
-    print(incre)
-    # for i in range(0,len(_range)):
-    #     if _range[i]==":":
-    #         index.append(i)
-    # lower = float(_range[0:index[0]])
-    # upper = float(_range[index[0]+1:index[1]])
-    # incre = float(_range[index[1]+1:])
-    values = []
     for i in range(0,n_max+1):
         if log_mode == True:
             _val = 10**(math.log(lower,10)+i*incre)
@@ -120,8 +108,6 @@ def main():
             _val = lower + i*incre
             _dec = len(str((upper-lower)/incre))
         values.append("%.*e"%(_dec,_val))
-    # for _val in np.arange(lower,upper+incre,incre):
-        # values.append("%.*e"%(len(str((upper-lower)/incre)),_val))
 
     #Open Files
     fcsv = open("csvfiles",'w')

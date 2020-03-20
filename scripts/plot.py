@@ -96,7 +96,7 @@ for fid in range(0,len(csvfile)):
     for column in range(3,n):
         num+=1
         if fmode==1:
-            lbl = csvfile[fid][-28:-21]     ## CHANGE THIS ACCORDING TO PARAMETER IN THE END OF FILENAME
+            lbl = csvfile[fid]#[-28:-21]     ## CHANGE THIS ACCORDING TO PARAMETER IN THE END OF FILENAME
             figname = ylbl
         else:
             lbl = headers[int(sys.argv[column])]

@@ -220,13 +220,21 @@
 
 #-----------------------------------------------Materials-------------------------------------------------
 [Materials]
- [./D]
+ [./Di]
    type = GenericConstantMaterial # diffusion coeficients
+   # prop_names = Di
    prop_names = 'Di Dv'
    # prop_values = '5e-14 1.3e-28'   # cm2/sec      recombination dominated case
    prop_values = '1.35e-7 9.4e-13' # cm2/sec      regular case
    block = '0'
  [../]
+ # [./Dv]
+ #   type = GenericConstantMaterial # diffusion coeficients
+ #   prop_names = Dv
+ #   # prop_values = '5e-14 1.3e-28'   # cm2/sec      recombination dominated case
+ #   prop_values = 9.4e-13 # cm2/sec      regular case
+ #   block = '0'
+ # [../]
  [./Kiv]
    type = DerivativeParsedMaterial
    f_name = Kiv
@@ -353,7 +361,7 @@
   nl_rel_tol = 1e-9 # Absolute tolerance for nonlienar solves
   scheme = bdf2   #try crank-nicholson
   start_time = 0
-  num_steps = 4294967295
+  num_steps = 4#294967295
   steady_state_detection = true
   # end_time = 1200
   dt = 1e-8

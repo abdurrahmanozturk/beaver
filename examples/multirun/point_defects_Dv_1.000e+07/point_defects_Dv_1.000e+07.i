@@ -221,15 +221,16 @@
 #-----------------------------------------------Materials-------------------------------------------------
 [Materials]
  [./D]
-   prop_values = '1.35e-7 9.4e-13' # cm2/sec      regular case
    type = GenericConstantMaterial # diffusion coeficients
-   block = '0'
+   prop_values = '1.35e-7 9.4e-13' # cm2/sec      regular case
    prop_names = 'Di Dv'  #parametric study
+   block = '0'
  [../]
- # [./D]
+ # [./Dv]
  #   type = GenericConstantMaterial # diffusion coeficients
- #   prop_names = 'Di Dv'
- #   prop_values = '5e-14 1.3e-28'   # cm2/sec      recombination dominated case
+ #   prop_names = Dv
+1.000e+07
+ #   prop_values = 9.4e-13 # cm2/sec      regular case
  #   block = '0'
  # [../]
  [./Kiv]
@@ -382,7 +383,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defects_constant_dt
+  file_base = point_defects_Dv_1.000e+07/point_defects_Dv_1.000e+07
   [./exodus]
     type = Exodus
     # file_base = point_defects

@@ -15,12 +15,17 @@ import matplotlib.pyplot as plt
 filename = sys.argv[1]
 figname=filename[:-4]+".png"
 csvfile = [filename]
-fmode=0
 n=len(sys.argv)
-if sys.argv[-1]=="-"+"f":
-    print("-f mode on")
-    fmode = 1
-    n=len(sys.argv)-1
+smode=False
+if sys.argv[-2]=="-"+"s" or sys.argv[-1]=="-"+"s":
+    print("-s mode : save only mode, plot wont be shown")
+    smode = True
+    n=n-1
+fmode=False
+if sys.argv[-2]=="-"+"f" or sys.argv[-1]=="-"+"f":
+    print("-f mode : multiple file mode, multiple files will be shown on the same plot")
+    fmode = True
+    n=n-1
     # Read file names from file
     file = open(filename)
     csvfile = file.readlines()
@@ -124,5 +129,8 @@ plt.ylabel(ylbl)
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 # Add Legend
 plt.legend(loc=0, ncol=1)
-plt.show()
-fig.savefig(figname, box_inches='tight')
+if smode == True: #save only
+    fig.savefig(figname, box_inches='tight')
+else:
+    plt.show()
+    fig.savefig(figname, box_inches='tight')

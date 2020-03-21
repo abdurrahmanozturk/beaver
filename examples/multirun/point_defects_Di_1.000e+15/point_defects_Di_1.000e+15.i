@@ -382,7 +382,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defects_constant_dt
+  file_base = point_defects_Di_1.000e+15/point_defects_Di_1.000e+15
   [./exodus]
     type = Exodus
     # file_base = point_defects

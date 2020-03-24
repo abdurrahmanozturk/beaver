@@ -221,7 +221,8 @@
 #-----------------------------------------------Materials-------------------------------------------------
 [Materials]
  [./D]
-   prop_values = '1.35e-7 9.4e-13' # cm2/sec     regular case
+   prop_values = '1.000e+07 9.4e-13' # cm2/sec     regular case
+
    type = GenericConstantMaterial # diffusion coeficients
    block = '0'
    prop_names = 'Di Dv'  #parametric study
@@ -382,7 +383,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defects_constant_dt
+  file_base = point_defects_Di_1.000e+07/point_defects_Di_1.000e+07
   [./exodus]
     type = Exodus
     # file_base = point_defects

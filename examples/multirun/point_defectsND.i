@@ -350,15 +350,15 @@
   start_time = 0
   # num_steps = 4294967295
   # steady_state_detection = true
-  end_time = 30000
-  dt = 1
-  # [./TimeStepper]
-  #   type = IterationAdaptiveDT
-  #   dt = 1e-8 #s
-  #   optimal_iterations = 5
-  #   growth_factor = 1.2
-  #   cutback_factor = 0.8
-  # [../]
+  end_time = 100
+  # dt = 1
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 1e-8 #s
+    optimal_iterations = 5
+    growth_factor = 1.2
+    cutback_factor = 0.8
+  [../]
   # postprocessor = cv
   # skip = 25
   # criteria = 0.01

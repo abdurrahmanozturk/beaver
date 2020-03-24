@@ -113,6 +113,7 @@ def newfile(values,runid,param,file):
 def get_index(param,line,linenum,file):
     index = []
     if re.search("_values",line):
+        param_index = 0
         #Read file
         f = open(file,'r')
         lines= f.readlines()
@@ -237,11 +238,11 @@ def main():
         for line in lines:
             f.write(line)
         f.close()
-        # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+        os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
     fcsv.close()
 
 #======================#
 #RUN THIS PYTHON SCRIPT
 main()
-# os.system("python ~/projects/beaver/scripts/plot.py csvfiles log-0 log-1 log-3 -f -s")
+os.system("python ~/projects/beaver/scripts/plot.py csvfiles log-0 log-1 log-3 -f -s")
 #======================#

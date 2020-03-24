@@ -131,20 +131,14 @@ def get_index(param,line,linenum,file):
                     if re.compile(re.escape("[./")).search(lines[back]):
                         sys.exit("Error! : "+name+" value is not defined input file.")
             subindex += 1
-        print(param)
-        print(names_line)
-        print(values_line)
         names_list = re.split(' ',re.split('\'',names_line)[1])
         for list_index in range(0,len(names_list)):
             if names_list[list_index]==param:
                 param_index = list_index
         values_list = re.split(' ',re.split('\'',values_line)[1])
-        print(names_list,values_list)
-        print(values_list[param_index])
         _patern = re.compile(values_list[param_index]).search(values_line)
         index.append(_patern.start()) #patern starting index
         index.append(_patern.end()) #patern ending index
-        print(index)
         return index
     else:
         _param = ""
@@ -161,7 +155,7 @@ def get_index(param,line,linenum,file):
             for i in range(_patern.end(),len(line)):
                 if line[i]==ending:
                     index.append(i) #patern ending index
-                    breakprop_names
+                    break
         else:
             if re.search(param+'=',line):
                 _param = param+'='   #improve this
@@ -231,7 +225,6 @@ def main():
     param_line = lines[find_line(_param,_file,blockmode)]
     filename_line_num = find_line("file_base",_file)
     filename_line = lines[find_line("file_base",_file)]
-    print(param_line_num,filename_line_num)
 
     #Loop over values, generate input files and run them
     for runid in range(0,len(values)):
@@ -239,10 +232,8 @@ def main():
         os.system("mkdir "+_newfile)
         fcsv.write(_newfile+"/"+_newfile+".csv\n")
         f = open(_newfile+"/"+_newfile+".i",'w')
-        print(lines[param_line_num])
-        lines[param_line_num] = newline(values,runid,_param_name,param_line,param_line_num,_file)+"\n"
-        print(lines[param_line_num])
-        lines[filename_line_num] = newline(values,runid,_param_name,filename_line,filename_line_num,_file)+"\n"
+        lines[param_line_num] = newline(values,runid,_param_name,param_line,param_line_num,_file)
+        lines[filename_line_num] = newline(values,runid,_param_name,filename_line,filename_line_num,_file)
         for line in lines:
             f.write(line)
         f.close()

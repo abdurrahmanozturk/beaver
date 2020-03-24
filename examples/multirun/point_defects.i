@@ -221,10 +221,10 @@
 #-----------------------------------------------Materials-------------------------------------------------
 [Materials]
  [./D]
-   prop_values = '1.35e-7 9.4e-13' # cm2/sec     regular case
    type = GenericConstantMaterial # diffusion coeficients
-   block = '0'
    prop_names = 'Di Dv'  #parametric study
+   prop_values = '1.35e-7 9.4e-13' # cm2/sec     regular case
+   block = '0'
  [../]
  # [./D]
  #   type = GenericConstantMaterial # diffusion coeficients
@@ -236,7 +236,7 @@
    type = DerivativeParsedMaterial
    f_name = Kiv
    args = cv
-   function = 'kiv:=7.49e10;-kiv*cv'  # 1/s regular case, parametric study
+   function = 'kiv:=7.49e10;-kiv*cv'  # 451/s regular case, parametric study
    # function = 'kiv:=1.7e4;kiv*cv'    # 1/s recombination dominated
  [../]
  [./Kvi]

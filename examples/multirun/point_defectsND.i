@@ -56,13 +56,13 @@
     type = BodyForce  #maskedbodyforce
     variable = xi
     # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case
+    value = 1e-2   #dpa/s   regular case, parametric study
   [../]
   [./defect_generation_v]
     type = BodyForce
     variable = xv
     # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case
+    value = 1e-2   #dpa/s   regular case, parametric study
   [../]
   [./recombination_i]
     type = MatReaction
@@ -76,18 +76,18 @@
     args = xi    #coupled in materials block
     mob_name = Kvi
   [../]
-  [./sink_reaction_i]
-    type = MatReaction
-    variable = xi
-    mob_name = Kis
-    args = xs     #coupled on materials block
-  [../]
-  [./sink_reaction_v]
-    type = MatReaction
-    variable = xv
-    mob_name = Kvs
-    args = xs    #coupled in materials block
-  [../]
+  # [./sink_reaction_i]
+  #   type = MatReaction
+  #   variable = xi
+  #   mob_name = Kis
+  #   args = xs     #coupled on materials block
+  # [../]
+  # [./sink_reaction_v]
+  #   type = MatReaction
+  #   variable = xv
+  #   mob_name = Kvs
+  #   args = xs    #coupled in materials block
+  # [../]
   [./ci_diff]
     type = MatDiffusion
     variable = xi
@@ -230,26 +230,26 @@
    type = DerivativeParsedMaterial
    f_name = Kiv
    args = cv
-   function = 'kiv:=1;-kiv*cv'  # 1/s regular case
+   function = 'kiv:=1;-kiv*cv'  # 1/s regular case, parametric study
  [../]
  [./Kvi]
    type = DerivativeParsedMaterial
    f_name = Kvi
    args = ci
-   function = 'kiv:=1;-kiv*ci'  # 1/s regular case
+   function = 'kiv:=1;-kiv*ci'  # 1/s regular case, parametric study
  [../]
- [./Kis]
-   type = DerivativeParsedMaterial
-   f_name = Kis
-   args = xs
-   function = 'kis:=1;-kis*xs' # 1/s      regular case
- [../]
- [./Kvs]
-   type = DerivativeParsedMaterial
-   f_name = Kvs
-   args = xs
-   function = 'kvs:=1;-kvs*xs' # 1/s      regular case
- [../]
+ # [./Kis]
+ #   type = DerivativeParsedMaterial
+ #   f_name = Kis
+ #   args = xs
+ #   function = 'kis:=1;-kis*xs' # 1/s      regular case
+ # [../]
+ # [./Kvs]
+ #   type = DerivativeParsedMaterial
+ #   f_name = Kvs
+ #   args = xs
+ #   function = 'kvs:=1;-kvs*xs' # 1/s      regular case
+ # [../]
  # [./k_values]
  #   type = GenericConstantMaterial
  #   prop_names = 'k ki kv kiv'
@@ -273,16 +273,16 @@
 
 #--------------------------------------------Postprocessors------------------------------------------------
 [Postprocessors]
-  [./center_ci]
-    type = PointValue
-    point = '0.5 0.5 0.0'
-    variable = ci
-  [../]
-  [./center_cv]
-    type = PointValue
-    point = '0.5 0.5 0.0'
-    variable = cv
-  [../]
+  # [./center_ci]
+  #   type = PointValue
+  #   point = '0.5 0.5 0.0'
+  #   variable = ci
+  # [../]
+  # [./center_cv]
+  #   type = PointValue
+  #   point = '0.5 0.5 0.0'
+  #   variable = cv
+  # [../]
   [./center_xi]
     type = PointValue
     point = '0.5 0.5 0.0'

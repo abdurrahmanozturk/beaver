@@ -97,8 +97,8 @@ def newline(values,runid,param,line,linenum,file):
     if len(index) == 1:
         if re.search("file_base",line):
             _newfile = newfile(values,runid,param,file)
-            return line[:index[0]]+" = "+_newfile+"/"+_newfile
-        return line[:index[0]]+values[runid]
+            return line[:index[0]]+" = "+_newfile+"/"+_newfile+"\n"
+        return line[:index[0]]+values[runid]+"\n"
     else:
         return line[:index[0]]+values[runid]+line[index[1]:]
 

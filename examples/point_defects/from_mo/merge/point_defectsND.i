@@ -20,10 +20,10 @@
 
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]
-  [./ci]
+  [./xi]
     initial_condition = 0
   [../]
-  [./cv]
+  [./xv]
     initial_condition = 0
   [../]
 []
@@ -32,11 +32,11 @@
 
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
-  [./xi]
+  [./ci]
   [../]
-  [./xv]
+  [./cv]
   [../]
-  [./cs]
+  [./xs]
     initial_condition = 1
   [../]
 []
@@ -54,57 +54,57 @@
 [Kernels]
   [./defect_generation_i]
     type = BodyForce  #maskedbodyforce
-    variable = ci
+    variable = xi
     # value = 1e-7   #dpa/s   recombination dominated case
     value = 1e-2   #dpa/s   regular case
   [../]
   [./defect_generation_v]
     type = BodyForce
-    variable = cv
+    variable = xv
     # value = 1e-7   #dpa/s   recombination dominated case
     value = 1e-2   #dpa/s   regular case
   [../]
   [./recombination_i]
     type = MatReaction
-    variable = ci
-    args = cv     #coupled on materials block
+    variable = xi
+    args = xv     #coupled on materials block
     mob_name = Kiv
   [../]
   [./recombination_v]
     type = MatReaction
-    variable = cv
-    args = ci    #coupled in materials block
+    variable = xv
+    args = xi    #coupled in materials block
     mob_name = Kvi
   [../]
   [./sink_reaction_i]
     type = MatReaction
-    variable = ci
+    variable = xi
     mob_name = Kis
-    args = cs     #coupled on materials block
+    args = xs     #coupled on materials block
   [../]
   [./sink_reaction_v]
     type = MatReaction
-    variable = cv
+    variable = xv
     mob_name = Kvs
-    args = cs    #coupled in materials block
+    args = xs    #coupled in materials block
   [../]
   [./ci_diff]
     type = MatDiffusion
-    variable = ci
+    variable = xi
     D_name = Di
   [../]
   [./cv_diff]
     type = MatDiffusion
-    variable = cv
+    variable = xv
     D_name = Dv
   [../]
   [./ci_time]
     type = TimeDerivative
-    variable = ci
+    variable = xi
   [../]
   [./cv_time]
     type = TimeDerivative
-    variable = cv
+    variable = xv
   [../]
   # [./defect_i]
   #   type = PointDefect
@@ -133,18 +133,18 @@
 
 #------------------------------------------------AuxKernels----------------------------------------------
 [AuxKernels]
-  [./xi]
-    type = ParsedAux
-    variable = xi
-    args = ci
-    function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'
-  [../]
-  [./xv]
-    type = ParsedAux
-    variable = xv
-    args = cv
-    function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'
-  [../]
+  # [./xi]
+  #   type = ParsedAux
+  #   variable = xi
+  #   args = ci
+  #   function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'
+  # [../]
+  # [./xv]
+  #   type = ParsedAux
+  #   variable = xv
+  #   args = cv
+  #   function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'
+  # [../]
   # [./cs]
   #   type = ParsedAux
   #   variable = cs
@@ -224,7 +224,7 @@
    type = GenericConstantMaterial # diffusion coeficients
    prop_names = 'Di Dv'
    # prop_values = '5e-14 1.3e-28'   # cm2/sec      recombination dominated case
-   prop_values = '1.35e-7 9.4e-13' # cm2/sec      regular case
+   prop_values = '0.000001 0.000001' # cm2/sec      regular case
    block = '0'
  [../]
  [./Kiv]
@@ -232,28 +232,28 @@
    f_name = Kiv
    args = cv
    # function = 'kiv:=1.7e4;kiv*cv'    # 1/s recombination dominated
-   function = 'kiv:=7.49e10;-kiv*cv'  # 1/s regular case
+   function = '-0.1*cv'  # 1/s regular case
  [../]
  [./Kvi]
    type = DerivativeParsedMaterial
    f_name = Kvi
    args = ci
    # function = 'kiv:=1.7e4;kiv*ci'    # 1/s recombination dominated
-   function = 'kiv:=7.49e10;-kiv*ci'  # 1/s regular case
+   function = '-0.1*ci'  # 1/s regular case
  [../]
  [./Kis]
    type = DerivativeParsedMaterial
    f_name = Kis
-   args = cs
+   args = xs
    # function = 'Di:=5e-14;ki:=38490;Di*ki*ki*cs' # 1/s      recombination dominated case
-   function = 'Di:=1.35e-7;ki:=38490;-Di*ki*ki/cs' # 1/s      regular case
+   function = '-0.1*xs' # 1/s      regular case
  [../]
  [./Kvs]
    type = DerivativeParsedMaterial
    f_name = Kvs
-   args = cs
+   args = xs
    # function = 'Dv:=1.3e-28;kv:=36580;Dv*Dv*kv*cs' # 1/s      recombination dominated case
-   function = 'Dv:=9.4e-13;kv:=36580;-Dv*kv*kv/cs' # 1/s      regular case
+   function = '-0.1*xs' # 1/s      regular case
  [../]
  # [./k_values]
  #   type = GenericConstantMaterial
@@ -301,7 +301,7 @@
   [./center_cs]
     type = PointValue
     point = '0.5 0.5 0.0'
-    variable = cs
+    variable = xs
   [../]
   # [./ci]  # should be equal 0.5,0.5
   #   type = ElementIntegralVariablePostprocessor
@@ -353,10 +353,10 @@
   nl_rel_tol = 1e-9 # Absolute tolerance for nonlienar solves
   scheme = bdf2   #try crank-nicholson
   start_time = 0
-  num_steps = 4294967295
-  steady_state_detection = true
-  # end_time = 1200
-  dt = 1e-8
+  # num_steps = 4294967295
+  # steady_state_detection = true
+  end_time = 30000
+  dt = 1
   # [./TimeStepper]
   #   type = IterationAdaptiveDT
   #   dt = 1e-8 #s
@@ -372,15 +372,12 @@
 #----------------------------------------------Executioner-------------------------------------------------
 
 
-[Debug]
-  show_var_residual_norms = true
-[]
 
 
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defects_constant_dt
+  file_base = point_defectsND_0000001-0000001-001-01-01
   [./exodus]
     type = Exodus
     # file_base = point_defects

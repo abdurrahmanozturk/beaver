@@ -225,11 +225,11 @@ def main():
         for line in lines:
             f.write(line)
         f.close()
-        # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+        os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
     fcsv.close()
 
 #======================#
 #RUN THIS PYTHON SCRIPT
 main()
-# os.system("python ~/projects/beaver/scripts/plot.py csvfiles log-0 log-1 log-3 -f -s")
+os.system("python ~/projects/beaver/scripts/plot.py csvfiles log-0 log-1 log-3 -f -s")
 #======================#

@@ -356,21 +356,20 @@
   num_steps = 4294967295
   steady_state_detection = true
   # end_time = 1200
-  dt = 1e-8
-  # [./TimeStepper]
-  #   type = IterationAdaptiveDT
-  #   dt = 1e-8 #s
-  #   optimal_iterations = 5
-  #   growth_factor = 1.2
-  #   cutback_factor = 0.8
-  # [../]
+  # dt = 1e-8
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 1e-8 #s
+    optimal_iterations = 5
+    growth_factor = 1.2
+    cutback_factor = 0.8
+  [../]
   # postprocessor = cv
   # skip = 25
   # criteria = 0.01
   # below = true
 []
 #----------------------------------------------Executioner-------------------------------------------------
-
 
 [Debug]
   show_var_residual_norms = true
@@ -380,7 +379,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defects_constant_dt
+  file_base = point_defects
   [./exodus]
     type = Exodus
     # file_base = point_defects

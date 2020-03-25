@@ -55,14 +55,12 @@
   [./defect_generation_i]
     type = BodyForce  #maskedbodyforce
     variable = xi
-    # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case, parametric study
+    value = 1e-2   #dpa/s regular case, 1e-7 : recdom,i parametric study
   [../]
   [./defect_generation_v]
     type = BodyForce
     variable = xv
-    # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case, parametric study
+    value = 1e-2   #dpa/s regular case, 1e-7 : recdom,v  parametric study
   [../]
   [./recombination_i]
     type = MatReaction
@@ -222,9 +220,9 @@
 [Materials]
  [./D]
    type = GenericConstantMaterial # diffusion coeficients
-   prop_names = 'Di Dv'
    prop_values = '1.0 1.0' # cm2/sec      regular case
    block = '0'
+   prop_names = 'Di Dv'
  [../]
  [./Kiv]
    type = DerivativeParsedMaterial
@@ -375,7 +373,6 @@
   file_base = point_defectsND
   [./exodus]
     type = Exodus
-    # file_base = point_defects
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true

@@ -55,14 +55,12 @@
   [./defect_generation_i]
     type = BodyForce  #maskedbodyforce
     variable = ci
-    # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case
+    value = 1e-2   #dpa/s   regular case, 1e-7 : recdom case,
   [../]
   [./defect_generation_v]
     type = BodyForce
     variable = cv
-    # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case
+    value = 1e-2   #dpa/s   regular case, 1e-7 : recdom case,
   [../]
   [./recombination_i]
     type = MatReaction
@@ -236,15 +234,13 @@
    type = DerivativeParsedMaterial
    f_name = Kiv
    args = cv
-   function = 'kiv:=7.49e10;-kiv*cv'  # 451/s regular case, parametric study
-   # function = 'kiv:=1.7e4;kiv*cv'    # 1/s recombination dominated
+   function = 'kiv:=7.49e10;-kiv*cv'  # 1/s regular case, 1.7e4 : recdom case, parametric study
  [../]
  [./Kvi]
    type = DerivativeParsedMaterial
    f_name = Kvi
    args = ci
-   function = 'kiv:=7.49e10;-kiv*ci'  # 1/s regular case, parametric study
-   # function = 'kiv:=1.7e4;kiv*ci'    # 1/s recombination dominated
+   function = 'kiv:=7.49e10;-kiv*cv'  # 1/s regular case, 1.7e4 : recdom case, parametric study
  [../]
  [./Kis]
    type = DerivativeParsedMaterial

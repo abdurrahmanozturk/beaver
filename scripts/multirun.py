@@ -37,35 +37,46 @@ import re
 #         return temp
 
 #Find the line number for given parameter
-def find_line(param,file,blockmode=False,value=False):
+def find_line(param,file,blockmode=False,filename=False):
     #Read input file
     f = open(file,'r')
     lines= f.readlines()
     f.close()
     #Loop over file
+    linenum = []
     index = 0
+
     for line in lines:
         if blockmode == False:
             name = re.escape(param)
-            if re.search("file_base",line) or (re.compile(name).search(line) and re.search("parametric study",line)):
+            #Find the line including output filename
+            if filename==True:
+                for i in range(len(lines)-1,0,-1):
+                    if re.search(name,lines[i]):
+                        linenum.append(i)
+                        return linenum
+                sys.exit("Error! : "+name+" value is not defined input file.")
+            #Find the line including parameter
+            if re.compile(name).search(line) and re.search("parametric study",line):
                 if re.search("_names",line):
-                    if value==True:
-                        return index
-                    else:
-                        subindex = 0
-                        for subline in lines[index:]:
-                            if re.search("_values",subline):
-                                return index+subindex
-                            if re.compile(re.escape("[../]")).search(subline):
-                                for back in range(index,0,-1):
-                                    if re.search("_values",lines[back]):
-                                        return back
-                                    if re.compile(re.escape("[./")).search(lines[back]):
-                                        sys.exit("Error! : "+name+" value is not defined input file.")
-                            subindex += 1
-                return index
+                    subindex = 0
+                    for subline in lines[index:]:
+                        if re.search("_values",subline):
+                            linenum.append(index+subindex)
+                            # return index+subindex
+                        if re.compile(re.escape("[../]")).search(subline):
+                            for back in range(index,0,-1):
+                                if re.search("_values",lines[back]):
+                                    linenum.append(back)
+                                    # return back
+                                if re.compile(re.escape("[./")).search(lines[back]):
+                                    sys.exit("Error! : "+name+" value is not defined input file.")
+                        subindex += 1
+                linenum.append(index)
+                index += 1
             else:
                 index += 1
+
         else:
             block = "[./"+param.split('/')[0]+"]"
             name = param.split('/')[1]
@@ -75,18 +86,18 @@ def find_line(param,file,blockmode=False,value=False):
                     if re.compile(name).search(subline):
                         if re.search("_names",subline):
                             prop_names_index = index+subindex
-                            if value==True:
-                                return index
-                            else:
-                                for prop_values_index in range(index,len(lines)):
-                                    if re.search("prop_values",lines[prop_values_index]):
-                                        return prop_values_index
-                        return index+subindex
+                            for prop_values_index in range(index,len(lines)):
+                                if re.search("prop_values",lines[prop_values_index]):
+                                    linenum.append(prop_values_index)
+                                    return linenum
+                        linenum.append(index+subindex)
+                        return linenum
                     if re.compile(re.escape("[../]")).search(subline):
                         sys.exit("Error! : "+name+" is not defined in block "+block)
                     subindex += 1
             else:
                 index += 1
+    return linenum
 
 
 #Generate New Line
@@ -137,9 +148,14 @@ def get_index(param,line,linenum,file):
             if names_list[list_index]==param:
                 param_index = list_index
         values_list = re.split(' ',re.split('\'',values_line)[1])
-        _patern = re.compile(values_list[param_index]).search(values_line)
-        index.append(_patern.start()) #patern starting index
-        index.append(_patern.end()) #patern ending index
+        string = "'"
+        for i in range(0,param_index):
+            string += values_list[i]+" "
+        _start = re.compile(string).search(values_line)
+        string += values_list[param_index]
+        _end = re.compile(string).search(values_line)
+        index.append(_start.end()) #patern starting index
+        index.append(_end.end()) #patern ending index
         return index
     else:
         _param = ""
@@ -223,9 +239,11 @@ def main():
 
     #Find Parameter in input file
     param_line_num = find_line(_param,_file,blockmode)
-    param_line = lines[find_line(_param,_file,blockmode)]
-    filename_line_num = find_line("file_base",_file)
-    filename_line = lines[find_line("file_base",_file)]
+    param_line = []
+    for i in range(0,len(param_line_num)):
+        param_line.append(lines[param_line_num[i]])
+    filename_line_num = find_line("file_base",_file,False,True)[0]
+    filename_line = lines[filename_line_num]
 
     #Loop over values, generate input files and run them
     for runid in range(0,len(values)):
@@ -233,16 +251,17 @@ def main():
         os.system("mkdir "+_newfile)
         fcsv.write(_newfile+"/"+_newfile+".csv\n")
         f = open(_newfile+"/"+_newfile+".i",'w')
-        lines[param_line_num] = newline(values,runid,_param_name,param_line,param_line_num,_file)
+        for i in range(0,len(param_line_num)):
+            lines[param_line_num[i]] = newline(values,runid,_param_name,param_line[i],param_line_num[i],_file)
         lines[filename_line_num] = newline(values,runid,_param_name,filename_line,filename_line_num,_file)
         for line in lines:
             f.write(line)
         f.close()
-        os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+        # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
     fcsv.close()
 
 #======================#
 #RUN THIS PYTHON SCRIPT
 main()
-os.system("python ~/projects/beaver/scripts/plot.py csvfiles log-0 log-1 log-3 -f -s")
+# os.system("python ~/projects/beaver/scripts/plot.py csvfiles log-0 log-1 log-3 -f -s")
 #======================#

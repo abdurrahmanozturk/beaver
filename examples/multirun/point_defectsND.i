@@ -221,8 +221,8 @@
  [./D]
    type = GenericConstantMaterial # diffusion coeficients
    prop_values = '1.0 1.0' # cm2/sec      regular case
-   block = '0'
    prop_names = 'Di Dv'
+   block = '0'
  [../]
  [./Kiv]
    type = DerivativeParsedMaterial
@@ -248,7 +248,7 @@
  #   args = xs
  #   function = 'kvs:=1;-kvs*xs' # 1/s      regular case
  # [../]
- # [./k_values]
+ # [./k_value]
  #   type = GenericConstantMaterial
  #   prop_names = 'k ki kv kiv'
  #   prop_values = '1e-2 38490 36580 7.49e10'
@@ -346,17 +346,17 @@
   nl_rel_tol = 1e-9 # Absolute tolerance for nonlienar solves
   scheme = bdf2   #try crank-nicholson
   start_time = 0
-  # num_steps = 4294967295
-  # steady_state_detection = true
-  end_time = 100
-  # dt = 1
-  [./TimeStepper]
-    type = IterationAdaptiveDT
-    dt = 1e-8 #s
-    optimal_iterations = 5
-    growth_factor = 1.2
-    cutback_factor = 0.8
-  [../]
+  num_steps = 4294967295
+  steady_state_detection = true
+  # end_time = 30000
+  dt = 1
+  # [./TimeStepper]
+  #   type = IterationAdaptiveDT
+  #   dt = 1e-8 #s
+  #   optimal_iterations = 5
+  #   growth_factor = 1.2
+  #   cutback_factor = 0.8
+  # [../]
   # postprocessor = cv
   # skip = 25
   # criteria = 0.01

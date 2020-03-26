@@ -63,12 +63,10 @@ def find_line(param,file,blockmode=False,filename=False):
                     for subline in lines[index:]:
                         if re.search("_values",subline):
                             linenum.append(index+subindex)
-                            # return index+subindex
                         if re.compile(re.escape("[../]")).search(subline):
                             for back in range(index,0,-1):
                                 if re.search("_values",lines[back]):
                                     linenum.append(back)
-                                    # return back
                                 if re.compile(re.escape("[./")).search(lines[back]):
                                     sys.exit("Error! : "+name+" value is not defined input file.")
                         subindex += 1
@@ -85,10 +83,10 @@ def find_line(param,file,blockmode=False,filename=False):
                 for subline in lines[index:]:
                     if re.compile(name).search(subline):
                         if re.search("_names",subline):
-                            prop_names_index = index+subindex
-                            for prop_values_index in range(index,len(lines)):
-                                if re.search("prop_values",lines[prop_values_index]):
-                                    linenum.append(prop_values_index)
+                            _names_index = index+subindex
+                            for _values_index in range(index,len(lines)):
+                                if re.search("_values",lines[_values_index]):
+                                    linenum.append(_values_index)
                                     return linenum
                         linenum.append(index+subindex)
                         return linenum
@@ -130,19 +128,22 @@ def get_index(param,line,linenum,file):
         lines= f.readlines()
         f.close()
         values_line = line
+        names_linenum = 0
         subindex = 0
         for subline in lines[linenum:]:
             if re.search("_names",subline):
-                names_line = subline
+                names_line = linenum+subindex
                 break
             if re.compile(re.escape("[../]")).search(subline):
                 for back in range(linenum,0,-1):
                     if re.search("_names",lines[back]):
-                        names_line = lines[back]
+                        names_linenum = back
                         break
                     if re.compile(re.escape("[./")).search(lines[back]):
                         sys.exit("Error! : "+name+" value is not defined input file.")
+                break
             subindex += 1
+        names_line = lines[names_linenum]
         names_list = re.split(' ',re.split('\'',names_line)[1])
         for list_index in range(0,len(names_list)):
             if names_list[list_index]==param:
@@ -164,9 +165,6 @@ def get_index(param,line,linenum,file):
         if re.search("function",line):
             _param = param+':='   #improve this
             ending= ";"
-        # elif re.search("prop_values",line):
-        #     _param = param+':='   #improve this
-        #     ending= ";"
             _patern = re.compile(_param).search(line)
             index.append(_patern.end()) #patern starting index
             for i in range(_patern.end(),len(line)):

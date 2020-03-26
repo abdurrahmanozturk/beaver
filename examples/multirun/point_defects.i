@@ -55,12 +55,12 @@
   [./defect_generation_i]
     type = BodyForce  #maskedbodyforce
     variable = ci
-    value = 1e-2   #dpa/s   regular case, 1e-7 : recdom case,
+    value = 1e-2   #dpa/s   regular case, 1e-7 : recdom case, parametric study
   [../]
   [./defect_generation_v]
     type = BodyForce
     variable = cv
-    value = 1e-2   #dpa/s   regular case, 1e-7 : recdom case,
+    value = 1e-2   #dpa/s   regular case, 1e-7 : recdom case, parametric study
   [../]
   [./recombination_i]
     type = MatReaction
@@ -135,13 +135,13 @@
     type = ParsedAux
     variable = xi
     args = ci
-    function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'
+    function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'  #parametric study
   [../]
   [./xv]
     type = ParsedAux
     variable = xv
     args = cv
-    function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'
+    function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'  #parametric study
   [../]
   # [./cs]
   #   type = ParsedAux
@@ -224,12 +224,6 @@
    prop_values = '1.35e-7 9.4e-13' # cm2/sec     regular case
    block = '0'
  [../]
- # [./D]
- #   type = GenericConstantMaterial # diffusion coeficients
- #   prop_names = 'Di Dv'
- #   prop_values = '5e-14 1.3e-28'   # cm2/sec      recombination dominated case
- #   block = '0'
- # [../]
  [./Kiv]
    type = DerivativeParsedMaterial
    f_name = Kiv
@@ -240,23 +234,21 @@
    type = DerivativeParsedMaterial
    f_name = Kvi
    args = ci
-   function = 'kiv:=7.49e10;-kiv*cv'  # 1/s regular case, 1.7e4 : recdom case, parametric study
+   function = 'kiv:=7.49e10;-kiv*ci'  # 1/s regular case, 1.7e4 : recdom case, parametric study
  [../]
  [./Kis]
    type = DerivativeParsedMaterial
    f_name = Kis
    args = cs
    function = 'Di:=1.35e-7;ki:=38490;-Di*ki*ki/cs' # 1/s      regular case
-   # function = 'Di:=5e-14;ki:=38490;Di*ki*ki*cs' # 1/s      recombination dominated case
  [../]
  [./Kvs]
    type = DerivativeParsedMaterial
    f_name = Kvs
    args = cs
    function = 'Dv:=9.4e-13;kv:=36580;-Dv*kv*kv/cs' # 1/s      regular case
-   # function = 'Dv:=1.3e-28;kv:=36580;Dv*Dv*kv*cs' # 1/s      recombination dominated case
  [../]
- # [./k_values]
+ # [./k_value]
  #   type = GenericConstantMaterial
  #   prop_names = 'k ki kv kiv'
  #   prop_values = '1e-2 38490 36580 7.49e10'
@@ -354,9 +346,9 @@
   nl_rel_tol = 1e-9 # Absolute tolerance for nonlienar solves
   scheme = bdf2   #try crank-nicholson
   start_time = 0
-  num_steps = 4#294967295
+  num_steps = 4294967295
   steady_state_detection = true
-  # end_time = 1200
+  end_time = 1200
   # dt = 1e-8
   [./TimeStepper]
     type = IterationAdaptiveDT
@@ -378,10 +370,9 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defects_constant_dt
+  file_base = point_defects
   [./exodus]
     type = Exodus
-    # file_base = point_defects
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true

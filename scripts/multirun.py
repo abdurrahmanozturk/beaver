@@ -205,31 +205,28 @@ def main():
         n = int(ck.split('x')[0])
     else:
         n = int((upper-lower)/float(ck))
-
     #Limit max number of simulations to avoid overloading memory
     n_max = 10
     if n > n_max:
         n = n_max
+    elif n==0:
+        sys.exit("Error! : Interval "+ck+" is larger than range.")
 
     #Calculate values based on given range
     values = []
-    log_mode = False
-    if math.log((upper-lower)/n) > 3:
-        log_mode = True
-        incre = (math.log(upper,10)-math.log(lower,10))/n
-    else:
-        incre = (upper-lower)/n
     for i in range(0,n+1):
-        if log_mode == True:
+        if (math.log(upper,10)-math.log(lower,10)) > 3:
+            incre = (math.log(upper,10)-math.log(lower,10))/n
             _val = 10**(math.log(lower,10)+i*incre)
             _dec = len(str((math.log(upper,10)-math.log(lower,10))/incre))
         else:
+            incre = (upper-lower)/n
             _val = lower + i*incre
             _dec = len(str((upper-lower)/incre))
         values.append("%.*e"%(_dec,_val))
 
     #Open files
-    csvfile = "csvfiles"
+    csvfile = _param_name+"_csvfiles"
     fcsv = open(csvfile,'w')
     f = open(_file,'r')
 

@@ -42,3 +42,5 @@ Physical Curve(4) = {4};
 Physical Curve(5) = {5, 6};
 //+
 Physical Surface(0) = {1};
+//+
+Transfinite Curve {6, 5} = 50 Using Progression 1;

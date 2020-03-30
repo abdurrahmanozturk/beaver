@@ -74,18 +74,18 @@
     args = xi    #coupled in materials block
     mob_name = Kvi
   [../]
-  # [./sink_reaction_i]
-  #   type = MatReaction
-  #   variable = xi
-  #   mob_name = Kis
-  #   args = xs     #coupled on materials block
-  # [../]
-  # [./sink_reaction_v]
-  #   type = MatReaction
-  #   variable = xv
-  #   mob_name = Kvs
-  #   args = xs    #coupled in materials block
-  # [../]
+  [./sink_reaction_i]
+    type = MatReaction
+    variable = xi
+    mob_name = Kis
+    args = xs     #coupled on materials block
+  [../]
+  [./sink_reaction_v]
+    type = MatReaction
+    variable = xv
+    mob_name = Kvs
+    args = xs    #coupled in materials block
+  [../]
   [./ci_diff]
     type = MatDiffusion
     variable = xi
@@ -220,34 +220,34 @@
 [Materials]
  [./D]
    type = GenericConstantMaterial # diffusion coeficients
-   prop_values = '1.0 1.0' # cm2/sec      regular case
    prop_names = 'Di Dv'
+   prop_values = '1 1e-3' # cm2/sec      regular case
    block = '0'
  [../]
  [./Kiv]
    type = DerivativeParsedMaterial
    f_name = Kiv
-   args = cv
-   function = 'kiv:=1;-kiv*cv'  # 1/s regular case, parametric study
+   args = xv
+   function = 'kiv:=1e2;-kiv*xv'  # 1/s regular case, parametric study
  [../]
  [./Kvi]
    type = DerivativeParsedMaterial
    f_name = Kvi
-   args = ci
-   function = 'kiv:=1;-kiv*ci'  # 1/s regular case, parametric study
+   args = xi
+   function = 'kiv:=1e2;-kiv*xi'  # 1/s regular case, parametric study
  [../]
- # [./Kis]
- #   type = DerivativeParsedMaterial
- #   f_name = Kis
- #   args = xs
- #   function = 'kis:=1;-kis*xs' # 1/s      regular case
- # [../]
- # [./Kvs]
- #   type = DerivativeParsedMaterial
- #   f_name = Kvs
- #   args = xs
- #   function = 'kvs:=1;-kvs*xs' # 1/s      regular case
- # [../]
+ [./Kis]
+   type = DerivativeParsedMaterial
+   f_name = Kis
+   args = xs
+   function = 'kis:=1e-4;-kis*xs' # 1/s      regular case
+ [../]
+ [./Kvs]
+   type = DerivativeParsedMaterial
+   f_name = Kvs
+   args = xs
+   function = 'kvs:=1e-4;-kvs*xs' # 1/s      regular case
+ [../]
  # [./k_value]
  #   type = GenericConstantMaterial
  #   prop_names = 'k ki kv kiv'
@@ -346,17 +346,17 @@
   nl_rel_tol = 1e-9 # Absolute tolerance for nonlienar solves
   scheme = bdf2   #try crank-nicholson
   start_time = 0
-  num_steps = 4294967295
+  # num_steps = 4294967295
   steady_state_detection = true
-  # end_time = 30000
-  dt = 1
-  # [./TimeStepper]
-  #   type = IterationAdaptiveDT
-  #   dt = 1e-8 #s
-  #   optimal_iterations = 5
-  #   growth_factor = 1.2
-  #   cutback_factor = 0.8
-  # [../]
+  end_time = 3000
+  # dt = 1
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 1 #s
+    # optimal_iterations = 6
+    growth_factor = 1.2
+    cutback_factor = 0.8
+  [../]
   # postprocessor = cv
   # skip = 25
   # criteria = 0.01

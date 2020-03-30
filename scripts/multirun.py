@@ -210,18 +210,21 @@ def main():
     elif n==0:
         sys.exit("Error! : Interval "+ck+" is larger than range.")
 
-    #Calculate values based on given range
     values = []
-    for i in range(0,n+1):
-        if (math.log(upper,10)-math.log(lower,10)) > 3:
-            incre = (math.log(upper,10)-math.log(lower,10))/n
-            _val = 10**(math.log(lower,10)+i*incre)
-            _dec = len(str((math.log(upper,10)-math.log(lower,10))/incre))
-        else:
-            incre = (upper-lower)/n
-            _val = lower + i*incre
-            _dec = len(str((upper-lower)/incre))
-        values.append("%.*e"%(_dec,_val))
+    if lower==upper: #Single Run
+        values.append(lower)
+    else:
+        for i in range(0,n):
+            # if (math.log(upper,10)-math.log(lower,10)) > 2:
+            if math.log(upper/lower,10) > 1.9:
+                incre = (math.log(upper,10)-math.log(lower,10))/(n-1)
+                _val = 10**(math.log(lower,10)+i*incre)
+                _dec = len(str((math.log(upper,10)-math.log(lower,10))/incre))
+            else:
+                incre = (upper-lower)/(n-1)
+                _val = lower + i*incre
+                _dec = len(str((upper-lower)/incre))
+            values.append("%.*e"%(_dec,_val))
 
     #Open files
     csvfile = _param_name+"_csvfiles"
@@ -252,11 +255,11 @@ def main():
         for line in lines:
             f.write(line)
         f.close()
-        # os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+        os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
     fcsv.close()
 
 #======================#
 #RUN THIS PYTHON SCRIPT
 main()
-# os.system("python ~/projects/beaver/scripts/plot.py csvfiles log-0 log-1 log-3 -f -s")
+# os.system("python ~/projects/beaver/scripts/plot.py "+csvfile+" log-0 log-1 log-3 -f -s")
 #======================#

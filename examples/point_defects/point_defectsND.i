@@ -56,13 +56,13 @@
     type = BodyForce  #maskedbodyforce
     variable = xi
     # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case
+    value = 1e-6   #dpa/s   regular case
   [../]
   [./defect_generation_v]
     type = BodyForce
     variable = xv
     # value = 1e-7   #dpa/s   recombination dominated case
-    value = 1e-2   #dpa/s   regular case
+    value = 1e-6   #dpa/s   regular case
   [../]
   [./recombination_i]
     type = MatReaction
@@ -223,32 +223,32 @@
  [./D]
    type = GenericConstantMaterial # diffusion coeficients
    prop_names = 'Di Dv'
-   prop_values = '1.0 1.0' # cm2/sec      regular case
+   prop_values = '1e-3 1.0' # cm2/sec      regular case
    block = '0'
  [../]
  [./Kiv]
    type = DerivativeParsedMaterial
    f_name = Kiv
-   args = cv
-   function = 'kiv:=1;-kiv*cv'  # 1/s regular case
+   args = xv
+   function = 'kiv:=1e-9;-kiv*xv'  # 1/s regular case
  [../]
  [./Kvi]
    type = DerivativeParsedMaterial
    f_name = Kvi
-   args = ci
-   function = 'kiv:=1;-kiv*ci'  # 1/s regular case
+   args = xi
+   function = 'kiv:=1e-9;-kiv*xi'  # 1/s regular case
  [../]
  [./Kis]
    type = DerivativeParsedMaterial
    f_name = Kis
    args = xs
-   function = 'kis:=1;-kis*xs' # 1/s      regular case
+   function = 'kis:=1e-2;-kis*xs' # 1/s      regular case
  [../]
  [./Kvs]
    type = DerivativeParsedMaterial
    f_name = Kvs
    args = xs
-   function = 'kvs:=1;-kvs*xs' # 1/s      regular case
+   function = 'kvs:=1e-5;-kvs*xs' # 1/s      regular case
  [../]
  # [./k_values]
  #   type = GenericConstantMaterial
@@ -350,15 +350,15 @@
   start_time = 0
   # num_steps = 4294967295
   # steady_state_detection = true
-  end_time = 30000
-  dt = 1
-  # [./TimeStepper]
-  #   type = IterationAdaptiveDT
-  #   dt = 1e-8 #s
-  #   optimal_iterations = 5
-  #   growth_factor = 1.2
-  #   cutback_factor = 0.8
-  # [../]
+  # end_time = 30000
+  # dt = 1
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 1 #s
+    optimal_iterations = 5
+    growth_factor = 1.2
+    cutback_factor = 0.8
+  [../]
   # postprocessor = cv
   # skip = 25
   # criteria = 0.01

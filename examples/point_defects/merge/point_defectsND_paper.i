@@ -131,7 +131,7 @@
     D_name = Di
   [../]
   [./xi_sink]
-    type = MaskedBodyForce
+    type = MatReaction
     variable = xi
     args = 'mu B rho_i rho_v'     #coupled on materials block
     mob_name = sink_i
@@ -167,7 +167,7 @@
     D_name = Dv
   [../]
   [./xv_sink]
-    type = MaskedBodyForce
+    type = MatReaction
     variable = xv
     args = 'rho_i rho_v'     #coupled on materials block
     mob_name = sink_v
@@ -428,7 +428,7 @@
     type = ParsedMaterial
     f_name = sink_i
     args = 'mu B rho_i rho_v'
-    function = '-mu*(1+B)*(1+rho_i+rho_v)'
+    function = '-mu*((1+B)*(1+rho_i+rho_v))'
   [../]
   [./sink_v]
     type = ParsedMaterial
@@ -454,7 +454,7 @@
   #   type = ParsedMaterial
   #   f_name = sink_i_rho_c
   #   args = 'mu rho_c'
-  #   function = '-mu*rho_c)'
+  #   function = '-mu*rho_c'
   # [../]
   # [./sink_v_rho_c]
   #   type = ParsedMaterial

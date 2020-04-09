@@ -373,13 +373,13 @@
     function = 'P*(1-epsi)'
   [../]
   [./source_v]
-    type = ParsedMaterial
+    type = DerivativeParsedMaterial
     f_name = source_v
     args = 'P epsv xvL rho_i rho_v'
     function = 'P*(1-epsv)+xvL*(rho_i+rho_v)'
   [../]
   [./rho_i_source]
-    type = ParsedMaterial
+    type = DerivativeParsedMaterial
     f_name = source_rho_i
     args = 'tau_i epsi P mu B xi xv xvL'
     function = '(epsi*P+mu*(1+B)*xi-(xv-xvL))/tau_i'
@@ -425,13 +425,13 @@
     function = '-((mu*(1+B)*xi+xvL-xv)/tau_v)'
   [../]
   [./sink_i]
-    type = ParsedMaterial
+    type = DerivativeParsedMaterial
     f_name = sink_i
     args = 'mu B rho_i rho_v'
     function = '-mu*((1+B)*(1+rho_i+rho_v))'
   [../]
   [./sink_v]
-    type = ParsedMaterial
+    type = DerivativeParsedMaterial
     f_name = sink_v
     args = 'rho_i rho_v'
     function = '-(1+rho_i+rho_v)'
@@ -439,7 +439,7 @@
 
   ## void sink density contribution
   # [./source_v_rho_c]
-  #   type = ParsedMaterial
+  #   type = DerivativeParsedMaterial
   #   f_name = source_v_rho_c
   #   args = 'xvL rho_c'
   #   function = 'xvL*rho_c'
@@ -451,13 +451,13 @@
   #   function = '-((xv-xvL-mu*xi)/tau_c)'
   # [../]
   # [./sink_i_rho_c]
-  #   type = ParsedMaterial
+  #   type = DerivativeParsedMaterial
   #   f_name = sink_i_rho_c
   #   args = 'mu rho_c'
   #   function = '-mu*rho_c'
   # [../]
   # [./sink_v_rho_c]
-  #   type = ParsedMaterial
+  #   type = DerivativeParsedMaterial
   #   f_name = sink_v_rho_c
   #   args = rho_c
   #   function = '-rho_c'

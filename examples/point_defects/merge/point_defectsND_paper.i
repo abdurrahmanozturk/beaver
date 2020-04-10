@@ -212,12 +212,19 @@
   [../]
 
   #void sink density
-  # [./rho_c_reaction]
-  #   type = MatReaction
-  #   variable = rho_c
-  #   args = 'mu xi xv xvL tau_c'      # coupled on materials block
-  #   mob_name = reaction_rho_c
-  # [../]
+  # vacancy loop density
+  [./tau_c_rho_c_drho_c_dt]
+    type = SusceptibilityTimeDerivative
+    variable = rho_c
+    args = rho_c
+    f_name = susceptibility_rho_c
+  [../]
+  [./rho_v_source]
+    type = MaskedBodyForce
+    variable = rho_v
+    args = 'tau_v epsv P'      # coupled on materials block
+    mask = source_rho_v  # P*epsilon_v
+  [../]
 
 #
 #   ################# eta0 ####################
@@ -365,33 +372,102 @@
 
 [Materials]
 
-  #source
+  #interstitial Concentration diff equation
   [./source_i]
     type = ParsedMaterial
     f_name = source_i
     args = 'P epsi'
     function = 'P*(1-epsi)'
   [../]
+  [./reaction_iv]
+    type = DerivativeParsedMaterial
+    f_name = reaction_iv
+    args = xv
+    function = '-xv'
+  [../]
+  [./sink_i]
+    type = DerivativeParsedMaterial
+    f_name = sink_i
+    args = 'mu B rho_i rho_v'
+    function = '-mu*((1+B)*(1+rho_i+rho_v))'
+  [../]
+  # [./sink_i_rho_c]
+  #   type = DerivativeParsedMaterial
+  #   f_name = sink_i_rho_c
+  #   args = 'mu rho_c'
+  #   function = '-mu*rho_c'
+  # [../]
+
+  #vacancy Concentration diff equation
   [./source_v]
     type = DerivativeParsedMaterial
     f_name = source_v
     args = 'P epsv xvL rho_i rho_v'
     function = 'P*(1-epsv)+xvL*(rho_i+rho_v)'
   [../]
+  # [./source_v_rho_c]
+  #   type = DerivativeParsedMaterial
+  #   f_name = source_v_rho_c
+  #   args = 'xvL rho_c'
+  #   function = 'xvL*rho_c'
+  # [../]
+  [./reaction_vi]
+    type = DerivativeParsedMaterial
+    f_name = reaction_vi
+    args = xi
+    function = '-xi'
+  [../]
+  [./sink_v]
+    type = DerivativeParsedMaterial
+    f_name = sink_v
+    args = 'rho_i rho_v'
+    function = '-(1+rho_i+rho_v)'
+  [../]
+  # [./sink_v_rho_c]
+  #   type = DerivativeParsedMaterial
+  #   f_name = sink_v_rho_c
+  #   args = rho_c
+  #   function = '-rho_c'
+  # [../]
+
+
+  #interstitial loop density diff equation
   [./rho_i_source]
     type = DerivativeParsedMaterial
     f_name = source_rho_i
     args = 'tau_i epsi P mu B xi xv xvL'
     function = '(epsi*P+mu*(1+B)*xi-(xv-xvL))/tau_i'
   [../]
+
+  #vacancy loop density diff equation
   [./rho_v_source]
     type = ParsedMaterial
     f_name = source_rho_v
     args = 'tau_v epsv P'
     function = '(epsv*P)/tau_v'
   [../]
+  [./reaction_rho_v]
+    type = DerivativeParsedMaterial
+    f_name = reaction_rho_v
+    args = 'mu B xi xv xvL tau_v'
+    function = '-((mu*(1+B)*xi+xvL-xv)/tau_v)'
+  [../]
 
-  #diffusion coefficient
+  ##void sink density diff equation
+  # [./susceptibility_rho_c]
+  #   type = DerivativeParsedMaterial
+  #   f_name = susceptibility_rho_c
+  #   args = rho_c
+  #   function = 'rho_c'
+  # [../]
+  # [./rho_c_source]
+  #   type = DerivativeParsedMaterial
+  #   f_name = source_rho_c
+  #   args = 'xv xvL mu xi tau_c'
+  #   function = '(xv-xvL-mu*xi)/tau_c'
+  # [../]
+
+  #diffusion coefficients
   [./Di_bar]
     type = ParsedMaterial
     f_name = Di
@@ -404,65 +480,6 @@
     args = Dv_bar
     function = 'Dv_bar'
   [../]
-
-  #reaction rates
-  [./reaction_iv]
-    type = DerivativeParsedMaterial
-    f_name = reaction_iv
-    args = xv
-    function = '-xv'
-  [../]
-  [./reaction_vi]
-    type = DerivativeParsedMaterial
-    f_name = reaction_vi
-    args = xi
-    function = '-xi'
-  [../]
-  [./reaction_rho_v]
-    type = DerivativeParsedMaterial
-    f_name = reaction_rho_v
-    args = 'mu B xi xv xvL tau_v'
-    function = '-((mu*(1+B)*xi+xvL-xv)/tau_v)'
-  [../]
-  [./sink_i]
-    type = DerivativeParsedMaterial
-    f_name = sink_i
-    args = 'mu B rho_i rho_v'
-    function = '-mu*((1+B)*(1+rho_i+rho_v))'
-  [../]
-  [./sink_v]
-    type = DerivativeParsedMaterial
-    f_name = sink_v
-    args = 'rho_i rho_v'
-    function = '-(1+rho_i+rho_v)'
-  [../]
-
-  ## void sink density contribution
-  # [./source_v_rho_c]
-  #   type = DerivativeParsedMaterial
-  #   f_name = source_v_rho_c
-  #   args = 'xvL rho_c'
-  #   function = 'xvL*rho_c'
-  # [../]
-  # [./reaction_rho_c]
-  #   type = DerivativeParsedMaterial
-  #   f_name = reaction_rho_c
-  #   args = 'mu xi xv xvL tau_c'
-  #   function = '-((xv-xvL-mu*xi)/tau_c)'
-  # [../]
-  # [./sink_i_rho_c]
-  #   type = DerivativeParsedMaterial
-  #   f_name = sink_i_rho_c
-  #   args = 'mu rho_c'
-  #   function = '-mu*rho_c'
-  # [../]
-  # [./sink_v_rho_c]
-  #   type = DerivativeParsedMaterial
-  #   f_name = sink_v_rho_c
-  #   args = rho_c
-  #   function = '-rho_c'
-  # [../]
-
 
  # [./FreeEng]
  #   type = DerivativeParsedMaterial

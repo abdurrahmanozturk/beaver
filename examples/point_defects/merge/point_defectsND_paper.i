@@ -152,7 +152,7 @@
   [./xv_defect_generation]
     type = MaskedBodyForce
     variable = xv
-    args = 'P epsv'      # coupled on materials block
+    args = 'P epsv xvL rho_i rho_v'      # coupled on materials block
     mask = source_v  # P*(1-epsilon_v)
   [../]
   [./xv_recombination]
@@ -190,7 +190,7 @@
     type = MaskedBodyForce
     variable = rho_i
     args = 'tau_i epsi P mu B xi xv xvL'      # coupled on materials block
-    mask = source_rho_i         # P*epsilon_i
+    mask = source_rho_i
   [../]
 
   # vacancy loop density
@@ -202,7 +202,7 @@
     type = MaskedBodyForce
     variable = rho_v
     args = 'tau_v epsv P'      # coupled on materials block
-    mask = source_rho_v  # P*epsilon_v
+    mask = source_rho_v
   [../]
   [./rho_v_reaction]
     type = MatReaction
@@ -213,18 +213,18 @@
 
   #void sink density
   # vacancy loop density
-  [./tau_c_rho_c_drho_c_dt]
-    type = SusceptibilityTimeDerivative
-    variable = rho_c
-    args = rho_c
-    f_name = susceptibility_rho_c
-  [../]
-  [./rho_v_source]
-    type = MaskedBodyForce
-    variable = rho_v
-    args = 'tau_v epsv P'      # coupled on materials block
-    mask = source_rho_v  # P*epsilon_v
-  [../]
+  # [./tau_c_rho_c_drho_c_dt]
+  #   type = SusceptibilityTimeDerivative
+  #   variable = rho_c
+  #   args = rho_c
+  #   f_name = susceptibility_rho_c
+  # [../]
+  # [./rho_c_source]
+  #   type = MaskedBodyForce
+  #   variable = rho_c
+  #   args = 'xv xvL xi tau_c'      # coupled on materials block
+  #   mask = source_rho_c
+  # [../]
 
 #
 #   ################# eta0 ####################
@@ -610,7 +610,7 @@
   [./exodus]
     type = Exodus
     output_material_properties = 1
-    output_postprocessors = true
+    execute_postprocessors_on = 'initial timestep_end'
     interval = 10000
   [../]
   csv = true

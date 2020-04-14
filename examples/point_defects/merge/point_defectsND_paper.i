@@ -77,7 +77,7 @@
     initial_condition = 0.1   #for nickel
   [../]
   [./xvL]   # Thermallyemitted vacancies from network dislocation.  xvN << xvv ~= xxi ~= xvc = xvL
-    initial_condition = 0
+    initial_condition = 3.08958e-22      # can be assumed to be equal to equilibrium vacancy concentration or zero
   [../]
 #   # for visuallizing all grains
 #   [./bnds]

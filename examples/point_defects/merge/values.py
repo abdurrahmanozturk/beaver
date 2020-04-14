@@ -11,8 +11,10 @@ Qv = 1.3 #ev
 Dv0 = 6e-5 #m2/s
 Di = Di0*np.exp(-Qi/(kB*T))  #m2/s
 Dv = Dv0*np.exp(-Qv/(kB*T))  #m2/s
+Cv_e = np.exp(-1.6/(kB*T))
 Nickel= {'Di': Di,
          'Dv': Dv,
+         'Cv_e': Cv_e,
          'b': 2.5e-10,
          'Atomic Volume': 1.206e-29,
          'B': 0.1,
@@ -45,6 +47,7 @@ mu = data['Di']/data['Dv']
 tau_i = data['b']*alpha*data['rho_n']/2*np.pi*data['N']*data['Dv']
 tau_v = data['b']*data['rv_0']*data['rho_n']*gamma
 # tau_c = (alpha*data['rho_n']*data['rho_n'])/((4*np.pi*data['Nc'])*(4*np.pi*data['Nc'])*data['Dv'])
+xvL = gamma*Cv_e
 print(data)
 print("\nalpha\t= ",alpha)
 print("gamma\t= ",gamma)
@@ -58,3 +61,4 @@ print("tau_i\t= ", tau_i)
 print("tau_v\t= ", tau_v)
 # print("tau_c\t= ", tau_c)
 print("epsilon\t= ", data['epsilon'])
+print("xvL\t= ", xvL)

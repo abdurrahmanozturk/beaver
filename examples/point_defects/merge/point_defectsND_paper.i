@@ -584,12 +584,12 @@
   scheme = bdf2   #try crank-nicholson
   start_time = 0
   # num_steps = 4294967295
-  steady_state_detection = true
+  # steady_state_detection = true
   end_time = 1000
   # dt = 1
   [./TimeStepper]
     type = IterationAdaptiveDT
-    dt = 1 #s
+    dt = 1e-8 #s
     optimal_iterations = 5
     growth_factor = 1.2
     cutback_factor = 0.8
@@ -606,7 +606,7 @@
 
 [Outputs]
   # exodus = true
-  file_base = point_defects_paper
+  file_base = point_defectsND_paper
   [./exodus]
     type = Exodus
     output_material_properties = 1

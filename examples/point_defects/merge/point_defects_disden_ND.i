@@ -146,13 +146,13 @@
     type = MaskedBodyForce
     variable = xi
     args = 'gamma w K epsi'      # coupled on materials block
-    mask = source_i  # gamma*w*K*(1-epsilon_i)
+    mask = source_i
   [../]
   [./xi_recombination]
     type = MatReaction
     variable = xi
     args = 'w alpha gamma xv'   # coupled on materials block
-    mob_name = reaction_iv     # xi*xv
+    mob_name = reaction_iv
   [../]
   [./xi_diffusion]
     type = MatDiffusion
@@ -181,14 +181,14 @@
   [./xv_defect_generation]
     type = MaskedBodyForce
     variable = xv
-    args = 'gamma w K epsv'      # coupled on materials block
-    mask = source_v  # P*(1-epsilon_v)
+    args = 'gamma w K epsv Dv beta Zvx xvL xvN rho_n rho_v rho_i'      # coupled on materials block
+    mask = source_v
   [../]
   [./xv_recombination]
     type = MatReaction
     variable = xv
     args = 'w alpha gamma xi'            #coupled on materials block
-    mob_name = reaction_vi     # xi*xv
+    mob_name = reaction_vi
   [../]
   [./xv_diffusion]
     type = MatDiffusion
@@ -390,13 +390,13 @@
 []
 
 [BCs]
-  # [./Periodic]
-  #   [./All]
-  #     variable = 'eta0 eta1 eta2'
-  #     # edited to auto_direction = y
-  #     auto_direction = 'y'
-  #   [../]
-  # [../]
+  [./Periodic]
+    [./All]
+      variable = 'eta0 eta1 eta2'
+      # edited to auto_direction = y
+      auto_direction = 'y'
+    [../]
+  [../]
 []
 
 [Materials]

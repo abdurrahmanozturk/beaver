@@ -613,12 +613,11 @@
   scheme = bdf2   #try crank-nicholson
   start_time = 0
   # num_steps = 4294967295
-  # steady_state_detection = true
+  steady_state_detection = true
   end_time = 1000
-  # dt = 1
   [./TimeStepper]
     type = IterationAdaptiveDT
-    dt = 1e-8 #s
+    dt = 1 # tau = t/w {s}
     optimal_iterations = 5
     growth_factor = 1.2
     cutback_factor = 0.8

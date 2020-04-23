@@ -61,7 +61,7 @@
     initial_condition = 1.8751155e-12
   [../]
   [./K]     #Displacement damage rate  {dpa/s}
-    initial_condition = 0#1e-3
+    initial_condition = 1e-3
   [../]
   [./alpha] #recombination rate {1/s}
   initial_condition = 1e-9

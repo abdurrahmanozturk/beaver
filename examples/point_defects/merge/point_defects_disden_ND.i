@@ -48,64 +48,64 @@
   ##  x   = gamma*c
   ##  rho  = beta*disden
   ##  tau = w*t
-  [./l]      #length scale {m}
+  [./l]     #length scale {m}
     initial_condition = 1e-9
   [../]
-  [./w]      #time scale , w=l^2/Di  {s}
+  [./w]     #time scale , w=l^2/Di  {s}
     initial_condition = 5.4e-10
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
     initial_condition = 1.8537471e-9
   [../]
-  [./Dv]     #Vacancy  Diffusion Coefficient {m^2/s}
+  [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
     initial_condition = 1.8751155e-12
   [../]
-  [./K]      #Displacement damage rate  {dpa/s}
-    initial_condition = 1e-3
+  [./K]     #Displacement damage rate  {dpa/s}
+    initial_condition = 0#1e-3
   [../]
-  [./alpha]  #recombination rate {1/s}
+  [./alpha] #recombination rate {1/s}
   initial_condition = 1e-9
   [../]
-  [./beta]   #beta = l^2 {m^2}
+  [./beta]  #beta = l^2 {m^2}
     initial_condition = 1e-18
   [../]
-  [./gamma]  #gamma = alpha/(Di*l^2) {unitless}
+  [./gamma] #gamma = alpha/(Di*l^2) {unitless}
     initial_condition = 5.39448e-19
   [../]
-  [./B]      #Excess network bias  {unitless}
+  [./B]     #Excess network bias  {unitless}
     initial_condition = 0.1
   [../]
-  [./Zix]      #ZiI=ZiN=ZiV=1+B    {unitless}
+  [./Zix]   #ZiI=ZiN=ZiV=1+B    {unitless}
     initial_condition = 1.1
   [../]
-  [./Zvx]      #ZvI=ZvN=ZvV=ZvC=ZiC = 1  {unitless}
+  [./Zvx]   #ZvI=ZvN=ZvV=ZvC=ZiC = 1  {unitless}
     initial_condition = 1
   [../]
-  [./epsi]   #interstitial cascade collapse efficiency  {unitless}
+  [./epsi]  #interstitial cascade collapse efficiency  {unitless}
     initial_condition = 0
   [../]
-  [./epsv]   #cascade collapse efficiency   {unitless}
+  [./epsv]  #cascade collapse efficiency   {unitless}
     initial_condition = 0.1   #for nickel
   [../]
-  [./N]      # interstitial loop denisty  {1/m^3}
+  [./N]     #interstitial loop denisty  {1/m^3}
     initial_condition = 1e22   #for nickel
   [../]
-  [./Nc]     # void loop denisty   {1/m^3}
+  [./Nc]    #void loop denisty   {1/m^3}
     initial_condition = 0      #check this value for void!
   [../]
-  [./xvL]   # Thermallyemitted vacancies from interstitial,vacancy,void.  xvv ~= xvi ~= xvc = xvL
+  [./xvL]   #Thermallyemitted vacancies from interstitial,vacancy,void.  xvv ~= xvi ~= xvc = xvL
     initial_condition = 0#3.12525e-28   # xvL=gamma*Cv_e,  can be assumed to be equal to non-dimensionalized equilibrium vacancy concentration or zero
   [../]
-  [./xvN]   # Thermallyemitted vacancies from network dislocation.  xvN << xvL
+  [./xvN]   #Thermallyemitted vacancies from network dislocation.  xvN << xvL
     initial_condition = 0
   [../]
-  [./rho_n]   #non-dimensionalized network dislocation_denisty, rho_n=beta*ddn   {1/m^2}
+  [./rho_n] #non-dimensionalized network dislocation_denisty, rho_n=beta*ddn   {1/m^2}
     initial_condition = 1e14
   [../]
-  [./Rv]   #non-dimensionalized network dislocation_denisty, rho_n=beta*ddn   {1/m^2}
+  [./Rv]    #non-dimensionalized network dislocation_denisty, rho_n=beta*ddn   {1/m^2}
     initial_condition = 1.5e-9
   [../]
-  [./b]   #non-dimensionalized network dislocation_denisty, rho_n=beta*ddn   {1/m^2}
+  [./b]     #non-dimensionalized network dislocation_denisty, rho_n=beta*ddn   {1/m^2}
     initial_condition = 2.5e-10
   [../]
 #   # for visuallizing all grains

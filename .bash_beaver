@@ -41,3 +41,7 @@ makebeaver()
   cd $current
 }
 # -------------------------------------------------------------------------------------------------
+
+#LS_COLORS=$LS_COLORS:'di=1;93:' ; export LS_COLORS
+LS_COLORS=$LS_COLORS:'*.i=33:' ; export LS_COLORS
+LS_COLORS=$LS_COLORS:'*.e=1;33:' ; export LS_COLORS

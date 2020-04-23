@@ -94,7 +94,7 @@
     initial_condition = 0      #check this value for void!
   [../]
   [./xvL]   # Thermallyemitted vacancies from interstitial,vacancy,void.  xvv ~= xvi ~= xvc = xvL
-    initial_condition = 3.12525e-28   # xvL=gamma*Cv_e,  can be assumed to be equal to non-dimensionalized equilibrium vacancy concentration or zero
+    initial_condition = 0#3.12525e-28   # xvL=gamma*Cv_e,  can be assumed to be equal to non-dimensionalized equilibrium vacancy concentration or zero
   [../]
   [./xvN]   # Thermallyemitted vacancies from network dislocation.  xvN << xvL
     initial_condition = 0

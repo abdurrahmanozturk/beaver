@@ -392,9 +392,9 @@
 [BCs]
   [./Periodic]
     [./All]
-      variable = 'eta0 eta1 eta2'
-      # edited to auto_direction = y
-      auto_direction = 'y'
+      # variable = 'eta0 eta1 eta2'
+      # auto_direction = y
+      auto_direction = 'x y'
     [../]
   [../]
 []

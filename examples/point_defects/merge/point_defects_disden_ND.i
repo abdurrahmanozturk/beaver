@@ -49,7 +49,7 @@
   ##  rho  = beta*disden
   ##  tau = w*t
   [./l]     #length scale {m}
-    initial_condition = 1e-9
+    initial_condition = 1e-6
   [../]
   [./w]     #time scale , w=l^2/Di  {s}
     initial_condition = 5.4e-10
@@ -61,7 +61,7 @@
     initial_condition = 1.8751155e-12
   [../]
   [./K]     #Displacement damage rate  {dpa/s}
-    initial_condition = 0#1e-3
+    initial_condition = 1e-3
   [../]
   [./alpha] #recombination rate {1/s}
   initial_condition = 1e-9
@@ -617,7 +617,7 @@
   end_time = 1000
   [./TimeStepper]
     type = IterationAdaptiveDT
-    dt = 1 # tau = t/w {s}
+    dt = 1e-6 # tau = t/w {s}
     optimal_iterations = 5
     growth_factor = 1.2
     cutback_factor = 0.8

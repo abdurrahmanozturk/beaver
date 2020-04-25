@@ -2,7 +2,10 @@
 #--------------------------------------------------------------------------------------------------------
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
-# Notes : Equations are non-dimensionalized
+# 5.1.2 Case 2 : Low Temperature and Intermediate Sink Density
+# Notes : 1- With increasing sink density, recombination is shrunk at the expense of annihilation at sinks
+#         2- K0*Kiv = (KisCs)^2
+#--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -23,10 +26,10 @@
   initial_condition = 1e2
   [../]
   [./Kis]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-5
+  initial_condition = 1e-4
   [../]
   [./Kvs]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-8
+  initial_condition = 1e-7
   [../]
   [./ci]
   [../]
@@ -328,7 +331,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case1_lowtemp_lowsink
+  file_base = Case2_lowtemp_intermediatesink
   [./exodus]
     type = Exodus
     # file_base = point_defects

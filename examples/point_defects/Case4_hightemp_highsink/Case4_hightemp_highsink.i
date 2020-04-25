@@ -2,31 +2,33 @@
 #--------------------------------------------------------------------------------------------------------
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
-# Notes : Equations are non-dimensionalized
+# 5.1.4 Case 4 : High Temperature and high sink density
+# Note : 1- Recombination is small and does not contribute much
+#--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
   [./xs]  #Uniform sink concentration
-  initial_condition = 1
+    initial_condition = 1
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-15
+    initial_condition = 1e-15
   [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-15
+    initial_condition = 1e-15
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-6
+    initial_condition = 1e-6
   [../]
   [./Kiv]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e2
+    initial_condition = 1e-9
   [../]
   [./Kis]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-5
+    initial_condition = 1e-2
   [../]
   [./Kvs]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-8
+    initial_condition = 1e-5
   [../]
   [./ci]
   [../]
@@ -328,7 +330,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case1_lowtemp_lowsink
+  file_base = Case4_hightemp_highsink
   [./exodus]
     type = Exodus
     # file_base = point_defects

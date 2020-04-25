@@ -105,8 +105,7 @@
     variable = ci
     value = 1e-6
     mask = 1
-  [../]
-
+[../]
 []
 
 [Materials]

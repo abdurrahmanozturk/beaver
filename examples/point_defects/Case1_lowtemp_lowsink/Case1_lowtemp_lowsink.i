@@ -2,7 +2,10 @@
 #--------------------------------------------------------------------------------------------------------
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
-# Notes : Equations are non-dimensionalized
+# 5.1.1 Case 1 : Low Temperature and Low Sink Density
+# Notes : 1- Ci~Cv  -->  Ci = Cv = C
+#         2- Sink density is low, does not affect solution much
+#--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------

@@ -2,7 +2,12 @@
 #--------------------------------------------------------------------------------------------------------
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
-# Notes : Equations are non-dimensionalized
+# 5.1.3 Case 3 : Low Temperature and High Sink Density
+# Notes : 1- The main effect of a high sink density is that interstitials find the sinks before they
+#            find vacancies because Cs ≫ Cv,
+#         2- In this case, the interstitial concentration comes into a quasi-steady state with production
+#            and annihilation at sinks, not enough time for recombination
+#--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -23,10 +28,10 @@
   initial_condition = 1e2
   [../]
   [./Kis]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-5
+  initial_condition = 1e-1
   [../]
   [./Kvs]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-8
+  initial_condition = 1e-4
   [../]
   [./ci]
   [../]
@@ -328,7 +333,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case1_lowtemp_lowsink
+  file_base = Case3_lowtemp_highsink
   [./exodus]
     type = Exodus
     # file_base = point_defects

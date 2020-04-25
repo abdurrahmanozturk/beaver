@@ -9,13 +9,13 @@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
   [./xs]    #Uniform sink concentration
-  initial_condition = 0
+  initial_condition = 1
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-15
+  initial_condition = 1
   [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-15
+  initial_condition = 1e-3
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
   initial_condition = 1e-6
@@ -38,6 +38,7 @@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
   type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
+  uniform_refine = 2
   dim = 2
   nx = 64
   ny = 64

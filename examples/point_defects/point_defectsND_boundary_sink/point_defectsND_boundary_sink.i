@@ -2,13 +2,14 @@
 #--------------------------------------------------------------------------------------------------------
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
-# Notes : Equations are non-dimensionalized
+# Notes : 1 - Equations are non-dimensionalized
+#         2 - Sinks are located at boundaries
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
-  [./xs]  #Uniform sink concentration
-  initial_condition = 1
+  [./xs]    #Uniform sink concentration
+  initial_condition = 0
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
   initial_condition = 1e-15
@@ -20,13 +21,13 @@
   initial_condition = 1e-6
   [../]
   [./Kiv]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e2
+  initial_condition = 1e-9
   [../]
   [./Kis]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-5
+  initial_condition = 1e-2
   [../]
   [./Kvs]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-8
+  initial_condition = 1e-5
   [../]
   [./ci]
   [../]
@@ -161,23 +162,23 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
-  [./Periodic]
-    [./all]
-      auto_direction = 'x y'
-    [../]
-  [../]
- # [./ci_bottom]
- #   type = DirichletBC
- #   variable = ci
- #   value = 0
- #   boundary = '0 1 2 3'
- # [../]
- # [./cv_bottom]
- #   type = DirichletBC
- #   variable = cv
- #   value = 0
- #   boundary = '0 1 2 3'
- # [../]
+  # [./Periodic]
+  #   [./all]
+  #     auto_direction = 'x y'
+  #   [../]
+  # [../]
+ [./xi_bc]
+   type = DirichletBC
+   variable = xi
+   value = 0
+   boundary = '0 1 2 3'
+ [../]
+ [./xv_bc]
+   type = DirichletBC
+   variable = xv
+   value = 0
+   boundary = '0 1 2 3'
+ [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------ICs---------------------------------------------------
@@ -287,6 +288,16 @@
     variable = xs
   [../]
 []
+[VectorPostprocessors]
+  [./x_direc]
+   type =  LineValueSampler
+    start_point = '0 128 0'
+    end_point = '256 128 0'
+    variable = 'xi xv'
+    num_points = 257
+    sort_by =  id
+  [../]
+[]
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------Preconditioning------------------------------------------------
 [Preconditioning]
@@ -328,14 +339,14 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case1_lowtemp_lowsink
+  file_base = point_defectsND_boundary_sink
   [./exodus]
     type = Exodus
     # file_base = point_defects
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true
-    interval = 1000
+    interval = 1
   [../]
   csv = true
   #xda = true

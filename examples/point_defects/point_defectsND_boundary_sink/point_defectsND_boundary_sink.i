@@ -4,6 +4,7 @@
 # Fundementals of Radiation Materials Science, Gary S. Was
 # Notes : 1 - Equations are non-dimensionalized
 #         2 - Sinks are located at boundaries
+#--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
@@ -20,13 +21,13 @@
   [./K0]     #Displacement damage rate  {dpa/s}
   initial_condition = 1e-6
   [../]
-  [./Kiv]     #Displacement damage rate  {dpa/s}
+  [./Kiv]     #Recombination rate  {1/s}
   initial_condition = 1e-9
   [../]
-  [./Kis]     #Displacement damage rate  {dpa/s}
+  [./Kis]     #Sink Reaction rate  {1/s}
   initial_condition = 1e-2
   [../]
-  [./Kvs]     #Displacement damage rate  {dpa/s}
+  [./Kvs]     #Sink Reaction rate  {1/s}
   initial_condition = 1e-5
   [../]
   [./ci]

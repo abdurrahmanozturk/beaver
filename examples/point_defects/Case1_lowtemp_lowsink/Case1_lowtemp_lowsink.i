@@ -22,13 +22,13 @@
   [./K0]     #Displacement damage rate  {dpa/s}
   initial_condition = 1e-6
   [../]
-  [./Kiv]     #Displacement damage rate  {dpa/s}
+  [./Kiv]     #Recombination rate  {1/s}
   initial_condition = 1e2
   [../]
-  [./Kis]     #Displacement damage rate  {dpa/s}
+  [./Kis]     #Sink Reaction rate  {1/s}
   initial_condition = 1e-5
   [../]
-  [./Kvs]     #Displacement damage rate  {dpa/s}
+  [./Kvs]     #Sink Reaction rate  {1/s}
   initial_condition = 1e-8
   [../]
   [./ci]

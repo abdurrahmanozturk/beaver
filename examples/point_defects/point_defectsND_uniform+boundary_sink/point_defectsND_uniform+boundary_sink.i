@@ -3,15 +3,14 @@
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
 # Notes : 1 - Equations are non-dimensionalized
-#         2 - Sinks are located at boundaries
-#         3 - There is not uniform sink
+#         2 - Sinks are uniformly distributed and located at boundaries
 #--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
   [./xs]    #Uniform sink concentration
-  initial_condition = 0
+  initial_condition = 1
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
   initial_condition = 1

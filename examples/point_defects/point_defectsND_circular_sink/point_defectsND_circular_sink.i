@@ -3,7 +3,7 @@
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
 # Notes : 1 - Equations are non-dimensionalized
-#         2 - Circular Sink is located at the domain center
+#         2 - Circular Void Sink is located at the domain center
 #         3 - There is not either uniform or boundary sink in model
 #--------------------------------------------------------------------------------------------------------
 #
@@ -274,26 +274,26 @@
     type = ElementAverageValue
     variable = xi
   [../]
-  [./center_xi]
+  [./left_xi]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xi
   [../]
-  [./center_xv]
+  [./left_xv]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xv
   [../]
-  [./center_xs]
+  [./left_xs]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xs
   [../]
 []
 [VectorPostprocessors]
   [./x_direc]
    type =  LineValueSampler
-    start_point = '0 128 0'
+    start_point = '153.6 128 0'
     end_point = '256 128 0'
     variable = 'xi xv'
     num_points = 257

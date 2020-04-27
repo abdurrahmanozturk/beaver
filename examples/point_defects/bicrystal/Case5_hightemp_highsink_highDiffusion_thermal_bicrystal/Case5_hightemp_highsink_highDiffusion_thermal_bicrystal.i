@@ -444,7 +444,7 @@ num_steps = 150000
 []
 
 [Outputs]
-  file_base = Case5_hightemp_highsink_highDiffusion_bicrystal
+  file_base = Case5_hightemp_highsink_highDiffusion_thermal_bicrystal
   exodus = true
   csv = true
   interval = 1

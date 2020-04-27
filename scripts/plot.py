@@ -4,6 +4,36 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+def getHelp():
+    print("\n# ------------------------------------------------------- #\n"
+          "# ======================================================= #\n"
+          "# Pyhton script to plot data from MOOSE csv output files. #\n"
+          "# ======================================================= #\n"
+          "# ----------------------------------------------eigenturk #\n")
+    print("This script is a tool for plotting csv files based on specified column numbers.\n\n"
+          "Usage: plot [filename] [column_number1] [column_number2] ... [-f] [-s]\n\n"
+          "Arguments:\n\n"
+          "\tfilename\t\tName of the data file with extension\n"
+          "\tcolumn_number\t\tThe column number of the data in csv file\n\n"
+          "Optional arguments:\n\n"
+          "  -h, Show this help message and exit.\n"
+          "  -f, Multiple file mode, multiple files will be shown on the same plot.\n"
+          "  -s, Save only mode, plot wont be shown.\n\n"
+          "Manual for commands :\n\n"
+          "Create the 'plot' command by adding following line to bash profile.\n"
+          "\tCheck script file path(e.g. projects/scripts/..)\n"
+          '\033[91m'+"\talias plot=\"python projects/scripts/plot.py\""+'\033[0m'
+          "\n1.Plotting multiple y values from same csv file\n"
+          '\033[91m'+"\tplot filename column_number(x) column_number(y1) column_number(y2)....column_number(yn)"+'\033[0m'
+          "\n2.Plot multiple y values from multiple csv files\n"
+          "\tAppend all csv files to a file (e.g. csvfiles)\n"
+          '\033[91m'+"\tplot csvfiles column_number(x) column_number(y) -f"+'\033[0m'
+          "\n3.Save a plot without showing it\n"
+          "\tAdd -s to end of the command\n"
+          '\033[91m'+"\tplot . . . -s")+'\033[0m'
+    sys.exit()
+
 # ------------------------------------------------------- #
 # ======================================================= #
 # Pyhton script to plot data from MOOSE csv output files. #
@@ -12,6 +42,10 @@ import matplotlib.pyplot as plt
 
 # print 'Number of arguments:', len(sys.argv), 'arguments.'
 # print 'Argument List:', str(sys.argv)
+
+if sys.argv[-1]=="-"+"h":
+    getHelp()
+
 filename = sys.argv[1]
 figname=filename[:-4]+".png"
 csvfile = [filename]

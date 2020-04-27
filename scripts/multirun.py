@@ -255,7 +255,7 @@ def main():
         for line in lines:
             f.write(line)
         f.close()
-        os.system("mpiexec -n 2 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
+        os.system("mpiexec -n 8 ~/projects/beaver/beaver-opt -i "+_newfile+"/"+_newfile+".i")
     fcsv.close()
 
 #======================#

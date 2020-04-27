@@ -3,33 +3,33 @@
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
 # Notes : 1 - Equations are non-dimensionalized
-#         2 - Sinks are located at boundaries
-#         3 - There is not uniform sink
+#         2 - Sinks are uniformly distributed
+#         3 - Circular Void sink is located at the domain center
 #--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
   [./xs]    #Uniform sink concentration
-  initial_condition = 0
-  [../]
-  [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
   initial_condition = 1
   [../]
+  [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
+  initial_condition = 1e-15
+  [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-3
+  initial_condition = 1e-15
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
   initial_condition = 1e-6
   [../]
   [./Kiv]     #Recombination rate  {1/s}
-  initial_condition = 1e-9
+  initial_condition = 1e2
   [../]
   [./Kis]     #Sink Reaction rate  {1/s}
-  initial_condition = 1e-2
+  initial_condition = 1e-5
   [../]
   [./Kvs]     #Sink Reaction rate  {1/s}
-  initial_condition = 1e-5
+  initial_condition = 1e-8
   [../]
   [./ci]
   [../]
@@ -39,14 +39,13 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
-  type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  uniform_refine = 2
-  dim = 2
-  nx = 64
-  ny = 64
-  xmax = 256
-  ymax = 256
+  type = FileMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
+  file = ../../mesh/void.msh
 []
+
+[GlobalParams]
+  block = domain
+[../]
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]
@@ -174,13 +173,13 @@
    type = DirichletBC
    variable = xi
    value = 0
-   boundary = '0 1 2 3'
+   boundary = void
  [../]
  [./xv_bc]
    type = DirichletBC
    variable = xv
    value = 0
-   boundary = '0 1 2 3'
+   boundary = void
  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -275,26 +274,26 @@
     type = ElementAverageValue
     variable = xi
   [../]
-  [./center_xi]
+  [./left_xi]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xi
   [../]
-  [./center_xv]
+  [./left_xv]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xv
   [../]
-  [./center_xs]
+  [./left_xs]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xs
   [../]
 []
 [VectorPostprocessors]
   [./x_direc]
    type =  LineValueSampler
-    start_point = '0 128 0'
+    start_point = '153.6 128 0'
     end_point = '256 128 0'
     variable = 'xi xv'
     num_points = 257
@@ -342,7 +341,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defectsND_boundary_sink
+  file_base = Case1_uniform+circular_sink
   [./exodus]
     type = Exodus
     # file_base = point_defects

@@ -3,8 +3,8 @@
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
 # Notes : 1 - Equations are non-dimensionalized
-#         2 - Circular Void Sink is located at the domain center
-#         3 - There is not either uniform or boundary sink in model
+#         2 - Sinks are located at boundaries
+#         3 - Circular Void Sink is located at the domain center
 #--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -40,7 +40,7 @@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
   type = FileMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  file = ../mesh/void.msh
+  file = ../../mesh/void.msh
 []
 
 [GlobalParams]
@@ -173,13 +173,13 @@
    type = DirichletBC
    variable = xi
    value = 0
-   boundary = void
+   boundary = 'bottom right top left void'
  [../]
  [./xv_bc]
    type = DirichletBC
    variable = xv
    value = 0
-   boundary = void
+   boundary = 'bottom right top left void'
  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -341,7 +341,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defectsND_circular_sink
+  file_base = Case5_circular+boundary_sink
   [./exodus]
     type = Exodus
     # file_base = point_defects

@@ -3,32 +3,33 @@
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
 # Notes : 1 - Equations are non-dimensionalized
-#         2 - Sinks are uniformly distributed
+#         2 - Circular Void Sink is located at the domain center
+#         3 - There is not either uniform or boundary sink in model
 #--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
   [./xs]    #Uniform sink concentration
-  initial_condition = 1
+  initial_condition = 0
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-15
+  initial_condition = 1
   [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-15
+  initial_condition = 1e-3
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
   initial_condition = 1e-6
   [../]
   [./Kiv]     #Recombination rate  {1/s}
-  initial_condition = 1e2
+  initial_condition = 1e-9
   [../]
   [./Kis]     #Sink Reaction rate  {1/s}
-  initial_condition = 1e-5
+  initial_condition = 1e-2
   [../]
   [./Kvs]     #Sink Reaction rate  {1/s}
-  initial_condition = 1e-8
+  initial_condition = 1e-5
   [../]
   [./ci]
   [../]
@@ -38,13 +39,13 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
-  type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  dim = 2
-  nx = 64
-  ny = 64
-  xmax = 256
-  ymax = 256
+  type = FileMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
+  file = ../../mesh/void.msh
 []
+
+[GlobalParams]
+  block = domain
+[../]
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]
@@ -163,23 +164,23 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
-  [./Periodic]
-    [./all]
-      auto_direction = 'x y'
-    [../]
-  [../]
-  # [./xi_bc]
-  #   type = DirichletBC
-  #   variable = xi
-  #   value = 0
-  #   boundary = '0 1 2 3'
+  # [./Periodic]
+  #   [./all]
+  #     auto_direction = 'x y'
+  #   [../]
   # [../]
-  # [./xv_bc]
-  #   type = DirichletBC
-  #   variable = xv
-  #   value = 0
-  #   boundary = '0 1 2 3'
-  # [../]
+ [./xi_bc]
+   type = DirichletBC
+   variable = xi
+   value = 0
+   boundary = void
+ [../]
+ [./xv_bc]
+   type = DirichletBC
+   variable = xv
+   value = 0
+   boundary = void
+ [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------ICs---------------------------------------------------
@@ -273,26 +274,26 @@
     type = ElementAverageValue
     variable = xi
   [../]
-  [./center_xi]
+  [./left_xi]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xi
   [../]
-  [./center_xv]
+  [./left_xv]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xv
   [../]
-  [./center_xs]
+  [./left_xs]
     type = PointValue
-    point = '0.5 0.5 0.0'
+    point = '0 0.5 0.0'
     variable = xs
   [../]
 []
 [VectorPostprocessors]
   [./x_direc]
    type =  LineValueSampler
-    start_point = '0 128 0'
+    start_point = '153.6 128 0'
     end_point = '256 128 0'
     variable = 'xi xv'
     num_points = 257
@@ -340,14 +341,14 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defectsND_uniform_sink
+  file_base = Case5_circular_sink
   [./exodus]
     type = Exodus
     # file_base = point_defects
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true
-    interval = 1000
+    interval = 1
   [../]
   csv = true
   #xda = true

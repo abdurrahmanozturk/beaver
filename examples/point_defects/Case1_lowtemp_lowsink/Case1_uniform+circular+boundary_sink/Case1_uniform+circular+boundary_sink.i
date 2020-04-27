@@ -14,22 +14,22 @@
   initial_condition = 1
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
-  initial_condition = 1
+  initial_condition = 1e-15
   [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-3
+  initial_condition = 1e-15
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
   initial_condition = 1e-6
   [../]
   [./Kiv]     #Recombination rate  {1/s}
-  initial_condition = 1e-9
+  initial_condition = 1e2
   [../]
   [./Kis]     #Sink Reaction rate  {1/s}
-  initial_condition = 1e-2
+  initial_condition = 1e-5
   [../]
   [./Kvs]     #Sink Reaction rate  {1/s}
-  initial_condition = 1e-5
+  initial_condition = 1e-8
   [../]
   [./ci]
   [../]
@@ -40,7 +40,7 @@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
   type = FileMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  file = ../mesh/void.msh
+  file = ../../mesh/void.msh
 []
 
 [GlobalParams]
@@ -341,7 +341,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = point_defectsND_circular_sink
+  file_base = Case1_uniform+circular+boundary_sink
   [./exodus]
     type = Exodus
     # file_base = point_defects

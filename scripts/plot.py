@@ -93,7 +93,7 @@ for fid in range(0,len(csvfile)):
     for i in range(2,n):
         c=0
         if isinstance(sys.argv[i][0],str):
-            if len(sys.argv[i])>1 and sys.argv[i][0]+sys.argv[i][1]+sys.argv[i][2]+sys.argv[i][3]=="log-":
+            if len(sys.argv[i])>2 and sys.argv[i][0]+sys.argv[i][1]+sys.argv[i][2]+sys.argv[i][3]=="log-":
                 sys.argv[i]=sys.argv[i][4:len(sys.argv[i])]
                 log[i]=1
             for j in range(0,len(headers)):

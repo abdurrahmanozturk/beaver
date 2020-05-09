@@ -15,7 +15,7 @@ import csv
 # print 'Argument List:', str(sys.argv)
 
 filename = sys.argv[1]
-cores = 8
+cores = "8"
 if len(sys.argv)>2:
     cores = sys.argv[-1]
 

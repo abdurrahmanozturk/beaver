@@ -40,7 +40,7 @@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
   type = FileMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  file = ../../mesh/void.msh
+  file = ~/projects/beaver/examples/point_defects/mesh/void.msh
 []
 
 [GlobalParams]

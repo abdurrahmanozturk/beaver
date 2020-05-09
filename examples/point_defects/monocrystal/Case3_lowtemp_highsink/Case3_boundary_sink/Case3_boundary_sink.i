@@ -342,7 +342,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case1_boundary_sink
+  file_base = Case3_boundary_sink
   [./exodus]
     type = Exodus
     # file_base = point_defects

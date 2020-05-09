@@ -340,7 +340,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case1_uniform_sink
+  file_base = Case2_uniform_sink
   [./exodus]
     type = Exodus
     # file_base = point_defects

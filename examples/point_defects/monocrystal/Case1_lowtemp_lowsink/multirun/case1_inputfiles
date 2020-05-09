@@ -1,7 +1,7 @@
-Case1_boundary_sink/Case1_boundary_sink.i
-Case1_circular_sink/Case1_circular_sink.i
-Case1_circular+boundary_sink/Case1_circular+boundary_sink.i
-Case1_uniform_sink/Case1_uniform_sink.i
-Case1_uniform+boundary_sink/Case1_uniform+boundary_sink.i
-Case1_uniform+circular_sink/Case1_uniform+circular_sink.i
-Case1_uniform+circular+boundary_sink/Case1_uniform+circular+boundary_sink.i
+../Case1_boundary_sink/Case1_boundary_sink.i
+../Case1_circular_sink/Case1_circular_sink.i
+../Case1_circular+boundary_sink/Case1_circular+boundary_sink.i
+../Case1_uniform_sink/Case1_uniform_sink.i
+../Case1_uniform+boundary_sink/Case1_uniform+boundary_sink.i
+../Case1_uniform+circular_sink/Case1_uniform+circular_sink.i
+../Case1_uniform+circular+boundary_sink/Case1_uniform+circular+boundary_sink.i

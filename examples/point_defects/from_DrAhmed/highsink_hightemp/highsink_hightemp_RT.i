@@ -217,7 +217,6 @@
     variable = jix
     boundary = left
   [../]
-
 []
 
 [VectorPostprocessors]

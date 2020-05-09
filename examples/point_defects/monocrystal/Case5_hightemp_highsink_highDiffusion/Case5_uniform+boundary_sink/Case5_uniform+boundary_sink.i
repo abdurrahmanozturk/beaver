@@ -2,10 +2,21 @@
 #--------------------------------------------------------------------------------------------------------
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
-# Notes : 1 - Equations are non-dimensionalized
-#         2 - Sinks are uniformly distributed and located at boundaries
+# Notes : 1- Equations are non-dimensionalized
+#         2- Sinks are uniformly distributed and located at boundaries
 #--------------------------------------------------------------------------------------------------------
 #
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#----------------------------------------------------Mesh------------------------------------------------
+[Mesh]
+  type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
+  uniform_refine = 2
+  dim = 2
+  nx = 64
+  ny = 64
+  xmax = 256
+  ymax = 256
+[]
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
@@ -34,17 +45,50 @@
   [../]
   [./cv]
   [../]
+  [./dxvdx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./dxidx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./jvx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./jix]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#----------------------------------------------------Mesh------------------------------------------------
-[Mesh]
-  type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  uniform_refine = 2
-  dim = 2
-  nx = 64
-  ny = 64
-  xmax = 256
-  ymax = 256
+#------------------------------------------------AuxKernels----------------------------------------------
+[AuxKernels]
+  [./dxvdx]
+    type = VariableGradientComponent
+    variable = dxvdx
+    gradient_variable = xv
+    component = x
+  [../]
+  [./dxidx]
+    type = VariableGradientComponent
+    variable = dxidx
+    gradient_variable = xi
+    component = x
+  [../]
+  [./jvx]
+    type = ParsedAux
+    variable = jvx
+    args = 'Dv dxvdx'
+    function = '-Dv*dxvdx'
+  [../]
+  [./jix]
+    type = ParsedAux
+    variable = jix
+    args = 'Di dxidx'
+    function = '-Di*dxidx'
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-------------------------------------------------Variables----------------------------------------------
@@ -138,27 +182,6 @@
   #   kiv = 7.49e10
   #   D = 9.4e-13
   #   # disable_diffusion = true
-  # [../]
-[]
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#------------------------------------------------AuxKernels----------------------------------------------
-[AuxKernels]
-  # [./xi]
-  #   type = ParsedAux
-  #   variable = xi
-  #   args = ci
-  #   function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'
-  # [../]
-  # [./xv]
-  #   type = ParsedAux
-  #   variable = xv
-  #   args = cv
-  #   function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'
-  # [../]
-  # [./cs]
-  #   type = ParsedAux
-  #   variable = cs
-  #   function = 'R:=0.707;if(x*x+y*y<=R*R,1,0)'
   # [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -288,6 +311,34 @@
     type = PointValue
     point = '0.5 0.5 0.0'
     variable = xs
+  [../]
+  [./total_cv]
+    type = ElementIntegralVariablePostprocessor
+    variable = xv
+  [../]
+  [./total_ci]
+    type = ElementIntegralVariablePostprocessor
+    variable = xi
+  [../]
+  [./right_jvx]
+    type = SideAverageValue
+    variable = jvx
+    boundary = right
+  [../]
+  [./left_jvx]
+    type = SideAverageValue
+    variable = jvx
+    boundary = left
+  [../]
+  [./right_jix]
+    type = SideAverageValue
+    variable = jix
+    boundary = right
+  [../]
+  [./left_jix]
+    type = SideAverageValue
+    variable = jix
+    boundary = left
   [../]
 []
 [VectorPostprocessors]

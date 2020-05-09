@@ -8,6 +8,16 @@
 #--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#----------------------------------------------------Mesh------------------------------------------------
+[Mesh]
+  type = FileMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
+  file = ../../../mesh/void.msh
+[]
+
+[GlobalParams]
+  block = domain
+[../]
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
   [./xs]    #Uniform sink concentration
@@ -35,17 +45,51 @@
   [../]
   [./cv]
   [../]
+  [./dxvdx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./dxidx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./jvx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./jix]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#----------------------------------------------------Mesh------------------------------------------------
-[Mesh]
-  type = FileMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  file = ../../../mesh/void.msh
+#------------------------------------------------AuxKernels----------------------------------------------
+[AuxKernels]
+  [./dxvdx]
+    type = VariableGradientComponent
+    variable = dxvdx
+    gradient_variable = xv
+    component = x
+  [../]
+  [./dxidx]
+    type = VariableGradientComponent
+    variable = dxidx
+    gradient_variable = xi
+    component = x
+  [../]
+  [./jvx]
+    type = ParsedAux
+    variable = jvx
+    args = 'Dv dxvdx'
+    function = '-Dv*dxvdx'
+  [../]
+  [./jix]
+    type = ParsedAux
+    variable = jix
+    args = 'Di dxidx'
+    function = '-Di*dxidx'
+  [../]
 []
-
-[GlobalParams]
-  block = domain
-[../]
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]

@@ -1,1 +1,7 @@
 ../Case6_boundary_sink/Case6_boundary_sink.i
+../Case6_circular_sink/Case6_circular_sink.i
+../Case6_circular+boundary_sink/Case6_circular+boundary_sink.i
+../Case6_uniform_sink/Case6_uniform_sink.i
+../Case6_uniform+boundary_sink/Case6_uniform+boundary_sink.i
+../Case6_uniform+circular_sink/Case6_uniform+circular_sink.i
+../Case6_uniform+circular+boundary_sink/Case6_uniform+circular+boundary_sink.i

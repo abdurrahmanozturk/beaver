@@ -24,6 +24,4 @@ file = open(filename)
 csvfile = file.readlines()
 file.close()
 for i in range(0,len(csvfile)):
-    #directory = csvfile[i].split('.')[-2]
-    os.system("mkdir "+str(i))
-    os.system("mpiexec -n "+cores+" ~/projects/beaver/beaver-opt -i "+str(i)+"/"+csvfile[i])
+    os.system("mpiexec -n "+cores+" ~/projects/beaver/beaver-opt -i "+csvfile[i])

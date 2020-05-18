@@ -395,7 +395,7 @@
   file_base = Case6_uniform+circular_sink
   [./exodus]
     type = Exodus
-    # file_base = point_defects
+    
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true

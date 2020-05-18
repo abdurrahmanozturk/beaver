@@ -392,10 +392,10 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case1_uniform+circular_sink
+  file_base = Case1_uniform+circular_sink_initial_condition_1.000e-06/Case1_uniform+circular_sink_initial_condition_1.000e-06
   [./exodus]
     type = Exodus
-    # file_base = Case1_uniform+circular_sink_initial_condition_1.000e-06/Case1_uniform+circular_sink_initial_condition_1.000e-06
+
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true

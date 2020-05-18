@@ -164,7 +164,7 @@ plt.ylabel(ylbl)
 # Add Legend
 plt.legend(loc=0, ncol=1)
 if smode == True: #save only
-    fig.savefig(figname, box_inches='tight')
+    fig.savefig(figname, box_inches='tight',dpi=200)
 else:
     plt.show()
-    fig.savefig(figname, box_inches='tight')
+    fig.savefig(figname, box_inches='tight',dpi=200)

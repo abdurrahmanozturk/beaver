@@ -391,10 +391,10 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case1_uniform_sink
+  file_base = Case1_uniform_sink_initial_condition_1.000e-05/Case1_uniform_sink_initial_condition_1.000e-05
   [./exodus]
     type = Exodus
-    # file_base = Case1_uniform_sink_initial_condition_1.000e-05/Case1_uniform_sink_initial_condition_1.000e-05
+
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true

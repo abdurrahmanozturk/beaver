@@ -2,13 +2,20 @@
 #--------------------------------------------------------------------------------------------------------
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
-# 5.1.3 Case 3 : Low Temperature and High Sink Density
-# Notes : 1- The main effect of a high sink density is that interstitials find the sinks before they
-#            find vacancies because Cs ≫ Cv,
-#         2- In this case, the interstitial concentration comes into a quasi-steady state with production
-#            and annihilation at sinks, not enough time for recombination
+# Notes : 1- Equations are non-dimensionalized
+#         2- Sinks are uniformly distributed
 #--------------------------------------------------------------------------------------------------------
 #
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#----------------------------------------------------Mesh------------------------------------------------
+[Mesh]
+  type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
+  dim = 2
+  nx = 64
+  ny = 64
+  xmax = 256
+  ymax = 256
+[]
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
@@ -37,16 +44,50 @@
   [../]
   [./cv]
   [../]
+  [./dxvdx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./dxidx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./jvx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./jix]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#----------------------------------------------------Mesh------------------------------------------------
-[Mesh]
-  type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  dim = 2
-  nx = 64
-  ny = 64
-  xmax = 256
-  ymax = 256
+#------------------------------------------------AuxKernels----------------------------------------------
+[AuxKernels]
+  [./dxvdx]
+    type = VariableGradientComponent
+    variable = dxvdx
+    gradient_variable = xv
+    component = x
+  [../]
+  [./dxidx]
+    type = VariableGradientComponent
+    variable = dxidx
+    gradient_variable = xi
+    component = x
+  [../]
+  [./jvx]
+    type = ParsedAux
+    variable = jvx
+    args = 'Dv dxvdx'
+    function = '-Dv*dxvdx'
+  [../]
+  [./jix]
+    type = ParsedAux
+    variable = jix
+    args = 'Di dxidx'
+    function = '-Di*dxidx'
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-------------------------------------------------Variables----------------------------------------------
@@ -143,27 +184,6 @@
   # [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#------------------------------------------------AuxKernels----------------------------------------------
-[AuxKernels]
-  # [./xi]
-  #   type = ParsedAux
-  #   variable = xi
-  #   args = ci
-  #   function = 'kiv:=7.49e10;k:=1e-2;ci*sqrt(kiv/k)'
-  # [../]
-  # [./xv]
-  #   type = ParsedAux
-  #   variable = xv
-  #   args = cv
-  #   function = 'kiv:=7.49e10;k:=1e-2;cv*sqrt(kiv/k)'
-  # [../]
-  # [./cs]
-  #   type = ParsedAux
-  #   variable = cs
-  #   function = 'R:=0.707;if(x*x+y*y<=R*R,1,0)'
-  # [../]
-[]
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
   [./Periodic]
@@ -171,18 +191,18 @@
       auto_direction = 'x y'
     [../]
   [../]
- # [./ci_bottom]
- #   type = DirichletBC
- #   variable = ci
- #   value = 0
- #   boundary = '0 1 2 3'
- # [../]
- # [./cv_bottom]
- #   type = DirichletBC
- #   variable = cv
- #   value = 0
- #   boundary = '0 1 2 3'
- # [../]
+  # [./xi_bc]
+  #   type = DirichletBC
+  #   variable = xi
+  #   value = 0
+  #   boundary = '0 1 2 3'
+  # [../]
+  # [./xv_bc]
+  #   type = DirichletBC
+  #   variable = xv
+  #   value = 0
+  #   boundary = '0 1 2 3'
+  # [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------ICs---------------------------------------------------
@@ -291,6 +311,44 @@
     point = '0.5 0.5 0.0'
     variable = xs
   [../]
+  [./total_cv]
+    type = ElementIntegralVariablePostprocessor
+    variable = xv
+  [../]
+  [./total_ci]
+    type = ElementIntegralVariablePostprocessor
+    variable = xi
+  [../]
+  [./right_jvx]
+    type = SideAverageValue
+    variable = jvx
+    boundary = right
+  [../]
+  [./left_jvx]
+    type = SideAverageValue
+    variable = jvx
+    boundary = left
+  [../]
+  [./right_jix]
+    type = SideAverageValue
+    variable = jix
+    boundary = right
+  [../]
+  [./left_jix]
+    type = SideAverageValue
+    variable = jix
+    boundary = left
+  [../]
+[]
+[VectorPostprocessors]
+  [./x_direc]
+   type =  LineValueSampler
+    start_point = '0 128 0'
+    end_point = '256 128 0'
+    variable = 'xi xv'
+    num_points = 257
+    sort_by =  id
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------Preconditioning------------------------------------------------
@@ -333,14 +391,14 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case3_lowtemp_highsink
+  file_base = Case3_uniform_sink
   [./exodus]
     type = Exodus
     
     # show_material_properties = 'D' # set material properite to a variable so it can be output
     output_material_properties = 1
     output_postprocessors = true
-    interval = 1000
+    interval = 1
   [../]
   csv = true
   #xda = true

@@ -256,7 +256,7 @@
     type = ParsedMaterial
     f_name = source_v
     args = 'K0 bias'
-    function = *bias*K0
+    function = bias*K0
   [../]
   [./reaction_i]
     type = DerivativeParsedMaterial

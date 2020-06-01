@@ -1,10 +1,8 @@
-| Case | Sink Type | Biased Vacancy Generation | Run | Postprocessing |
-| ---- | ----------| ------------------------- | --- | -------------- |
-| 1 | Uniform | No | Completed | Completed |
-| 1 | Uniform+Boundary | No | Completed | Completed |
-| 1 | Uniform+Circular | No | Completed | Completed |
-| 1 | Uniform+Boundary+Circular | No | Completed | Completed |
-| 1 | Uniform | Yes | Completed | Completed |
-| 1 | Uniform+Boundary | Yes | Completed | Completed |
-| 1 | Uniform+Circular | Yes | Completed | Completed |
-| 1 | Uniform+Boundary+Circular | Yes | Completed | Completed |
+| Case | Temperature | Sink Density | Diffusion | Run | Postprocessing |
+| ---- | ------------| ------------ | --------- | --- | -------------- |
+| 1 | Low | Low | Low | Completed | Completed |
+| 2 | Low | Intermediate | Low | Pending | Pending |
+| 3 | Low | High | Low | Pending | Pending |
+| 4 | High | High | Low | Pending | Pending |
+| 5 | High | Yes | High | Pending | Pending |
+| 6 | High | Low | High | Completed | Completed |

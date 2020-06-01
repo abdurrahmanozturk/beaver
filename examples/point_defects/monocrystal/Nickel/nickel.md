@@ -1,7 +1,7 @@
 | Case | Sink Type | Sink Density | Dose Rate | Temperature | Vacancy Generation Bias | Aspect Ratio | Length Scale | Run | Postprocessing | Plot |
 | ---- | --------- | ------------ | ----------| ----------- | ----------------------- | ------------ | ------------ | --- | -------------- | ---- |
-| [x] | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending | []() |
-| [ ] | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| [[x]] | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending | []() |
+| [[ ]] | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
 | Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
 | Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
 | Ni | Uniform | 1e18 | 773 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |

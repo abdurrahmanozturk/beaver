@@ -1,9 +1,11 @@
 #
 #--------------------------------------------------------------------------------------------------------
+# Nickel Case
 # Solution of Point Defect Balance Equations (Eq. 5.1) from the texbook
 # Fundementals of Radiation Materials Science, Gary S. Was
 # Notes : 1- Equations are non-dimensionalized
 #         2- Sinks are uniformly distributed
+#         3- Nickel parameters are used
 #--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -11,8 +13,8 @@
 [Mesh]
   type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
   dim = 2
-  nx = 64
-  ny = 64
+  nx = 32
+  ny = 32
   xmax = 256
   ymax = 256
 []
@@ -23,10 +25,10 @@
   initial_condition = 1
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-9
+  initial_condition = 1
   [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-  initial_condition = 2e-13
+  initial_condition = 1e-3
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
   initial_condition = 1e-6
@@ -212,8 +214,8 @@
 [ICs]
   [./xv]
     type = RandomIC
-    min = 1e-11
-    max = 3e-11
+    min = 3.6e-11       # Nickel equilibrium vacancy concentration
+    max = 3.8e-11
     variable = xv
   [../]
   [./xi]

@@ -1,0 +1,258 @@
+| Case | Sink Type | Sink Density [1/m<sup>3</sup>] | T [K] | Dose Rate [dpa/s] | Vacancy Generation Bias | Aspect Ratio | Length Scale [m] | Run | Postprocessing | Plot |
+| ---- | --------- | ------------ | ------------| --------- | ----------------------- | ------------ | ------------ | --- | -------------- | ---- |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 773 | 1e-6 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-3 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e18 | 1000 | 1e-6 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-3 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 773 | 1e-6 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-3 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform | 1e22 | 1000 | 1e-6 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-3 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 773 | 1e-6 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-3 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e18 | 1000 | 1e-6 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-3 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 773 | 1e-6 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-3 | 10.0 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 0.00 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 0.00 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 0.00 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 3.33 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 3.33 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 3.33 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 3.33 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 6.66 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 6.66 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 6.66 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 6.66 % | 8 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 10.0 % | 1 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 10.0 % | 1 | 1e-9 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 10.0 % | 8 | 1e-7 | Pending | Pending |
+| Ni | Uniform +Boundary | 1e22 | 1000 | 1e-6 | 10.0 % | 8 | 1e-9 | Pending | Pending |

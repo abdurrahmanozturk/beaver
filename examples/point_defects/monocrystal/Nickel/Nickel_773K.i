@@ -23,10 +23,10 @@
   initial_condition = 1
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
-  initial_condition = 1
+  initial_condition = 1e-9
   [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-  initial_condition = 1e-3
+  initial_condition = 2e-13
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
   initial_condition = 1e-6

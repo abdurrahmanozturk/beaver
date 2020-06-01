@@ -1,6 +1,6 @@
-| Case | Sink Type | Sink Density | Dose Rate | Temperature | Vacancy Generation Bias | Aspect Ratio | Length Scale | Run | Postprocessing |
-| ---- | --------- | ------------ | ----------| ----------- | ----------------------- | ------------ | ------------ | --- | -------------- |
-| Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending |
+| Case | Sink Type | Sink Density | Dose Rate | Temperature | Vacancy Generation Bias | Aspect Ratio | Length Scale | Run | Postprocessing | Plot |
+| ---- | --------- | ------------ | ----------| ----------- | ----------------------- | ------------ | ------------ | --- | -------------- | ---- |
+| Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-7 | Pending | Pending | [-]() |
 | Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 1 | 1e-9 | Pending | Pending |
 | Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 8 | 1e-7 | Pending | Pending |
 | Ni | Uniform | 1e18 | 773 | 1e-3 | 0.00 % | 8 | 1e-9 | Pending | Pending |

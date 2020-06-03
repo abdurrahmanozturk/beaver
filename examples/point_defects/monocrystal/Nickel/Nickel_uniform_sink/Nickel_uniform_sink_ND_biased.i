@@ -12,41 +12,41 @@
 #----------------------------------------------------Mesh------------------------------------------------
 [Mesh]
   type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
-  dim = 2
-  nx = 32
-  ny = 32
-  xmax = 256
-  ymax = 256
+  dim = 1
+  nx = 50000
+  # ny = 32
+  xmax = 50000
+  # ymax = 256
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
   [./xs]    #Uniform sink concentration
-  initial_condition = 1e20
+  initial_condition = 1   #included in reaction rate constants
   [../]
   [./l]     #Length scale
   initial_condition = 1e-9
   [../]
   [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
-  initial_condition = 1.107e-09
+  initial_condition = 1
   [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-  initial_condition = 2.005e-13
+  initial_condition = 1.81e-4
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
-  initial_condition = 1e-3
+  initial_condition = 9.0366e-13
   [../]
   [./bias]    #vacancy generation rate bias {1 = no bias}
   initial_condition = 1.1
   [../]
   [./Kiv]     #Recombination rate  {1/s}
-  initial_condition = 1e-9    # ! ASK ABOUT THIS
+  initial_condition = 3.7e3    # ! ASK ABOUT THIS 4piR(Di+Dv)=1e-17
   [../]
   [./Kis]     #Sink Reaction rate  {1/s}
-  initial_condition = 4.89e-17
+  initial_condition = 4.4233e-6
   [../]
   [./Kvs]     #Sink Reaction rate  {1/s}
-  initial_condition = 8.87e-17
+  initial_condition = 8.014e-10
   [../]
   [./ci]
   [../]
@@ -194,23 +194,23 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------BCs---------------------------------------------------
 [BCs]
-  [./Periodic]
-    [./all]
-      auto_direction = 'x y'
-    [../]
+  # [./Periodic]
+  #   [./all]
+  #     auto_direction = 'x y'
+  #   [../]
+  # [../]
+  [./xi_bc]
+    type = DirichletBC
+    variable = xi
+    value = 0
+    boundary = 'left right'
   [../]
-  # [./xi_bc]
-  #   type = DirichletBC
-  #   variable = xi
-  #   value = 0
-  #   boundary = '0 1 2 3'
-  # [../]
-  # [./xv_bc]
-  #   type = DirichletBC
-  #   variable = xv
-  #   value = 0
-  #   boundary = '0 1 2 3'
-  # [../]
+  [./xv_bc]
+    type = DirichletBC
+    variable = xv
+    value = 3.7e-11
+    boundary = 'left right'
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------ICs---------------------------------------------------
@@ -223,8 +223,8 @@
   [../]
   [./xi]
     type = RandomIC
-    min = 1e-11
-    max = 3e-11
+    min = 1e-17
+    max = 3e-17
     variable = xi
   [../]
   # [./cs]
@@ -304,21 +304,21 @@
     type = ElementAverageValue
     variable = xi
   [../]
-  [./center_xi]
-    type = PointValue
-    point = '0.5 0.5 0.0'
-    variable = xi
-  [../]
-  [./center_xv]
-    type = PointValue
-    point = '0.5 0.5 0.0'
-    variable = xv
-  [../]
-  [./center_xs]
-    type = PointValue
-    point = '0.5 0.5 0.0'
-    variable = xs
-  [../]
+  # [./center_xi]
+  #   type = PointValue
+  #   point = '0.5 0.5 0.0'
+  #   variable = xi
+  # [../]
+  # [./center_xv]
+  #   type = PointValue
+  #   point = '0.5 0.5 0.0'
+  #   variable = xv
+  # [../]
+  # [./center_xs]
+  #   type = PointValue
+  #   point = '0.5 0.5 0.0'
+  #   variable = xs
+  # [../]
   [./total_cv]
     type = ElementIntegralVariablePostprocessor
     variable = xv
@@ -351,10 +351,10 @@
 [VectorPostprocessors]
   [./x_direc]
    type =  LineValueSampler
-    start_point = '0 128 0'
-    end_point = '256 128 0'
-    variable = 'xi xv'
-    num_points = 257
+    start_point = '0 0 0'
+    end_point = '50000 0 0'
+    variable = 'xi xv jvx jix'
+    num_points = 50001
     sort_by =  id
   [../]
 []
@@ -375,7 +375,7 @@
   petsc_options_value = 'asm ilu  '  #  either asm or hypre'
   l_tol = 1e-4 # Relative tolerance for linear solves
   nl_max_its = 15 # Max number of nonlinear iterations
-  nl_abs_tol = 1e-9 # Relative tolerance for nonlienar solves
+  #nl_abs_tol = 1e-9 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-6 # Absolute tolerance for nonlienar solves
   scheme = bdf2   #try crank-nicholson
   start_time = 0
@@ -390,6 +390,12 @@
     growth_factor = 1.2
     cutback_factor = 0.8
   [../]
+  [./Adaptivity]
+      refine_fraction = 0.5
+      coarsen_fraction = 0.05
+      max_h_level = 2
+     initial_adaptivity = 2
+  [../]
   # postprocessor = cv
   # skip = 25
   # criteria = 0.01
@@ -399,7 +405,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Case6_uniform_sink_biased
+  file_base = Nickel_uniform_sink_ND_biased
   [./exodus]
     type = Exodus
 

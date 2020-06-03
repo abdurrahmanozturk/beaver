@@ -21,57 +21,60 @@ Nickel= {'Di': Di,
          'delta_B': 0.005,
          'rv_0': 1.5e-9,
          'rho_n': 1e14,
-         'K': 1e-3,
          'epsilon': 0.1,
-         'N': 1e22 }
+         'N': 1e22,
+         'a': 0.352e-9  }
 
-# Parameter Calculations
+# Parameter Calculations for the Eq. 5.2 in Gary Was textbook
 data = Nickel
-ZiN = 1+data['B']
-ZiI = ZiN
-ZiV = ZiN
-ZvN = 1
-ZvI = ZvN
-ZvV = ZvN
-ZvC = ZvN
-ZiC = ZvN
-l = 1e-9            #length scale {m}
-beta = l*l          #{m^2}
-w = beta/data['Di'] #time scale   {s}
-alpha =  1e-9       #recombination rate {1/s}
-Cs = 1e18           #sink density (1/m3)
-Kis=4*np.pi*(data['rv_0']*l)*(Di*l)  #Interstitial-sink reaction rate
-Kvs=4*np.pi*(data['rv_0']*l)*(Dv*l)  #Vacancy-sink reaction rate
-gamma = w*alpha     #{unitless}
-B = data['B']       #{unitless}
-xvL = gamma*Cv_e    #{unitless}
-Zix = ZiN #ZiI=ZiN=ZiV=1+B           #{unitless}
-Zvx = ZvN #ZvI=ZvN=ZvV=ZvC=ZiC = 1   #{unitless}
-K = data['K']            #{dpa/s}
-N = data['N']            #{1/m^3}
-rho_n = data['rho_n']    #{1/m^2}
-Rv = data['rv_0']    #{m}
-b = data['b']    #{m}
+Cs = 1e20                     #sink density (1/m3)
+l = 1e-9                      #length scale {m}
+beta = l*l                    #{m^2}
+w = beta/Di                   #time scale   {s}
+omega = data['Atomic Volume'] #{m3}
+xv_e = Cv_e                   #{unitless}
+Xs   = omega*Cs               #{unitless}
+riv = 10*data['a']            #{m}
+K = 1e-3                      #{dpa/s}
+Kiv = 4*np.pi*riv*(Di+Dv)     #recombination rate {1/s}
+Kis = 4*np.pi*riv*Di          #Interstitial-sink reaction rate
+Kvs = 4*np.pi*riv*Dv          #Vacancy-sink reaction rate
+K_ND = w*K
+Kiv_ND = Kiv*w/omega
+Kis_ND = Kis*w/omega
+Kvs_ND = Kvs*w/omega
+KisXs_ND = Kis*w*Xs/omega
+KvsXs_ND = Kvs*w*Xs/omega
+Di_ND = Di*w/beta
+Dv_ND = Dv*w/beta
 print(data)
 print("\nT\t= ", T)
-print("l\t= ", l)
-print("w\t= ", w)
+print("length scale(l)\t= ", l)
+print("time scale (w)\t= ", w)
 print("Di\t= ", Di)
 print("Dv\t= ", Dv)
 print("K\t= ", K)
-print("alpha\t= ",alpha)
 print("beta\t= ",beta)
-print("gamma\t= ",gamma)
-print("B\t= ", B)
-print("Zix\t= ", Zix)
-print("Zvx\t= ", Zvx)
-print("epsilon\t= ", data['epsilon'])
-print("N\t= ", N)
-print("xvL\t= ", xvL)
-print("rho_n\t= ", rho_n)
-print("Rv\t= ", Rv)
-print("b\t= ", b)
+print("omega\t= ",omega)
+print("xv_e\t= ", xv_e)
+print("riv\t= ", riv)
 print("Cv_eq\t= ", Cv_e)
 print("Cs\t= ", Cs)
-print("Kis\t= ", Kis)
-print("Kvs\t= ", Kvs)
+print("Kiv\t= ",Kiv)
+print("Kis\t= ",Kis)
+print("Kvs\t= ",Kvs)
+print("===================")
+print("\nT\t= ", T)
+print("l\t= ", l)
+print("w\t= ", w)
+print("riv\t= ", riv)
+print("xv_e\t= ", xv_e)
+print("Xs\t= ", Xs)
+print("KisXs\t= ",KisXs_ND)
+print("KvsXs\t= ",KvsXs_ND)
+print("K_ND\t= ", K_ND)
+print("Kiv_ND\t= ",Kiv_ND)
+print("Kis_ND\t= ",Kis_ND)
+print("Kvs_ND\t= ",Kvs_ND)
+print("Di_ND\t= ", Di_ND)
+print("Dv_ND\t= ", Dv_ND)

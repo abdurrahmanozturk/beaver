@@ -116,7 +116,7 @@
 [Kernels]
   [./defect_generation_i]
     type = MaskedBodyForce
-  #   variable = xi
+    variable = xi
     mask = source_i
     args = 'K0 bias'
   [../]
@@ -128,7 +128,7 @@
   [../]
   [./recombination_i]
     type = MatReaction
-  #   variable = xi
+    variable = xi
     args = 'xv Kiv'     #coupled on materials block
     mob_name = reaction_i
   [../]
@@ -140,7 +140,7 @@
   [../]
   [./sink_reaction_i]
     type = MatReaction
-  #   variable = xi
+    variable = xi
     args = 'xs Kis'     #coupled on materials block
     mob_name = sink_i
   [../]
@@ -152,7 +152,7 @@
   [../]
   [./xi_diff]
     type = MatDiffusion
-  #   variable = xi
+    variable = xi
     args = Di
     D_name = diff_i
   [../]
@@ -164,7 +164,7 @@
   [../]
   [./xi_time]
     type = TimeDerivative
-  #   variable = xi
+    variable = xi
   [../]
   [./xv_time]
     type = TimeDerivative
@@ -201,7 +201,7 @@
   [../]
   # [./xi_bc]
   #   type = DirichletBC
-  #   variable = xi
+  #  variable = xi
   #   value = 0
   #   boundary = 'left right'
   # [../]
@@ -225,7 +225,7 @@
     type = RandomIC
     min = 1e-17
     max = 3e-17
-  #   variable = xi
+    variable = xi
   [../]
   # [./cs]
   #   type = RandomIC
@@ -302,12 +302,12 @@
   [../]
   [./average_xi]
     type = ElementAverageValue
-  #   variable = xi
+    variable = xi
   [../]
   # [./center_xi]
   #   type = PointValue
   #   point = '0.5 0.5 0.0'
-  #   variable = xi
+  #  variable = xi
   # [../]
   # [./center_xv]
   #   type = PointValue
@@ -325,7 +325,7 @@
   [../]
   [./total_ci]
     type = ElementIntegralVariablePostprocessor
-  #   variable = xi
+    variable = xi
   [../]
   [./right_jvx]
     type = SideAverageValue

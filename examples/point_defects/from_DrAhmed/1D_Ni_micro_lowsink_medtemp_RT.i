@@ -273,7 +273,7 @@
       coarsen_fraction = 0.05
       max_h_level = 2
      initial_adaptivity = 2
-  [../]
+    [../]
 []
 
 [Outputs]

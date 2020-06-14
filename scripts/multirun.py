@@ -24,4 +24,8 @@ file = open(filename)
 csvfile = file.readlines()
 file.close()
 for i in range(0,len(csvfile)):
+    for s in range(len(csvfile[i])-1,-1,-1):
+        if csvfile[i][s]=="/":
+            os.chdir(csvfile[i][:s])
+            break
     os.system("mpiexec -n "+cores+" ~/projects/beaver/beaver-opt -i "+csvfile[i])

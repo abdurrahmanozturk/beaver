@@ -27,5 +27,8 @@ for i in range(0,len(csvfile)):
     for s in range(len(csvfile[i])-1,-1,-1):
         if csvfile[i][s]=="/":
             os.chdir(csvfile[i][:s])
+            print(csvfile[i][:s])
             break
+    os.system("pwd")
+    print(csvfile[i])
     os.system("mpiexec -n "+cores+" ~/projects/beaver/beaver-opt -i "+csvfile[i])

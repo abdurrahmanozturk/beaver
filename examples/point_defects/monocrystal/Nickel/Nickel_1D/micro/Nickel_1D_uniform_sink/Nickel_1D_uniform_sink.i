@@ -372,7 +372,7 @@
   type = Transient
   solve_type = 'NEWTON'  #try NEWTON,PJFNK
   petsc_options_iname = '-pc_type -sub_pc_type'
-  petsc_options_value = 'asm lu  '  #  either asm or hypre'
+  petsc_options_value = 'asm ilu  '  #  either asm or hypre'
   l_tol = 1e-4 # Relative tolerance for linear solves
   nl_max_its = 15 # Max number of nonlinear iterations
   #nl_abs_tol = 1e-9 # Relative tolerance for nonlienar solves
@@ -381,8 +381,8 @@
   start_time = 0
   num_steps = 4294967295
   steady_state_detection = true
-  steady_state_tolerance = 1e-14
-  # end_time = 30000
+  steady_state_tolerance = 1e-13
+  dtmin = 0.1
   # dt = 1
   [./TimeStepper]
     type = IterationAdaptiveDT

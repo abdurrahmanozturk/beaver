@@ -352,9 +352,9 @@
   [./x_direc]
    type =  LineValueSampler
     start_point = '0 0 0'
-    end_point = '50000 0 0'
+    end_point = '50 0 0'
     variable = 'xi xv jvx jix'
-    num_points = 50001
+    num_points = 51
     sort_by =  id
   [../]
 []

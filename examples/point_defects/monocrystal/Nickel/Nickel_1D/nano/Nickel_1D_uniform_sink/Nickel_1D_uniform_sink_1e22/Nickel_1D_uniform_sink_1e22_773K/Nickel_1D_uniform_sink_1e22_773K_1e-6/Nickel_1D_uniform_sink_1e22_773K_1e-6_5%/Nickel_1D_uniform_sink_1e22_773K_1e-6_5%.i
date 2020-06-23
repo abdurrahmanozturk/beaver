@@ -372,8 +372,8 @@
   type = Transient
   solve_type = 'NEWTON'  #try NEWTON,PJFNK
   petsc_options_iname = '-pc_type -sub_pc_type'
-  petsc_options_value = 'asm ilu  '  #  either asm or hypre'
-  l_tol = 1e-4 # Relative tolerance for linear solves
+  petsc_options_value = 'asm lu  '  #  either asm or hypre'
+  l_tol = 1e-3 # Relative tolerance for linear solves
   nl_max_its = 15 # Max number of nonlinear iterations
   #nl_abs_tol = 1e-9 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-6 # Absolute tolerance for nonlienar solves
@@ -410,12 +410,12 @@
   [./exodus]
     type = Exodus
 
-    # show_material_properties = 'D' # set material properite to a variable so it can be output
+    enable = false #exodus
     output_material_properties = 1
     output_postprocessors = true
     interval = 1
   [../]
   csv = true
-  #xda = true
+  interval = 10 #exodus
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

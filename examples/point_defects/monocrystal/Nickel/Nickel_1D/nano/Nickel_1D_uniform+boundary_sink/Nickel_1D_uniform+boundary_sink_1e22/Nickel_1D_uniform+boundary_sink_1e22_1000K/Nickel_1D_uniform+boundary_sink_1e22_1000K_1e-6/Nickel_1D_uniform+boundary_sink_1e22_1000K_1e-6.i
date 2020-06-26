@@ -101,10 +101,10 @@
 #-------------------------------------------------Variables----------------------------------------------
 [Variables]
   [./xi]
-    # initial_condition = 0
+    scaling =1e4 #variables
   [../]
   [./xv]
-    # initial_condition = 0
+    scaling =1e4 #variables
   [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -375,15 +375,15 @@
   petsc_options_value = 'asm lu  '  #  either asm or hypre'
   l_tol = 1e-3 # Relative tolerance for linear solves
   nl_max_its = 15 # Max number of nonlinear iterations
-  #nl_abs_tol = 1e-9 # Relative tolerance for nonlienar solves
+  nl_abs_tol = 1e-18 # Relative tolerance for nonlienar solves
   nl_rel_tol = 1e-6 # Absolute tolerance for nonlienar solves
   scheme = bdf2   #try crank-nicholson
   start_time = 0
-  num_steps = 4294967295
+  end_time = 1e22 #executioner
   steady_state_detection = true
-  steady_state_tolerance = 1e-13
-  dtmin = 0.1
-  # dt = 1
+  steady_state_tolerance = 1e-16 #executioner
+  dtmin = 1e-3 #executioner
+  dtmax = 1e14 #executioner
   [./TimeStepper]
     type = IterationAdaptiveDT
     dt = 1 #s

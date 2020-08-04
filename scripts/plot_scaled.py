@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-timescale = 9.036600512379032e-12 # for 1D l-1e-10m
+# scale = 9.036600512379032e-12 # for 1D l-1e-10m   for time scale
+scale = 1e-1 #for length scale
+# omega = 1.206e-29 # Atomic volume for Nickel
 
 def getHelp():
     print('\033[96m'+"\n# ------------------------------------------------------- #\n"
@@ -81,8 +83,10 @@ for fid in range(0,len(csvfile)):
         headers = next(reader)
         data = np.array(list(reader)).astype(float)
 
-    # Scale tau back to time(s)
-    data[:,0] *= timescale
+    # Back Scaling
+    data[:,0] *= scale
+    # data[:,1] /= omega
+    # data[:,2] /= omega
 
     print(headers)
     print(data.shape)
@@ -109,6 +113,7 @@ for fid in range(0,len(csvfile)):
                     if c==len(headers[j]):
                         sys.argv[i]=str(j)
                         break
+
     print(sys.argv)
 
     #Labels
@@ -144,9 +149,9 @@ for fid in range(0,len(csvfile)):
         else:
             lbl = headers[int(sys.argv[column])]
         if log[column]==1:
-            plt.semilogy(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num+fid), linewidth=1, alpha=1,label=lbl)
+            plt.semilogy(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num+fid), linewidth=1.5, alpha=1,label=lbl)
         else:
-            plt.plot(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num+fid), linewidth=1, alpha=1,label=lbl)
+            plt.plot(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num+fid), linewidth=1.5, alpha=1,label=lbl)
         if log[2]==1:
             plt.xscale('log',basex=10)
         if np.min(data[:, int(sys.argv[column])])<ymin:
@@ -158,7 +163,7 @@ for fid in range(0,len(csvfile)):
 
 # Plot Settings
 # Title
-plt.title(filename, loc='center', fontsize=12, fontweight=0, color='black')
+plt.title(filename, loc='center', fontsize=14, fontweight=0, color='black')
 # Labels
 plt.xlim(xmin,xmax)
 plt.xlabel(xlbl)
@@ -166,7 +171,7 @@ plt.ylabel(ylbl)
 # plt.axis('equal')               # fix x and y axis
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 # Add Legend
-plt.legend(loc=0, ncol=1)
+plt.legend(loc=0, ncol=1, fontsize=14)
 if smode == True: #save only
     fig.savefig(figname, box_inches='tight',dpi=150)
 else:

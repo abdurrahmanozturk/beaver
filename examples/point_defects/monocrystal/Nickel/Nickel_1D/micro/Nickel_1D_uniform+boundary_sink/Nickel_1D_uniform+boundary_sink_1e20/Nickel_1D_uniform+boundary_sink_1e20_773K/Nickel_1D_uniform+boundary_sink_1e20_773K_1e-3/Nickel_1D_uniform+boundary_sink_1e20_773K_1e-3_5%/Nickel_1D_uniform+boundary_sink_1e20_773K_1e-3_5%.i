@@ -22,7 +22,7 @@
 #-----------------------------------------------AuxVariables---------------------------------------------
 [AuxVariables]
   [./xs]    #Uniform sink concentration
-  initial_condition = 1.206e-10
+  initial_condition = 1.206e-9
   [../]
   [./l]     #Length scale
   initial_condition = 1e-10

@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 # scale = 9.036600512379032e-12 # for 1D l-1e-10m   for time scale
 scale = 1e-1 #for length scale
 # omega = 1.206e-29 # Atomic volume for Nickel
@@ -37,15 +38,17 @@ def getHelp():
           '\033[93m'+"\tplot . . . -s")+'\033[0m'
     sys.exit()
 
-def getSinkStrength(data):
-    Ci_ave = data[-1,1]
-    Ji_left = data[-1,3]
-    Di_ave = data[-1,9]
-    Cv_ave = data[-1,2]
-    Jv_left = data[-1,4]
-    Dv_ave = data[-1,10]
-    Zi = Ji_left / (Di_ave*Ci_ave)
-    Zv = Jv_left / (Dv_ave*Cv_ave)
+def getSinkStrength(data,defect):
+    if defect=="i":
+        C = data[-1,1]
+        J = data[-1,3]
+        D = data[-1,9]
+    elif defect=="v":
+        C = data[-1,2]
+        J = data[-1,4]
+        D = data[-1,10]
+    print(C,J,D)
+    return J/(D*C)
 
 
 # ------------------------------------------------------- #
@@ -172,6 +175,15 @@ for fid in range(0,len(csvfile)):
             ymax=np.max(data[:, int(sys.argv[column])])*1.05
             plt.ylim(ymin,ymax)
 
+if sys.argv[3]=="1":
+    sink_strength = np.abs(getSinkStrength(data,'i'))
+    s = "Interstitial Sink Strength: "+str(sink_strength)
+    print(s)
+else:
+    sink_strength = getSinkStrength(data,'v')
+    s = "Vacancy Sink Strenth: "+str(sink_strength)
+    print(s)
+
 # Plot Settings
 # Title
 plt.title(filename, loc='center', fontsize=14, fontweight=0, color='black')
@@ -183,6 +195,9 @@ plt.ylabel(ylbl)
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 # Add Legend
 plt.legend(loc=0, ncol=1, fontsize=14)
+plt.text(0.98*xmax, 10*ymin, s , size=10,
+         ha="right", va="top",
+         bbox=dict(boxstyle="square", ec=(1., 0.5, 0.5),fc=(1., 0.8, 0.8),))
 if smode == True: #save only
     fig.savefig(figname, box_inches='tight',dpi=150)
 else:

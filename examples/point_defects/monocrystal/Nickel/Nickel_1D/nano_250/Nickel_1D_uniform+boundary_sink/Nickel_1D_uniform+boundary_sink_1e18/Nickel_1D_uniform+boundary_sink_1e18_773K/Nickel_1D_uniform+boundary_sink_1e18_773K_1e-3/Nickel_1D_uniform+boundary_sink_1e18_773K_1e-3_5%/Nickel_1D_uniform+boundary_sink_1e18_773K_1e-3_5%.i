@@ -347,6 +347,14 @@
     variable = jix
     boundary = left
   [../]
+  [./xDi]
+    type = ElementAverageValue
+    variable = Di
+  [../]
+  [./xDv]
+    type = ElementAverageValue
+    variable = Dv
+  [../]
 []
 [VectorPostprocessors]
   [./x_direc]
@@ -410,10 +418,10 @@
   [./exodus]
     type = Exodus
 
-    enable = false #exodus
+    enable = true #exodus
     output_material_properties = 1
     output_postprocessors = true
-    interval = 1
+    interval = 10
   [../]
   csv = true
   interval = 10 #exodus

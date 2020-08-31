@@ -110,9 +110,9 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-------------------------------------------------Functions----------------------------------------------
 [Functions]
-  [./linear_source]
+  [./exp_source]
     type = ParsedFunction
-    value = 'K0:=1e-3;A:=5e-3;if(x<1250,K0*exp(-A*x),0)'   #A=100 for 150nm 5e-3 for 250nm
+    value = 'K0:=1e-3;A:=5e-3;if(x<2500,K0*exp(-A*x),0)'   #A=100 for 150nm 5e-3 for 250nm
   [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -129,6 +129,18 @@
     variable = xv
     mask = source_v
     args = 'K0 bias'
+  [../]
+  [./equilibrium_i]
+    type = MaskedBodyForce
+    variable = xi
+    mask = equilibrium_i
+    args = 'Kiv xv'
+  [../]
+  [./equilibrium_v]
+    type = MaskedBodyForce
+    variable = xv
+    mask = equilibrium_v
+    args = 'Kiv xi'
   [../]
   [./recombination_i]
     type = MatReaction
@@ -269,12 +281,24 @@
   [./linearsource_i]
     type = GenericFunctionMaterial
     prop_names = source_i
-    prop_values = linear_source
+    prop_values = exp_source
   [../]
   [./linearsource_v]
     type = GenericFunctionMaterial
     prop_names = source_v
-    prop_values = linear_source
+    prop_values = exp_source
+  [../]
+  [./equilibrium_i]
+    type = ParsedMaterial
+    f_name = equilibrium_i
+    args = 'Kiv xv'
+    function = Kiv*xv*3.6e-11
+  [../]
+  [./equilibrium_v]
+    type = ParsedMaterial
+    f_name = equilibrium_v
+    args = 'Kiv xi'
+    function = Kiv*xi*3.6e-11
   [../]
   [./reaction_i]
     type = DerivativeParsedMaterial
@@ -428,7 +452,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Nickel_1D_uniform+boundary_sink_1e18_773K_linear1e-3_5%
+  file_base = Nickel_1D_uniform+boundary_sink_1e18_773K_exponent1e-3_5%
   [./exodus]
     type = Exodus
 

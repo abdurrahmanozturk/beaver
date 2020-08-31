@@ -13,9 +13,9 @@
 [Mesh]
   type = GeneratedMesh  # use file mesh by external mesh generator vacancy fracion is one for cirlce bc
   dim = 1
-  nx = 2500
+  nx = 50
   # ny = 32
-  xmax = 2500
+  xmax = 50
   # ymax = 256
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -34,10 +34,10 @@
   initial_condition = 1.810e-04
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
-  initial_condition = 9.037e-15
+  initial_condition = 9.037e-12
   [../]
   [./bias]    #vacancy generation rate bias {1 = no bias}
-  initial_condition = 1.050e+00
+  initial_condition = 1.000e+00
   [../]
   [./Kiv]     #Recombination rate  {1/s}
   initial_condition = 36.68460966
@@ -110,10 +110,6 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-------------------------------------------------Functions----------------------------------------------
 [Functions]
-  [./linear_source]
-    type = ParsedFunction
-    value = 'K0:=1e-3;if(x<2500,K0*(1-x/2500),0)'
-  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------Kernels-----------------------------------------------
@@ -124,12 +120,24 @@
     mask = source_i
     args = 'K0 bias'
   [../]
+  [./injected_interstitials_i]
+    type = MaskedBodyForce
+    variable = xi
+    mask = injected_interstitials_i
+    args = 'K0'
+  [../]
   [./defect_generation_v]
     type = MaskedBodyForce
     variable = xv
     mask = source_v
     args = 'K0 bias'
   [../]
+  # [./equilibrium_v]
+  #   type = MaskedBodyForce
+  #   variable = xv
+  #   mask = equilibrium_v
+  #   args = 'Kiv xi'
+  # [../]
   [./recombination_i]
     type = MatReaction
     variable = xi
@@ -254,28 +262,30 @@
     args = Dv
     function = Dv
   [../]
-  # [./source_i]
-  #   type = ParsedMaterial
-  #   f_name = source_i
-  #   args = 'K0 bias'
-  #   function = K0
-  # [../]
-  # [./source_v]
-  #   type = ParsedMaterial
-  #   f_name = source_v
-  #   args = 'K0 bias'
-  #   function = bias*K0
-  # [../]
-  [./linearsource_i]
-    type = GenericFunctionMaterial
-    prop_names = source_i
-    prop_values = linear_source
+  [./source_i]
+    type = ParsedMaterial
+    f_name = source_i
+    args = 'K0 bias'
+    function = K0
   [../]
-  [./linearsource_v]
-    type = GenericFunctionMaterial
-    prop_names = source_v
-    prop_values = linear_source
+  [./injected_interstitials_i]
+    type = ParsedMaterial
+    f_name = injected_interstitials_i
+    args = 'K0'
+    function = K0*0.8
   [../]
+  [./source_v]
+    type = ParsedMaterial
+    f_name = source_v
+    args = 'K0 bias'
+    function = bias*K0
+  [../]
+  # [./equilibrium_v]
+  #   type = ParsedMaterial
+  #   f_name = equilibrium_v
+  #   args = 'Kiv xi'
+  #   function = Kiv*xi*3.6e-11
+  # [../]
   [./reaction_i]
     type = DerivativeParsedMaterial
     f_name = reaction_i
@@ -361,22 +371,14 @@
     variable = jix
     boundary = left
   [../]
-  [./xDi]
-    type = ElementAverageValue
-    variable = Di
-  [../]
-  [./xDv]
-    type = ElementAverageValue
-    variable = Dv
-  [../]
 []
 [VectorPostprocessors]
   [./x_direc]
    type =  LineValueSampler
     start_point = '0 0 0'
-    end_point = '2500 0 0'
+    end_point = '50 0 0'
     variable = 'xi xv jvx jix'
-    num_points = 2501
+    num_points = 51
     sort_by =  id
   [../]
 []
@@ -428,14 +430,14 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Nickel_1D_uniform+boundary_sink_1e18_773K_linear1e-3_5%
+  file_base = Nickel_1D_injected_uniform+boundary_sink_1e18_773K_1e-3_0%
   [./exodus]
     type = Exodus
 
-    enable = true #exodus
+    enable = false #exodus
     output_material_properties = 1
     output_postprocessors = true
-    interval = 10
+    interval = 1
   [../]
   csv = true
   interval = 10 #exodus

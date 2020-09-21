@@ -175,11 +175,14 @@ for fid in range(0,len(csvfile)):
             ymax=np.max(data[:, int(sys.argv[column])])*1.05
             plt.ylim(ymin,ymax)
 
-if sys.argv[3]=="1":
+if len(sys.argv)<5:
     sink_strength = np.abs(getSinkStrength(data,'i'))
     s = "Interstitial Sink Strength: "+str(sink_strength)
     print(s)
 else:
+    sink_strength = np.abs(getSinkStrength(data,'i'))
+    s = "Interstitial Sink Strength: "+str(sink_strength)
+    print(s)
     sink_strength = getSinkStrength(data,'v')
     s = "Vacancy Sink Strenth: "+str(sink_strength)
     print(s)
@@ -195,7 +198,7 @@ plt.ylabel(ylbl)
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 # Add Legend
 plt.legend(loc=0, ncol=1, fontsize=14)
-plt.text(0.98*xmax, 10*ymin, s , size=10,
+plt.text(0.5*xmax, 10*ymin, s , size=10,
          ha="right", va="top",
          bbox=dict(boxstyle="square", ec=(1., 0.5, 0.5),fc=(1., 0.8, 0.8),))
 if smode == True: #save only

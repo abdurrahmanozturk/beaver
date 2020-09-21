@@ -37,6 +37,19 @@ def getHelp():
           '\033[93m'+"\tplot . . . -s")+'\033[0m'
     sys.exit()
 
+def getSinkStrength(df,defect):
+    nrow = df.shape[0] #number of columns in dataframe
+    if defect=="i":
+        C = df.loc[(nrow+1)/2,'xi']
+        J = df.loc[nrow-1,'jix']
+        D = df.loc[(nrow+1)/2,'Di']
+    elif defect=="v":
+        C = df.loc[(nrow+1)/2,'xv']
+        J = df.loc[nrow-1,'jvx']
+        D = df.loc[(nrow+1)/2,'Dv']
+    print("X = "+str(C)+", J = "+str(J)+", D = "+str(D))
+    return J/(C*D)
+
 # ------------------------------------------------------- #
 # ======================================================= #
 # Pyhton script to plot data from MOOSE csv output files. #
@@ -161,6 +174,14 @@ for fid in range(0,len(csvfile)):
             ymax=np.max(data[:, int(sys.argv[column])])*1.05
             plt.ylim(ymin,ymax)
 
+
+# Sink Strength Calculations
+ssi = getSinkStrength(df,'i')      # Interstitial sink strength
+ssv = getSinkStrength(df,'v')      # Vacancy sink strength
+ss_str = "Interstitial Sink Strength: "+str(ssi)+"\nVacancy Sink Strength: "+str(ssv)
+print('\033[93m'+ss_str+'\033[0m')
+
+
 # Plot Settings
 # Title
 plt.title(filename, loc='center', fontsize=14, fontweight=0, color='black')
@@ -172,6 +193,9 @@ plt.ylabel(ylbl)
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 # Add Legend
 plt.legend(loc=0, ncol=1, fontsize=14)
+plt.text(xmax,ymax*1.1, ss_str , size=10,
+         ha="right", va="top",
+         bbox=dict(boxstyle="square", ec=(1., 0.5, 0.5),fc=(1., 0.8, 0.8),))
 if smode == True: #save only
     fig.savefig(figname, box_inches='tight',dpi=150)
 else:

@@ -74,21 +74,21 @@ palette = plt.get_cmap('Set2')
 plt.style.use('seaborn-whitegrid')
 
 for fid in range(0,len(csvfile)):
-    print(csvfile)
+    # print(csvfile)
     with open(csvfile[fid], 'r') as f:
         reader = csv.reader(f, delimiter=',')
         headers = next(reader)
         data = np.array(list(reader)).astype(float)
 
-    print(headers)
-    print(data.shape)
-    print(data[:5])
+    # print(headers)
+    # print(data.shape)
+    # print(data[:5])
 
     # Make a data frame
     df=pd.DataFrame(data,columns=headers)
 
     # Read Command Line Arguments
-    print(sys.argv)
+    # print(sys.argv)
     log = [0]*n
     for i in range(2,n):
         c=0
@@ -105,7 +105,7 @@ for fid in range(0,len(csvfile)):
                     if c==len(headers[j]):
                         sys.argv[i]=str(j)
                         break
-    print(sys.argv)
+    # print(sys.argv)
 
     #Labels
     xlbl = headers[int(sys.argv[2])]
@@ -151,6 +151,9 @@ for fid in range(0,len(csvfile)):
         if np.max(data[:, int(sys.argv[column])])*1.05>ymax:
             ymax=np.max(data[:, int(sys.argv[column])])*1.05
             plt.ylim(ymin,ymax)
+
+
+print(headers)
 
 # Plot Settings
 # Title

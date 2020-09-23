@@ -110,7 +110,7 @@ for fid in range(0,len(csvfile)):
     # data[:,1] /= omegategrid')
 
 for fid in range(0,len(csvfile)):
-    # print(csvfile)
+    print(csvfile[fid][-30:])
     with open(csvfile[fid], 'r') as f:
         reader = csv.reader(f, delimiter=',')
         headers = next(reader)
@@ -194,16 +194,16 @@ for fid in range(0,len(csvfile)):
             ymax=np.max(data[:, int(sys.argv[column])])*1.05
             plt.ylim(ymin,ymax)
 
-print(headers)
+    #Sink Strength Calculations
+    ssi = getSinkStrength(data,'i')      # Interstitial sink strength
+    ssv = getSinkStrength(data,'v')      # Vacancy sink strength
+    ss_str = "Zi: "+str(ssi)+" m\nZv: "+str(ssv)+" m"
+    print('\033[93m'+ss_str+'\033[0m')
+    Sv = getSuperSaturation(data,cve)   # Average Vacancy supersaturation
+    S_str = "Vacancy Supersaturation: "+str(Sv)+"\n"
+    print('\033[93m'+S_str+'\033[0m')
 
-#Sink Strength Calculations
-ssi = getSinkStrength(data,'i')      # Interstitial sink strength
-ssv = getSinkStrength(data,'v')      # Vacancy sink strength
-ss_str = "Zi: "+str(ssi)+" m\nZv: "+str(ssv)+" m"
-print('\033[93m'+ss_str+'\033[0m')
-Sv = getSuperSaturation(data,cve)   # Average Vacancy supersaturation
-S_str = "Vacancy Supersaturation: "+str(Sv)+"\n"
-print('\033[93m'+S_str+'\033[0m')
+print(headers)
 
 # Plot Settings
 # Title

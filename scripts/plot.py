@@ -74,7 +74,7 @@ palette = plt.get_cmap('Set2')
 plt.style.use('seaborn-whitegrid')
 
 for fid in range(0,len(csvfile)):
-    # print(csvfile)
+    print(csvfile[fid][-30:])
     with open(csvfile[fid], 'r') as f:
         reader = csv.reader(f, delimiter=',')
         headers = next(reader)

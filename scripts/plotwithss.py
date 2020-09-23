@@ -196,7 +196,7 @@ for fid in range(0,len(csvfile)):
 
 ssi = getSinkStrength(data,'i')      # Interstitial sink strength
 ssv = getSinkStrength(data,'v')      # Vacancy sink strength
-ss_str = "Interstitial Sink Strength: "+str(ssi)+"\nVacancy Sink Strength: "+str(ssv)
+ss_str = "Zi: "+str(ssi)+" m\nZv: "+str(ssv)+" m"
 print('\033[93m'+ss_str+'\033[0m')
 Sv = getSuperSaturation(data,cve)   # Vacancy supersaturation
 S_str = "Vacancy Supersaturation: "+str(Sv)+"\n"

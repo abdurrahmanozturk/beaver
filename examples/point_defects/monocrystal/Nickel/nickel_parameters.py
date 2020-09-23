@@ -5,16 +5,20 @@ import math
 #Material Properties For Nickel
 T=773 #K
 kB = 8.617e-5 # ev/K
-Qi = 0.3 #ev
+Emi = 0.3 #ev  migration energy for Interstitial  [Shijun Zhao]
+Efi = 4.27#ev  formation energy for Interstitial  [Shijun Zhao]
 Di0 = 1e-7 #m2/s
-Qv = 1.3 #ev
+Emv = 1.3 #ev  migration energy for vacancy       [Shijun Zhao]
+Efv = 1.6 #ev  formation energy for vacancy       [Shijun Zhao]
 Dv0 = 6e-5 #m2/s
-Di = Di0*np.exp(-Qi/(kB*T))  #m2/s
-Dv = Dv0*np.exp(-Qv/(kB*T))  #m2/s
-Cv_e = np.exp(-1.6/(kB*T))
+Di = Di0*np.exp(-Emi/(kB*T))  #m2/s
+Dv = Dv0*np.exp(-Emv/(kB*T))  #m2/s
+Cv_e = np.exp(-Efv/(kB*T))
+Ci_e = np.exp(-Efi/(kB*T))
 Nickel = {'Di': Di,
          'Dv': Dv,
          'Cv_e': Cv_e,
+         'Ci_e': Ci_e,
          'b': 2.5e-10,
          'Atomic Volume': 1.206e-29,
          'B': 0.1,
@@ -59,6 +63,7 @@ print("omega\t= ",omega)
 print("xv_e\t= ", xv_e)
 print("riv\t= ", riv)
 print("Cv_eq\t= ", Cv_e)
+print("Ci_eq\t= ", Ci_e)
 print("Cs\t= ", Cs)
 print("Kiv\t= ",Kiv)
 print("Kis\t= ",Kis)

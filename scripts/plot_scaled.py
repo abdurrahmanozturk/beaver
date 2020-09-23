@@ -43,11 +43,12 @@ def getSinkStrength(df,defect):
         C = df.loc[(nrow+1)/2,'xi']
         J = df.loc[nrow-1,'jix']
         D = df.loc[(nrow+1)/2,'Di']
+        print("xi = "+str(C)+", jix = "+str(J)+", Di = "+str(D))
     elif defect=="v":
         C = df.loc[(nrow+1)/2,'xv']
         J = df.loc[nrow-1,'jvx']
         D = df.loc[(nrow+1)/2,'Dv']
-    print("X = "+str(C)+", J = "+str(J)+", D = "+str(D))
+        print("xv = "+str(C)+", jvx = "+str(J)+", Dv = "+str(D))
     return J/(C*D)
 
 # ------------------------------------------------------- #
@@ -178,7 +179,7 @@ for fid in range(0,len(csvfile)):
 # Sink Strength Calculations
 ssi = getSinkStrength(df,'i')      # Interstitial sink strength
 ssv = getSinkStrength(df,'v')      # Vacancy sink strength
-ss_str = "Interstitial Sink Strength: "+str(ssi)+"\nVacancy Sink Strength: "+str(ssv)
+ss_str = "Zi: "+str(ssi)+" m\nZv: "+str(ssv)+" m"
 print('\033[93m'+ss_str+'\033[0m')
 
 

@@ -194,9 +194,9 @@ plt.ylabel(ylbl)
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 # Add Legend
 plt.legend(loc=0, ncol=1, fontsize=14)
-# plt.text(xmax,ymax*1.1, ss_str , size=10,
-#          ha="right", va="top",
-#          bbox=dict(boxstyle="square", ec=(1., 0.5, 0.5),fc=(1., 0.8, 0.8),))
+plt.text(xmax,ymax*1.1, ss_str , size=10,
+         ha="right", va="top",
+         bbox=dict(boxstyle="square", ec=(1., 0.5, 0.5),fc=(1., 0.8, 0.8),))
 if smode == True: #save only
     fig.savefig(figname, box_inches='tight',dpi=150)
 else:

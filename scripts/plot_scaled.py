@@ -1,3 +1,4 @@
+import os
 import sys
 import csv
 import numpy as np
@@ -37,19 +38,23 @@ def getHelp():
           '\033[93m'+"\tplot . . . -s")+'\033[0m'
     sys.exit()
 
-def getSinkStrength(df,defect):
+def getSinkStrength(df):
+    ss_file = open('sink_strength_moose.csv', 'a')
     nrow = df.shape[0] #number of columns in dataframe
-    if defect=="i":
-        C = df.loc[(nrow+1)/2,'xi']
-        J = df.loc[nrow-1,'jix']
-        D = df.loc[(nrow+1)/2,'Di']
-        print("xi = "+str(C)+", jix = "+str(J)+", Di = "+str(D))
-    elif defect=="v":
-        C = df.loc[(nrow+1)/2,'xv']
-        J = df.loc[nrow-1,'jvx']
-        D = df.loc[(nrow+1)/2,'Dv']
-        print("xv = "+str(C)+", jvx = "+str(J)+", Dv = "+str(D))
-    return J/(C*D)
+    Ci = df.loc[(nrow+1)/2,'xi']
+    Cv = df.loc[(nrow+1)/2,'xv']
+    Ji = df.loc[nrow-1,'jix']
+    Jv = df.loc[nrow-1,'jvx']
+    Di = df.loc[(nrow+1)/2,'Di']
+    Dv = df.loc[(nrow+1)/2,'Dv']
+    Zi= Ji/(Ci*Di)
+    Zv= Jv/(Cv*Dv)
+    print("xi = "+str(Ci)+", jix = "+str(Ji)+", Di = "+str(Di))
+    print("xv = "+str(Cv)+", jvx = "+str(Jv)+", Dv = "+str(Dv))
+    print('\033[93m'+"Zi: "+str(Zi)+" m\nZv: "+str(Zv)+" m"+'\033[0m')
+    ss_file.write(str(Ci)+","+str(Cv)+","+str(Ji)+","+str(Jv)+","+str(Zi)+","+str(Zv)+"\n")
+    ss_file.close()
+    return 0
 
 # ------------------------------------------------------- #
 # ======================================================= #
@@ -59,6 +64,7 @@ def getSinkStrength(df,defect):
 
 # print 'Number of arguments:', len(sys.argv), 'arguments.'
 # print 'Argument List:', str(sys.argv)
+os.system("rm -rf sink_strength_moose.csv")
 
 if sys.argv[-1]=="-"+"h":
     getHelp()
@@ -176,10 +182,10 @@ for fid in range(0,len(csvfile)):
             plt.ylim(ymin,ymax)
 
     # Sink Strength Calculations
-    ssi = getSinkStrength(df,'i')      # Interstitial sink strength
-    ssv = getSinkStrength(df,'v')      # Vacancy sink strength
-    ss_str = "Zi: "+str(ssi)+" m\nZv: "+str(ssv)+" m"
-    print('\033[93m'+ss_str+'\033[0m')
+    getSinkStrength(df)
+    # ssi = getSinkStrength(df,'i')      # Interstitial sink strength
+    # ssv = getSinkStrength(df,'v')      # Vacancy sink strength
+
 
 print(headers)
 

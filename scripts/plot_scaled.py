@@ -41,18 +41,23 @@ def getHelp():
 def getSinkStrength(df):
     ss_file = open('sink_strength_moose.csv', 'a')
     nrow = df.shape[0] #number of columns in dataframe
+    size = df.loc[nrow-1,'x']
     Ci = df.loc[(nrow+1)/2,'xi']
     Cv = df.loc[(nrow+1)/2,'xv']
     Ji = df.loc[nrow-1,'jix']
     Jv = df.loc[nrow-1,'jvx']
     Di = df.loc[(nrow+1)/2,'Di']
     Dv = df.loc[(nrow+1)/2,'Dv']
-    Zi= Ji/(Ci*Di)
-    Zv= Jv/(Cv*Dv)
+    Zi = Ji/(Ci*Di)
+    Zv = Jv/(Cv*Dv)
+    rho = 6/(np.pi*(size*1e-9)**3)
+    ki = rho*Zi
+    kv = rho*Zv
     print("xi = "+str(Ci)+", jix = "+str(Ji)+", Di = "+str(Di))
     print("xv = "+str(Cv)+", jvx = "+str(Jv)+", Dv = "+str(Dv))
     print('\033[93m'+"Zi: "+str(Zi)+" m\nZv: "+str(Zv)+" m"+'\033[0m')
-    ss_file.write(str(Ci)+","+str(Cv)+","+str(Ji)+","+str(Jv)+","+str(Zi)+","+str(Zv)+"\n")
+    print("x,Ci,Cv,Ji,Cv,Di,Dv,Zi,Zv,rho,rho,ki,kv")
+    ss_file.write(str(size)+","+str(Ci)+","+str(Cv)+","+str(Ji)+","+str(Jv)+","+str(Di)+","+str(Dv)+","+str(Zi)+","+str(Zv)+","+str(rho)+","+str(rho)+","+str(ki)+","+str(kv)+"\n")
     ss_file.close()
     return 0
 

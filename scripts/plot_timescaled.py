@@ -5,9 +5,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# scale = 9.036600512379032e-12 # for 1D l-1e-10m   for time scale
-scale = 1e-1 #for length scale
+scale = 9.036600512379032e-12 # for time scale
+# scale = 1e-1 #for length scale
 # omega = 1.206e-29 # Atomic volume for Nickel
+cve = 3.7e-11   #vacancy equilibrium concentration for Nickel
 
 def getHelp():
     print('\033[96m'+"\n# ------------------------------------------------------- #\n"
@@ -38,28 +39,26 @@ def getHelp():
           '\033[93m'+"\tplot . . . -s")+'\033[0m'
     sys.exit()
 
-def getSinkStrength(df):
-    ss_file = open('sink_strength_moose.csv', 'a')
-    nrow = df.shape[0] #number of columns in dataframe
-    size = df.loc[nrow-1,'x']
-    Ci = df.loc[(nrow+1)/2,'xi']
-    Cv = df.loc[(nrow+1)/2,'xv']
-    Ji = df.loc[nrow-1,'jix']
-    Jv = df.loc[nrow-1,'jvx']
-    Di = df.loc[(nrow+1)/2,'Di']
-    Dv = df.loc[(nrow+1)/2,'Dv']
-    Zi = Ji/(Ci*Di)
-    Zv = Jv/(Cv*Dv)
-    rho = 6/(np.pi*(size*1e-9)**3)
-    ki = rho*Zi
-    kv = rho*Zv
-    print("xi = "+str(Ci)+", jix = "+str(Ji)+", Di = "+str(Di))
-    print("xv = "+str(Cv)+", jvx = "+str(Jv)+", Dv = "+str(Dv))
-    print('\033[93m'+"Zi: "+str(Zi)+" m\nZv: "+str(Zv)+" m"+'\033[0m')
-    print("x,Ci,Cv,Ji,Cv,Di,Dv,Zi,Zv,rho,rho,ki,kv")
-    ss_file.write(str(size)+","+str(Ci)+","+str(Cv)+","+str(Ji)+","+str(Jv)+","+str(Di)+","+str(Dv)+","+str(Zi)+","+str(Zv)+","+str(rho)+","+str(rho)+","+str(ki)+","+str(kv)+"\n")
-    ss_file.close()
-    return 0
+def getSinkStrength(data,defect):
+    if defect=="i":
+        C = data[-1,1]
+        J = data[-1,3]
+        D = data[-1,9]
+    elif defect=="v":
+        C = data[-1,2]
+        J = data[-1,4]
+        D = data[-1,10]
+    print(C,J,D)
+    return J/(D*C)
+
+def getSuperSaturation(data,cve):
+    Ci = data[-1,1]
+    Cv = data[-1,2]
+    Cve= cve
+    Di = data[-1,9]
+    Dv = data[-1,10]
+    print(Ci,Cv,Cve,Di,Dv)
+    return (Dv*Cv-Di*Ci)/(Dv*Cve)
 
 # ------------------------------------------------------- #
 # ======================================================= #
@@ -69,7 +68,6 @@ def getSinkStrength(df):
 
 # print 'Number of arguments:', len(sys.argv), 'arguments.'
 # print 'Argument List:', str(sys.argv)
-os.system("rm -rf sink_strength_moose.csv")
 
 if sys.argv[-1]=="-"+"h":
     getHelp()
@@ -100,6 +98,17 @@ fig = plt.figure()
 palette = plt.get_cmap('Set2')
 # Style
 plt.style.use('seaborn-whitegrid')
+
+for fid in range(0,len(csvfile)):
+    # print(csvfile)
+    with open(csvfile[fid], 'r') as f:
+        reader = csv.reader(f, delimiter=',')
+        headers = next(reader)
+        data = np.array(list(reader)).astype(float)
+
+    # Back Scaling
+    data[:,0] *= scale
+    # data[:,1] /= omegategrid')
 
 for fid in range(0,len(csvfile)):
     print(csvfile[fid][-30:])
@@ -186,11 +195,14 @@ for fid in range(0,len(csvfile)):
             ymax=np.max(data[:, int(sys.argv[column])])*1.05
             plt.ylim(ymin,ymax)
 
-    # Sink Strength Calculations
-    getSinkStrength(df)
-    # ssi = getSinkStrength(df,'i')      # Interstitial sink strength
-    # ssv = getSinkStrength(df,'v')      # Vacancy sink strength
-
+    #Sink Strength Calculations
+    ssi = getSinkStrength(data,'i')      # Interstitial sink strength
+    ssv = getSinkStrength(data,'v')      # Vacancy sink strength
+    ss_str = "Zi: "+str(ssi)+" m\nZv: "+str(ssv)+" m"
+    print('\033[93m'+ss_str+'\033[0m')
+    Sv = getSuperSaturation(data,cve)   # Average Vacancy supersaturation
+    S_str = "Vacancy Supersaturation: "+str(Sv)+"\n"
+    print('\033[93m'+S_str+'\033[0m')
 
 print(headers)
 
@@ -205,10 +217,9 @@ plt.ylabel(ylbl)
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 # Add Legend
 plt.legend(loc=0, ncol=1, fontsize=14)
-# if sys.argv[i][0]!="-":
-#     plt.text(xmax,ymax*1.1, ss_str , size=10,
-#              ha="right", va="top",
-#              bbox=dict(boxstyle="square", ec=(1., 0.5, 0.5),fc=(1., 0.8, 0.8),))
+plt.text(1e-2, 5e-13, ss_str , size=10,
+         ha="right", va="top",
+         bbox=dict(boxstyle="square", ec=(1., 0.5, 0.5),fc=(1., 0.8, 0.8),))
 if smode == True: #save only
     fig.savefig(figname, box_inches='tight',dpi=150)
 else:

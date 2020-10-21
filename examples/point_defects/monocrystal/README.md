@@ -7,3 +7,6 @@
 | 5 | High | High | High | Completed | Pending | [Case5](https://github.com/abdurrahmanozturk/beaver/tree/master/examples/point_defects/monocrystal/Case5_hightemp_highsink_highDiffusion) |
 | 6 | High | Low | High | Completed | Completed | [Case6](https://github.com/abdurrahmanozturk/beaver/blob/master/examples/point_defects/monocrystal/Case6_hightemp_lowsink_highDiffusion/Case6_X_SS_profile.png) |
 | Ni | High | Low | High | Pending | Pending | [Nickel](https://github.com/abdurrahmanozturk/beaver/tree/master/examples/point_defects/monocrystal/Nickel) |
+
+
+<!-- However, it supports inline HTML, so if you already have an image that you want to change and you're willing to write something like <img src="a.jpg" onmouseover="this.src='b.jpg'" onmouseout="this.src='a.jpg'" /> you should be able to make this work. -->

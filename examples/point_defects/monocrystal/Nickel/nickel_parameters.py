@@ -15,7 +15,7 @@ Di = Di0*np.exp(-Emi/(kB*T))  #m2/s
 Dv = Dv0*np.exp(-Emv/(kB*T))  #m2/s
 Cv_e = np.exp(-Efv/(kB*T))
 Ci_e = np.exp(-Efi/(kB*T))
-Nickel = {'Di': Di,
+Nickel ={'Di': Di,
          'Dv': Dv,
          'Cv_e': Cv_e,
          'Ci_e': Ci_e,
@@ -31,13 +31,14 @@ Nickel = {'Di': Di,
 
 # Parameter Calculations for the Eq. 5.2 in Gary Was textbook
 data = Nickel
-l = 1e-10                     #length scale {m}
-K0 = 1e-3                     #{dpa/s}
+l = 1e-09                     #length scale {m}
+K0 = 1e-6                     #{dpa/s}
 Cs = 1e18                     #sink density (1/m3)
 beta = l*l                    #{m^2}
 w = beta/Di                   #time scale   {s}
 omega = data['Atomic Volume'] #{m3}
 xv_e = data['Cv_e']           #{unitless}
+xi_e = data['Ci_e']           #{unitless}
 Xs   = omega*Cs               #{unitless}
 riv = 10*data['a']            #{m}
 Kiv = 4*np.pi*riv*(data['Di']+data['Dv']) #recombination rate {1/s}
@@ -60,7 +61,6 @@ print("Dv\t= ", Dv)
 print("K0\t= ", K0)
 print("beta\t= ",beta)
 print("omega\t= ",omega)
-print("xv_e\t= ", xv_e)
 print("riv\t= ", riv)
 print("Cv_eq\t= ", Cv_e)
 print("Ci_eq\t= ", Ci_e)
@@ -73,6 +73,7 @@ print("\nT\t= ", T)
 print("l\t= ", l)
 print("w\t= ", w)
 print("riv\t= ", riv)
+print("xi_e\t= ", xi_e)
 print("xv_e\t= ", xv_e)
 print("Xs\t= ", Xs)
 print("KisXs\t= ",KisXs_ND)

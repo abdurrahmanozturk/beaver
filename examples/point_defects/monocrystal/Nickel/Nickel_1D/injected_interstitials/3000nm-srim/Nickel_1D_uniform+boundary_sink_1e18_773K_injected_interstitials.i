@@ -5,8 +5,8 @@
 # Fundementals of Radiation Materials Science, Gary S. Was
 # Notes : 1- Equations are non-dimensionalized
 #         2- Sinks are uniformly distributed and located at boundaries
-#         3- Non-uniformly distributed defect sources
-#         4- Injected interstitials are considered
+#         3- Non-uniformly distributed defect sources (SRIM data)
+#         4- Injected interstitials are considered (SRIM data)
 #         5- Nickel parameters are used
 #--------------------------------------------------------------------------------------------------------
 #
@@ -43,7 +43,7 @@
   [../]
   [./K0_dist_FP] #distributed displacement damage rate  {dpa/s}
   [../]
-  [./K0_dist_II] #distributed displacement damage rate for II  {dpa/s}
+  [./K0_dist_II] #distributed displacement damage rate  {dpa/s}
   [../]
   [./bias]    #vacancy generation rate bias {1 = no bias}
     initial_condition = 1.000e+00
@@ -147,12 +147,18 @@
 #-------------------------------------------------Functions----------------------------------------------
 [Functions]
   [./dist_source_FP]
-    type = ParsedFunction
-    value = 'K0:=9.037e-13;mu:=1000;sigma:=200;K0*exp(-((x-mu)^2)/(2*sigma^2))/(0.4*(2*acos(-1))^0.5)'
+    type = PiecewiseLinear
+    data_file = vacancy.csv
+    format = columns
+    scale_factor = 1e-2
+    axis = 0
   [../]
   [./dist_source_II]
-    type = ParsedFunction
-    value = 'f_ii:=1.6e-4;K0:=9.037e-13;mu:=1150;sigma:=200;f_ii*K0*exp(-((x-mu)^2)/(2*sigma^2))/(0.4*(2*acos(-1))^0.5)'
+    type = PiecewiseLinear
+    data_file = range.csv
+    format = columns
+    scale_factor = 1e-2
+    axis = 0
   [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -253,13 +259,7 @@
     type = DirichletBC
     variable = xi
     value = 0
-    boundary = 'left right'
-  [../]
-  [./xv_bc-right]
-    type = DirichletBC
-    variable = xv
-    value = 0
-    boundary = 'right'
+    boundary = 'left'
   [../]
   [./xv_bc]
     type = DirichletBC

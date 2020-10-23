@@ -253,13 +253,7 @@
     type = DirichletBC
     variable = xi
     value = 0
-    boundary = 'left right'
-  [../]
-  [./xv_bc-right]
-    type = DirichletBC
-    variable = xv
-    value = 0
-    boundary = 'right'
+    boundary = 'left'
   [../]
   [./xv_bc]
     type = DirichletBC

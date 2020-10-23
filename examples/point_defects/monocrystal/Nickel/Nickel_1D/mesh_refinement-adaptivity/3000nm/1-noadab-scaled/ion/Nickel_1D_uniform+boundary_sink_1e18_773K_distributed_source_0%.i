@@ -6,8 +6,7 @@
 # Notes : 1- Equations are non-dimensionalized
 #         2- Sinks are uniformly distributed and located at boundaries
 #         3- Non-uniformly distributed defect sources
-#         4- Injected interstitials are considered
-#         5- Nickel parameters are used
+#         4- Nickel parameters are used
 #--------------------------------------------------------------------------------------------------------
 #
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -164,12 +163,12 @@
     mask = source_i
     args = 'K0_dist_FP bias'
   [../]
-  [./injected_interstitials_i]
-    type = MaskedBodyForce
-    variable = xi
-    mask = injected_interstitials_i
-    args = 'K0_dist_II'
-  [../]
+  # [./injected_interstitials_i]
+  #   type = MaskedBodyForce
+  #   variable = xi
+  #   mask = injected_interstitials_i
+  #   args = 'K0_dist_II'
+  # [../]
   [./defect_generation_v]
     type = MaskedBodyForce
     variable = xv
@@ -311,11 +310,11 @@
     prop_names = source_i
     prop_values = dist_source_FP
   [../]
-  [./injected_interstitials_i]
-    type = GenericFunctionMaterial
-    prop_names = injected_interstitials_i
-    prop_values = dist_source_II
-  [../]
+  # [./injected_interstitials_i]
+  #   type = GenericFunctionMaterial
+  #   prop_names = injected_interstitials_i
+  #   prop_values = dist_source_II
+  # [../]
   [./source_v]
     type = GenericFunctionMaterial
     prop_names = source_v
@@ -458,7 +457,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Nickel_1D_uniform+boundary_sink_1e18_773K_injected_interstitials
+  file_base = Nickel_1D_uniform+boundary_sink_1e18_773K_distributed_source_0%
   [./exodus]
     type = Exodus
 

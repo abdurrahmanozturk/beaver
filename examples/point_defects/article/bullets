@@ -1,0 +1,17 @@
+Results
+=======
+- Effect of..
+	defect production rate
+	recombination rate
+	sink density
+	temperature
+	bias
+	domain size
+	defect production profile (distribute or uniform)
+	boundary type (symmetry or sink)
+
+- Defect segreation near boundary
+- Flipping behaviour in interstitial concentration profile for neutron irradiation
+- supersaturation calc (ds, flip)
+- sink strengths (ds, flip)
+

@@ -429,7 +429,7 @@
 #----------------------------------------------Outputs----------------------------------------------------
 [Outputs]
   # exodus = true
-  file_base = Nickel_1D_uniform+boundary_sink_1e18_773K_distributed_source_1e-6_5%
+  file_base = Nickel_1D_uniform+boundary_sink_1e18_773K_1e-6_5%
   [./exodus]
     type = Exodus
 

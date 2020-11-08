@@ -89,10 +89,10 @@ if fmode == False:
     markers = ["",""]
     palette = plt.get_cmap('gray')  # Black and White Scale
 else:
-    # markers = ["","s", "o", "v","X"]
     markers = ["",""]
-    # palette = plt.get_cmap('gray')  # Black and White Scale
     palette = plt.get_cmap('Set1')  # Color Scale, {Set1,Set2,Set3,Dark2,tab10},tab20,Pastel1}
+    # markers = ["","s", "o", "v","X"]
+    # palette = plt.get_cmap('gray')  # Black and White Scale
 
 #=============================================================================
 

@@ -191,7 +191,10 @@ ax.spines['top'].set_visible(True)
 
 # Labels
 plt.xlim(xmin,xmax)
-ax.tick_params(axis='both')
+ax.xaxis.set_tick_params(which='major', size=5, width=1, direction='in', top='on')
+ax.xaxis.set_tick_params(which='minor', size=3, width=1, direction='in', top='on')
+ax.yaxis.set_tick_params(which='major', size=5, width=1, direction='in', right='on')
+ax.yaxis.set_tick_params(which='minor', size=3, width=1, direction='in', right='on')
 ax.set_xlabel(xlbl)
 ax.set_ylabel(ylbl)
 # plt.axis('equal')               # fix x and y axis

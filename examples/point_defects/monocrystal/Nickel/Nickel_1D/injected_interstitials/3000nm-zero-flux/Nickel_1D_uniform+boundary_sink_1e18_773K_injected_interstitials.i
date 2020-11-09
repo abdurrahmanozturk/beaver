@@ -46,7 +46,7 @@
   [./K0_dist_II] #distributed displacement damage rate for II  {dpa/s}
   [../]
   [./bias]    #vacancy generation rate bias {1 = no bias}
-    initial_condition = 1.000e+00
+    initial_condition = 1.050e+00
   [../]
   [./Kiv]     #Recombination rate  {1/s}
     initial_condition = 3668.460966

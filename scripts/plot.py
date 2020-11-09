@@ -64,7 +64,7 @@ if sys.argv[-2]=="-"+"g" or sys.argv[-1]=="-"+"g":
     n=n-1
 
 if re.search(".csv",file.readlines()[0]):
-    print('\033[92m'+"Multiple File Mode : Data from multiple files was plotted on the same figure."+'\033[0m')
+    print('\033[92m'+"Multiple File Mode : Data from multiple files was plotted on the same figure.\n"+'\033[0m')
     fmode = True
     # Read file names from file
     csvfile=[]
@@ -74,7 +74,7 @@ if re.search(".csv",file.readlines()[0]):
         csvfile.append(filenames[i][:-1])
 else:
     fmode = False
-    print('\033[92m'+"Single File Mode : Data from a single file was plotted."+'\033[0m')
+    print('\033[92m'+"Single File Mode : Data from a single file was plotted.\n"+'\033[0m')
     csvfile = [filename]
 
 smode = False
@@ -94,7 +94,7 @@ ax = fig.add_subplot(1, 1, 1)
 
 # Plotting Style,Color Palette,Markers and Line Styles
 linestyles = ["solid","dotted","dashdot","dashed"]
-markers = ["",""]
+markers = ["","","","",""]
 plt.style.use('seaborn-whitegrid')
 
 if gmode == True: # Use Gray Color Scale
@@ -108,7 +108,7 @@ else: # Colorful plotting
 #=============================================================================
 
 for fid in range(0,len(csvfile)):
-    print(csvfile[fid][-30:])
+    print('\033[92m'+"Reading file......"+'\033[0m'+csvfile[fid][-40:])
     with open(csvfile[fid], 'r') as f:
         reader = csv.reader(f, delimiter=',')
         headers = next(reader)
@@ -122,7 +122,7 @@ for fid in range(0,len(csvfile)):
     df=pd.DataFrame(data,columns=headers)
 
     # Read Command Line Arguments
-    log = [0]*n
+    log = [0]*n  #list to check if log-plot was requested for commandline argument
     for i in range(2,n):
         c=0
         if isinstance(sys.argv[i][0],str):
@@ -146,10 +146,10 @@ for fid in range(0,len(csvfile)):
     # ylbl = "y(x) [unit]"       # define y label manually
 
     #Axis Limits
-    xmin=np.min(data[:, int(sys.argv[2])])
-    xmax=np.max(data[:, int(sys.argv[2])])
-    ymin=np.min(data[:, int(sys.argv[3])])
-    ymax=np.max(data[:, int(sys.argv[3])])*1.05
+    xmin=np.floor(np.min(data[:, int(sys.argv[2])]))
+    xmax=np.ceil(np.max(data[:, int(sys.argv[2])]))
+    ymin=np.floor(np.min(data[:, int(sys.argv[3])]))
+    ymax=np.ceil(np.max(data[:, int(sys.argv[3])]))#*1.05
 
     #=============================================================================
     #                           Plotting Data
@@ -176,7 +176,8 @@ for fid in range(0,len(csvfile)):
             ax.set_ylim(ymin,ymax)
         num+=1
 
-print(headers)
+print('\033[92m'+"\nAvailable parameters for plotting: \n"+'\033[0m'+str(headers))
+# IMPROVE THIS TO CHECK EXISTENCE OF HEADERS
 
 #=============================================================================
 #                               Plot Settings
@@ -186,10 +187,10 @@ print(headers)
 plt.rcParams['font.family']='Times New Roman'
 plt.rcParams['font.size'] = 12
 # Tick Settings
-ax.xaxis.set_tick_params(which='major', size=5, width=1, direction='in', top=True)
-ax.xaxis.set_tick_params(which='minor', size=3, width=1, direction='in', top=True)
-ax.yaxis.set_tick_params(which='major', size=5, width=1, direction='in', right=True)
-ax.yaxis.set_tick_params(which='minor', size=3, width=1, direction='in', right=True)
+ax.xaxis.set_tick_params(which='major', size=7, width=1, direction='in', top=True)
+ax.xaxis.set_tick_params(which='minor', size=2, width=1, direction='in', top=True)
+ax.yaxis.set_tick_params(which='major', size=7, width=1, direction='in', right=True)
+ax.yaxis.set_tick_params(which='minor', size=2, width=1, direction='in', right=True)
 # Hide or Show the top and right spines of the axis
 ax.spines['right'].set_visible(True)
 ax.spines['top'].set_visible(True)
@@ -204,9 +205,9 @@ plt.title(filename)
 # plt.axis('equal')               # fix x and y axis
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
 if smode == True: #save only
-    fig.savefig(figname, bbox_inches='tight',dpi=300, transparent=False)
+    fig.savefig(figname, bbox_inches='tight',dpi=150, transparent=False)
 else:
     plt.show()
-    fig.savefig(figname, bbox_inches='tight',dpi=300, transparent=False)
+    fig.savefig(figname, bbox_inches='tight',dpi=150, transparent=False)
 
 #=============================================================================

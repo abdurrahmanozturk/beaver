@@ -1,2 +1,3 @@
-/home/ao/projects/beaver/examples/point_defects/monocrystal/Nickel/Nickel_1D/srim_data-symmetryBC/500nm/neutron/Nickel_1D_uniform+boundary_sink_1e18_773K_1e-6_5%_x_direc_0140.csv
-/home/ao/projects/beaver/examples/point_defects/monocrystal/Nickel/Nickel_1D/srim_data-symmetryBC/5000nm/1e-9_scale/neutron/Nickel_1D_uniform+boundary_sink_1e18_773K_1e-6_5%_x_direc_0140_scaled.csv
+/home/ao/projects/beaver/examples/point_defects/monocrystal/Nickel/Nickel_1D/srim_data-symmetryBC/5000nm/1e-10_scale/ion-modified-0.20/Nickel_1D_uniform+boundary_sink_1e18_773K_distributed_source_1e-3_5%_x_direc_0170.csv
+/home/ao/projects/beaver/examples/point_defects/monocrystal/Nickel/Nickel_1D/srim_data-symmetryBC/5000nm/1e-10_scale/ion-modified-0.35/Nickel_1D_uniform+boundary_sink_1e18_773K_distributed_source_1e-3_5%_x_direc_0170.csv
+/home/ao/projects/beaver/examples/point_defects/monocrystal/Nickel/Nickel_1D/srim_data-symmetryBC/5000nm/1e-10_scale/ion-modified-0.50/Nickel_1D_uniform+boundary_sink_1e18_773K_distributed_source_1e-3_5%_x_direc_0170.csv

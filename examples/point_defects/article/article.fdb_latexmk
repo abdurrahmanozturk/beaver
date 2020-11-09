@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1603734992 "article.tex" "/home/ao/projects/beaver/examples/point_defects/article/article.pdf" "article" 1603734992
+["pdflatex"] 1603734992 "article.tex" "/home/ao/projects/beaver/examples/point_defects/article/article.pdf" "article" 1604815010
   "/etc/texmf/web2c/texmf.cnf" 1603731169 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/ao/projects/beaver/examples/point_defects/article/article.aux" 1603734992 221 64c3a7768aa95ccdf7d02c18542270a3 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -78,7 +78,7 @@
   "article.tex" 1603734990 6081 2d63a315a2b9c5cbe9667f68b85c56ce ""
   (generated)
   "article.aux"
-  "/home/ao/projects/beaver/examples/point_defects/article/article.log"
   "article.log"
+  "/home/ao/projects/beaver/examples/point_defects/article/article.log"
   "article.pdf"
   "/home/ao/projects/beaver/examples/point_defects/article/article.pdf"

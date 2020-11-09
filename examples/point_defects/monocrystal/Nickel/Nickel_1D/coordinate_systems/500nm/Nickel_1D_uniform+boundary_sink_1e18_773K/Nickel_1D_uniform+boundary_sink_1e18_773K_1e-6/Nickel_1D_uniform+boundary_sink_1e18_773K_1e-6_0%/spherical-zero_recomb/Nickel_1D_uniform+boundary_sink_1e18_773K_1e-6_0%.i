@@ -81,10 +81,10 @@
     order = CONSTANT
     family = MONOMIAL
   [../]
-  # [/ci_analytical]
-  # [../]
-  # [/cv_analytical]
-  # [../]
+  [/ci_analytical]
+  [../]
+  [/cv_analytical]
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #------------------------------------------------AuxKernels----------------------------------------------
@@ -130,16 +130,16 @@
     args = 'super_saturation'
     function = 'pow(super_saturation,5.41547)*exp(-14.6586)'
   [../]
-  # [./ci_analytical]
-  #   type = FunctionAux
-  #   variable = ci_analytical
-  #   function = ci_func
-  # [../]
-  # [./cv_analytical]
-  #   type = FunctionAux
-  #   variable = cv_analytical
-  #   function = cv_func
-  # [../]
+  [./ci_analytical]
+    type = FunctionAux
+    variable = ci_analytical
+    function = ci_func
+  [../]
+  [./cv_analytical]
+    type = FunctionAux
+    variable = cv_analytical
+    function = cv_func
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #-------------------------------------------------Variables----------------------------------------------
@@ -158,14 +158,14 @@
     type = ParsedFunction
     value = 'k0:=9.037e-18;mu:=2500;sigma:=175;k0*exp(-((x-mu)^2)/(2*sigma^2))/(1.6e-3*sigma*(2*acos(-1))^0.5)'
   [../]
-  # [./ci_func]
-  #   type = ParsedFunction
-  #   value = 'k0:=1e-6;cs:=1e18;Di:=1.106e-9;Dv:=2.005e-13;kis:=4.89494e-17;kvs:=8.8691448e-21;a:=500;(k0/(kis*cs)*(1-a*sinh(pow(kis*cs/Di,0.5)*x)/x*sinh(pow(kis*cs/Di,0.5)*a)))'
-  # [../]
-  # [./cv_func]
-  #   type = ParsedFunction
-  #   value = 'k0:=1e-6;cs:=1e18;Di:=1.106e-9;Dv:=2.005e-13;kis:=4.89494e-17;kvs:=8.8691448e-21;a:=500;(k0/(kvs*cs)*(1-a*sinh(pow(kvs*cs/Dv,0.5)*x)/x*sinh(pow(kvs*cs/Dv,0.5)*a)))'
-  # [../]
+  [./ci_func]
+    type = ParsedFunction
+    value = 'k0:=9.037e-18;cs:=1.206e-11;Di:=1;Dv:=1.810e-04;kis:=36.67796398;kvs:=0.006645681;a:=5000;(k0/(kis*cs)*(1-a*sinh(pow(kis*cs/Di,0.5)*x)/x*sinh(pow(kis*cs/Di,0.5)*a)))'
+  [../]
+  [./cv_func]
+    type = ParsedFunction
+    value = 'k0:=9.037e-18;cs:=1.206e-11;Di:=1;Dv:=1.810e-04;kis:=36.67796398;kvs:=0.006645681;a:=5000;(k0/(kvs*cs)*(1-a*sinh(pow(kvs*cs/Dv,0.5)*x)/x*sinh(pow(kvs*cs/Dv,0.5)*a)))'
+  [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #--------------------------------------------------Kernels-----------------------------------------------
@@ -412,7 +412,7 @@
    type =  LineValueSampler
     start_point = '0 0 0'
     end_point = '5000 0 0'
-    variable = 'xi xv jvx jix xie xve Di Dv K0_dist super_saturation void_nucleation_rate'# ci_analytical cv_analytical'
+    variable = 'xi xv jvx jix xie xve Di Dv K0_dist super_saturation void_nucleation_rate ci_analytical cv_analytical'
     num_points = 5001
     sort_by =  id
   [../]

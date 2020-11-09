@@ -23,7 +23,7 @@ def getHelp():
           "Usage: plot [filename] [column_number1] [column_number2] ... [-h] [-s]\n\n"
           "Arguments:\n\n"
           "\tfilename\t\tName of the data file with extension\n"
-          "\tcolumn_number\t\tThe column number of the data in csv file\n\n"
+          "\tcolumn(number or name)\t\tThe column number(name) of the data in csv file\n\n"
           "Optional arguments:\n\n"
           "  -h, Show this help message and exit.\n"
           "  -s, Save only mode, plot wont be shown.\n"
@@ -33,14 +33,14 @@ def getHelp():
           "Note  : To make it easy, create 'plot' command by adding following line to your shell profile.\n"
           '\033[92m'+"\talias plot=\"python projects/scripts/plot.py\"\n"+'\033[0m'
           "\n-Plotting data from a single file\n"
-          '\033[93m'+"\tplot filename column_number(x) column_number(y1).....column_number(yn)\n"+'\033[0m'
+          '\033[93m'+"\tplot filename column_x column_y1.....column_yn\n"+'\033[0m'
           "\n-Plotting data from multiple files\n"
           '\033[91m'+"\tFirst, append name of all csv files to a seperate file (e.g. \"csvfiles\"),then use name of that file in command line.\n"
-          '\033[93m'+"\tplot csvfiles column_number(x) column_number(y)\n"+'\033[0m'
+          '\033[93m'+"\tplot csvfiles column_x column_y\n"+'\033[0m'
           "\n-Save a plot without showing it by adding \"-s\" at end of the command\n"
-          '\033[93m'+"\tplot filename column_number(x) column_number(y1).....column_number(yn) -s\n"+'\033[0m'
+          '\033[93m'+"\tplot filename column_x column_y1.....column_yn -s\n"+'\033[0m'
           "\n-Use gray color scale for plotting by adding \"-g\" at end of the command\n"
-          '\033[93m'+"\tplot filename column_number(x) column_number(y1).....column_number(yn) -g\n"+'\033[0m')
+          '\033[93m'+"\tplot filename column_x column_y1.....column_yn -g\n"+'\033[0m')
     sys.exit()
 
 if sys.argv[-1]=="-"+"h":

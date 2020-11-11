@@ -31,8 +31,8 @@ Nickel ={'Di': Di,
 
 # Parameter Calculations for the Eq. 5.2 in Gary Was textbook
 data = Nickel
-l = 1e-09                     #length scale {m}
-K0 = 1e-3                     #{dpa/s}
+l = 1e-10                     #length scale {m}
+K0 = 1e-6                     #{dpa/s}
 Cs = 1e18                     #sink density (1/m3)
 beta = l*l                    #{m^2}
 w = beta/Di                   #time scale   {s}

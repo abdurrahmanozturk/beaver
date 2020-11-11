@@ -33,7 +33,7 @@
     initial_condition = 1
   [../]
   [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
-    initial_condition = 1.810e-04
+    initial_condition = 1.810e-01
   [../]
   [./K0]     #Displacement damage rate  {dpa/s}
     initial_condition = 9.037e-13
@@ -256,11 +256,17 @@
     value = 0
     boundary = 'left right'
   [../]
+  [./xv_bc-right]
+    type = DirichletBC
+    variable = xv
+    value = 0
+    boundary = 'right'
+  [../]
   [./xv_bc]
     type = DirichletBC
     variable = xv
     value = 3.7e-11
-    boundary = 'left right'
+    boundary = 'left'
   [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

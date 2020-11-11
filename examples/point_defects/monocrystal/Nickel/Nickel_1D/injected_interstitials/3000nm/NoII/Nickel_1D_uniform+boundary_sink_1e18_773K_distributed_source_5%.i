@@ -254,17 +254,11 @@
     value = 0
     boundary = 'left right'
   [../]
-  [./xv_bc-right]
-    type = DirichletBC
-    variable = xv
-    value = 0
-    boundary = 'right'
-  [../]
   [./xv_bc]
     type = DirichletBC
     variable = xv
     value = 3.7e-11
-    boundary = 'left'
+    boundary = 'left right'
   [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -83,14 +83,23 @@ if sys.argv[-2]=="-"+"s" or sys.argv[-1]=="-"+"s":
     smode = True
     n=n-1
 
+# tmode = False    # WORK ON THIS
+# if sys.argv[-2]=="-"+"t" or sys.argv[-1]=="-"+"t":
+#     print("-t mode : add secondary axis for column_y2")
+#     tmode = True
+#     n=n-1
+
 #=============================================================================
 #                               Figure Settings
 #=============================================================================
-mf=2   #Marker frequency
+mf=10000   #Marker frequency
 
 #Create Figure
 fig = plt.figure(figsize=(5, 5))
 ax = fig.add_subplot(1, 1, 1)
+
+# if tmode==True:  # ADD SECONDARY AXIS FEATURE, WORK ON THIS!!
+#     ax2 = ax.twiny()
 
 # Plotting Style,Color Palette,Markers and Line Styles
 linestyles = ["solid","dotted","dashdot","dashed"]
@@ -177,11 +186,24 @@ for fid in range(0,len(csvfile)):
         num+=1
 
 print('\033[92m'+"\nAvailable parameters for plotting: \n"+'\033[0m'+str(headers))
-# IMPROVE THIS TO CHECK EXISTENCE OF HEADERS
+# WORK ON THIS TO CHECK EXISTENCE OF HEADERS
 
 #=============================================================================
 #                               Plot Settings
 #=============================================================================
+# if tmode==True:   # !WORK ON THIS,  NOT READY TO USE
+#     # Tick Settings
+#     ax2.xaxis.set_tick_params(which='major', size=7, width=1, direction='in', top=True)
+#     ax2.xaxis.set_tick_params(which='minor', size=2, width=1, direction='in', top=True)
+#     ax2.yaxis.set_tick_params(which='major', size=7, width=1, direction='in', right=True)
+#     ax2.yaxis.set_tick_params(which='minor', size=2, width=1, direction='in', right=True)
+#     # Hide or Show the top and right spines of the axis
+#     ax2.spines['right'].set_visible(True)
+#     ax2.spines['top'].set_visible(True)
+#     # Set Labels
+#     ax2.set_xlim(xmin,xmax)
+#     ax2.set_xlabel(xlbl)
+#     ax2.set_ylabel(ylbl)
 
 # Font Settings
 plt.rcParams['font.family']='Times New Roman'
@@ -195,9 +217,10 @@ ax.yaxis.set_tick_params(which='minor', size=2, width=1, direction='in', right=T
 ax.spines['right'].set_visible(True)
 ax.spines['top'].set_visible(True)
 # Set Labels
-plt.xlim(xmin,xmax)
+ax.set_xlim(xmin,xmax)
 ax.set_xlabel(xlbl)
 ax.set_ylabel(ylbl)
+
 # Add Legend and title
 plt.legend(loc=0, ncol=1,fontsize='medium')
 plt.title(filename)

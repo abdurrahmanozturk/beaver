@@ -160,11 +160,11 @@
   [../]
   [./ci_func]
     type = ParsedFunction
-    value = 'k0:=9.037e-18;cs:=1.206e-11;Di:=1;Dv:=1.810e-04;kis:=36.67796398;kvs:=0.006645681;a:=5000;(k0/(kis*cs)*(1-a*sinh(pow(kis*cs/Di,0.5)*x)/x*sinh(pow(kis*cs/Di,0.5)*a)))'
+    value = 'k0:=9.037e-18;xs:=1.206e-11;Di:=1;Dv:=1.810e-04;kis:=36.67796398;kvs:=0.006645681;a:=5000;(k0/(kis*xs)*(1-a*sinh(pow(kis*xs/Di,0.5)*x)/(x*sinh(pow(kis*xs/Di,0.5)*a))))'
   [../]
   [./cv_func]
     type = ParsedFunction
-    value = 'k0:=9.037e-18;cs:=1.206e-11;Di:=1;Dv:=1.810e-04;kis:=36.67796398;kvs:=0.006645681;a:=5000;(k0/(kvs*cs)*(1-a*sinh(pow(kvs*cs/Dv,0.5)*x)/x*sinh(pow(kvs*cs/Dv,0.5)*a)))'
+    value = 'k0:=9.037e-18;xs:=1.206e-11;Di:=1;Dv:=1.810e-04;kis:=36.67796398;kvs:=0.006645681;a:=5000;(k0/(kvs*xs)*(1-a*sinh(pow(kvs*xs/Dv,0.5)*x)/(x*sinh(pow(kvs*xs/Dv,0.5)*a))))'
   [../]
 []
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

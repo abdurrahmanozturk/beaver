@@ -49,28 +49,32 @@ def getHelp():
           '\033[93m'+"\tplot filename column_x column_y1.....column_yn -g\n"+'\033[0m')
     sys.exit()
 
-def getSinkStrength(df_unscaled,l,scale,domain="full"):
+def getSinkStrength(df,l,scale,domain="full"):
     ss_file = open('sink_strength_moose.csv', 'a')
-    nrow = df_unscaled.shape[0] #number of columns in dataframe
-    size = df_unscaled.loc[nrow-1,'x']/scale
+    nrow = df.shape[0] #number of columns in dataframe
+    size = df.loc[nrow-1,'x']
+    flow_area=1
+    if df.loc[nrow-1,'y']==0 and df.loc[nrow-1,'z']==0:
+        flow_area=size*size
     if domain == "half":
         print('\033[91m'+"Domain is choosen as \""+domain+"\""+'\033[0m')
-        xi = df_unscaled.loc[0,'xi']
-        xv = df_unscaled.loc[0,'xv']
+        xi = df.loc[0,'xi']  # left boundary(r=0) for spherical coordinate system
+        xv = df.loc[0,'xv']  # left boundary(r=0) for spherical coordinate system
     else:
-        xi = df_unscaled.loc[(nrow+1)/2,'xi']
-        xv = df_unscaled.loc[(nrow+1)/2,'xv']
-    Ji = df_unscaled.loc[nrow-1,'jix']
-    Jv = df_unscaled.loc[nrow-1,'jvx']
-    Di = df_unscaled.loc[(nrow+1)/2,'Di']
-    Dv = df_unscaled.loc[(nrow+1)/2,'Dv']
+        xi = df.loc[(nrow+1)/2,'xi']
+        xv = df.loc[(nrow+1)/2,'xv']
+    Ji = flow_area*df.loc[nrow-1,'jix']
+    Jv = flow_area*df.loc[nrow-1,'jvx']
+    Di = df.loc[(nrow+1)/2,'Di']
+    Dv = df.loc[(nrow+1)/2,'Dv']
     Zi = Ji/(xi*Di)
     Zv = Jv/(xv*Dv)
     rho = 6/(np.pi*(size*2)**3)
     ki = rho*Zi
     kv = rho*Zv
     print('\033[94m'+'\033[4m'+'\033[1m'+"\nNondimensionalized Results for length_scale= "+str(l)+" m"+'\033[0m')
-    print('\033[97m'+"xi = "+str(xi)+", jix = "+str(Ji)+", Di = "+str(Di))
+    print('\033[97m'+"Domain Size = "+str(size))
+    print("xi = "+str(xi)+", jix = "+str(Ji)+", Di = "+str(Di))
     print("xv = "+str(xv)+", jvx = "+str(Jv)+", Dv = "+str(Dv))
     print('\033[93m'+"Zi: "+str(Zi)+" \nZv: "+str(Zv))
     print('\033[97m'+"ki^2: "+str(ki)+" \nkv^2: "+str(kv)+" "+'\033[0m')
@@ -80,7 +84,7 @@ def getSinkStrength(df_unscaled,l,scale,domain="full"):
 
 os.system("rm -rf sink_strength_moose.csv")
 ss_file = open('sink_strength_moose.csv', 'a')
-ss_file.write("x,Ci,Cv,Ji,Cv,Di,Dv,Zi,Zv,rho,rho,ki,kv\n")
+ss_file.write("x,Ci_Center,Cv_center,Ji,Jv,Di,Dv,Zi,Zv,rho,rho,ki,kv\n")
 ss_file.close()
 
 if sys.argv[-1]=="-"+"h":

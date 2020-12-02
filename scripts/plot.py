@@ -181,7 +181,7 @@ for fid in range(0,len(csvfile)):
             ymin=np.min(data[:, int(sys.argv[column])])
             ax.set_ylim(ymin,ymax)
         if np.ceil(np.max(data[:, int(sys.argv[column])]))>ymax:
-            np.ceil(ymax=np.max(data[:, int(sys.argv[column])]))
+            ymax=np.ceil(np.max(data[:, int(sys.argv[column])]))
             ax.set_ylim(ymin,ymax)
         num+=1
 

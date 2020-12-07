@@ -58,17 +58,19 @@ def getSinkStrength(df,l,scale,domain="full"):
         flow_area=size*size
     if domain == "half":
         print('\033[91m'+"Domain is choosen as \""+domain+"\""+'\033[0m')
-        xi = df.loc[0,'xi']  # left boundary(r=0) for spherical coordinate system
-        xv = df.loc[0,'xv']  # left boundary(r=0) for spherical coordinate system
+        xi = df.loc[0,'xi']  # at center(r=0) for spherical coordinate system
+        xv = df.loc[0,'xv']  # at center(r=0) for spherical coordinate system
     else:
-        xi = df.loc[(nrow+1)/2,'xi']
-        xv = df.loc[(nrow+1)/2,'xv']
-    Ji = flow_area*df.loc[nrow-1,'jix']
-    Jv = flow_area*df.loc[nrow-1,'jvx']
+        xi = df.loc[(nrow+1)/2,'xi'] # at center for cartesian coordinate system
+        xv = df.loc[(nrow+1)/2,'xv'] # at center for cartesian coordinate system
+    Ji=df.loc[nrow-1,'jix']
+    Jv=df.loc[nrow-1,'jvx']
+    Fi = flow_area*Ji
+    Fv = flow_area*Jv
     Di = df.loc[(nrow+1)/2,'Di']
     Dv = df.loc[(nrow+1)/2,'Dv']
-    Zi = Ji/(xi*Di)
-    Zv = Jv/(xv*Dv)
+    Zi = Fi/(xi*Di)
+    Zv = Fv/(xv*Dv)
     rho = 6/(np.pi*(size*2)**3)
     ki = rho*Zi
     kv = rho*Zv
@@ -78,13 +80,13 @@ def getSinkStrength(df,l,scale,domain="full"):
     print("xv = "+str(xv)+", jvx = "+str(Jv)+", Dv = "+str(Dv))
     print('\033[93m'+"Zi: "+str(Zi)+" \nZv: "+str(Zv))
     print('\033[97m'+"ki^2: "+str(ki)+" \nkv^2: "+str(kv)+" "+'\033[0m')
-    ss_file.write(str(size)+","+str(xi)+","+str(xv)+","+str(Ji)+","+str(Jv)+","+str(Di)+","+str(Dv)+","+str(Zi)+","+str(Zv)+","+str(rho)+","+str(rho)+","+str(ki)+","+str(kv)+"\n")
+    ss_file.write(str(size)+","+str(xi)+","+str(xv)+","+str(Fi)+","+str(Fv)+","+str(Di)+","+str(Dv)+","+str(Zi)+","+str(Zv)+","+str(rho)+","+str(rho)+","+str(ki)+","+str(kv)+"\n")
     ss_file.close()
     return 0
 
 os.system("rm -rf sink_strength_moose.csv")
 ss_file = open('sink_strength_moose.csv', 'a')
-ss_file.write("x,Ci_Center,Cv_center,Ji,Jv,Di,Dv,Zi,Zv,rho,rho,ki,kv\n")
+ss_file.write("x,Ci_Center,Cv_center,Fi,Fv,Di,Dv,Zi,Zv,rho,rho,ki,kv\n")
 ss_file.close()
 
 if sys.argv[-1]=="-"+"h":

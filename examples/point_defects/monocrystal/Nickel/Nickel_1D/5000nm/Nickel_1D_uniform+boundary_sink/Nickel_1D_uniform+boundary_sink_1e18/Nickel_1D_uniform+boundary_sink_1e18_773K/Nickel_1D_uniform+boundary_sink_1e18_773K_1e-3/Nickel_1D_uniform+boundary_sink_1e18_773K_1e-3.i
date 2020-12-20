@@ -414,12 +414,12 @@
     growth_factor = 1.2
     cutback_factor = 0.8
   [../]
-  [./Adaptivity]
-      refine_fraction = 0.5
-      coarsen_fraction = 0.05
-      max_h_level = 2
-     initial_adaptivity = 2
-  [../]
+  # [./Adaptivity]
+  #     refine_fraction = 0.5
+  #     coarsen_fraction = 0.05
+  #     max_h_level = 2
+  #    initial_adaptivity = 2
+  # [../]
   # postprocessor = cv
   # skip = 25
   # criteria = 0.01

@@ -21,6 +21,9 @@
 []
 
 [AuxVariables]
+  [./epsi_dd]
+    initial_condition = 0.03
+  [../]
 
 
 
@@ -193,7 +196,7 @@
 [./rho_i_source]
   type = MaskedBodyForce
   variable = rho_i
-  args = 'xi xv'     # coupled on materials block
+  args = 'xi xv epsi_dd'     # coupled on materials block
   mask = rho_i_evolution
 [../]
 
@@ -208,8 +211,8 @@
   [./reaction_iv]
     type = DerivativeParsedMaterial
     f_name = reaction_iv
-    constant_names = 'l Di Dv alpha'
-    constant_expressions = '1e-9 1e-9 2e-13  3.68e12'
+    prop_names = 'l Di Dv alpha'
+    prop_values = '1e-9 1e-9 2e-13  3.68e12'
     args = 'xv'
     function = '-1*((l*l/Di)*alpha)*xv'
   [../]
@@ -228,8 +231,8 @@
     f_name = sink_i
     args = 'rho_i'
     function = '-1*(1/Di)*Di*(rho_i)'
-    constant_names = 'l Di Dv'
-    constant_expressions = '1e-9 1e-9 2e-13'
+    prop_names = 'l Di Dv'
+    prop_values = '1e-9 1e-9 2e-13'
   [../]
 
 
@@ -240,7 +243,7 @@
     f_name = reaction_vi
     args = 'xi'
     constant_names = 'l Di Dv alpha'
-    constant_expressions = '1e-9 1e-9 2e-13 3.68e12 '
+    constant_expressions = '1e-9 1e-9 2e-13 3.68e12'
     function = '-1*(((l*l)/Di)*alpha)*xi'
   [../]
 
@@ -257,7 +260,7 @@
     f_name = sink_v
     args = 'rho_i'
     constant_names = 'l Di Dv alpha'
-    constant_expressions = '1e-9 1e-9 2e-13 3.68e12 '
+    constant_expressions = '1e-9 1e-9 2e-13 3.68e12'
     function = '-1*((1/Di)*Dv)*(rho_i)'
   [../]
 
@@ -267,9 +270,9 @@
   [./rho_i_evolution]
     type = DerivativeParsedMaterial
     f_name = rho_i_evolution
-    args = 'xi xv'
-    constant_names = 'l Di Dv N b epsi_dd'
-    constant_expressions = '1e-9 1e-9 2e-13 1e22 2.5e-10 0.03'
+    args = 'xi xv epsi_dd'
+    constant_names = 'l Di Dv N b'
+    constant_expressions = '1e-9 1e-9 2e-13 1e22 2.5e-10'
     function = '(6.3256e-16*epsi_dd)+((((pow(l,4))/Di)*((2*3.14*N)/b))*((Di*xi)-(Dv*(xv-3.7e-11))))' # note that, here i commentetd out the espi*K
   [../]
 
@@ -359,6 +362,7 @@
 # []
 
 [Outputs]
+  file_base = dd_test_04
   exodus = true
   csv = true
   interval = 1

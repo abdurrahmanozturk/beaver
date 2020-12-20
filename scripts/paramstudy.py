@@ -55,20 +55,20 @@ def find_line(param,file,blockmode=False,filename=False):
                     if re.search(name,lines[i]):
                         linenum.append(i)
                         return linenum
-                sys.exit("Error! : "+name+" value is not defined input file.")
+                sys.exit("Error 58! : "+name+" value is not defined input file.")
             #Find the line including parameter
             if re.compile(name).search(line) and re.search("parametric study",line):
                 if re.search("_names",line):
                     subindex = 0
                     for subline in lines[index:]:
-                        if re.search("_values",subline):
+                        if re.search("_values",subline) or re.search("_expressions",subline):
                             linenum.append(index+subindex)
                         if re.compile(re.escape("[../]")).search(subline):
                             for back in range(index,0,-1):
-                                if re.search("_values",lines[back]):
+                                if re.search("_values",lines[back]) or re.search("_expressions",lines[back]):
                                     linenum.append(back)
                                 if re.compile(re.escape("[./")).search(lines[back]):
-                                    sys.exit("Error! : "+name+" value is not defined input file.")
+                                    sys.exit("Error 71! : "+name+" value is not defined input file.")
                         subindex += 1
                 linenum.append(index)
                 index += 1
@@ -85,13 +85,13 @@ def find_line(param,file,blockmode=False,filename=False):
                         if re.search("_names",subline):
                             _names_index = index+subindex
                             for _values_index in range(index,len(lines)):
-                                if re.search("_values",lines[_values_index]):
+                                if re.search("_values",lines[_values_index]) or re.search("_expressions",lines[_values_index]):
                                     linenum.append(_values_index)
                                     return linenum
                         linenum.append(index+subindex)
                         return linenum
                     if re.compile(re.escape("[../]")).search(subline):
-                        sys.exit("Error! : "+name+" is not defined in block "+block)
+                        sys.exit("Error 94! : "+name+" is not defined in block "+block)
                     subindex += 1
             else:
                 index += 1
@@ -101,7 +101,7 @@ def find_line(param,file,blockmode=False,filename=False):
 #Generate New Line
 def newline(values,runid,param,line,linenum,file):
     if param == "function" or param == "prop_values":
-        sys.exit("Error! : Specify variable name instead of "+param)
+        sys.exit("Error 104! : Specify variable name instead of "+param)
     index = get_index(param,line,linenum,file)
     if len(index) == 1:
         if re.search("file_base",line):
@@ -114,14 +114,14 @@ def newline(values,runid,param,line,linenum,file):
 #Generate New Filename
 def newfile(values,runid,param,file):
     if param == "function" or param == "prop_values":
-        sys.exit("Error! : Specify variable name instead of "+param)
+        sys.exit("Error 117! : Specify variable name instead of "+param)
     return file[:-2:]+"_"+param+"_"+values[runid]
 
 
 #Find Index
 def get_index(param,line,linenum,file):
     index = []
-    if re.search("_values",line):
+    if re.search("_values",line) or re.search("_expressions",line):
         param_index = 0
         #Read file
         f = open(file,'r')
@@ -140,7 +140,7 @@ def get_index(param,line,linenum,file):
                         names_linenum = back
                         break
                     if re.compile(re.escape("[./")).search(lines[back]):
-                        sys.exit("Error! : "+name+" value is not defined input file.")
+                        sys.exit("Error 143! : "+name+" value is not defined input file.")
                 break
             subindex += 1
         names_line = lines[names_linenum]
@@ -208,7 +208,7 @@ def main():
     if n > n_max:
         n = n_max
     elif n==0:
-        sys.exit("Error! : Interval "+ck+" is larger than range.")
+        sys.exit("Error 211! : Interval "+ck+" is larger than range.")
 
     values = []
     if lower==upper: #Single Run

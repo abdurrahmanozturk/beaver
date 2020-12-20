@@ -1,14 +1,15 @@
 # Fdb version 3
-["bibtex article"] 1606934074 "article.aux" "article.bbl" "article" 1607221116
+["bibtex article"] 1607972126 "article.aux" "article.bbl" "article" 1607972272
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/unsrt.bst" 1480098433 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "article.aux" 1606939256 4458 e8bc596ecf2b2bfdb28e16c5b83c05d2 ""
+  "article.aux" 1607972272 4638 e540492a85e47b41b17f2298263c2b14 ""
   "article.bcf" 0 -1 0 ""
   "ref.bib" 1605858575 1083 04a2f824d8bdce1eba4a2a6765df9e28 ""
   (generated)
   "article.bbl"
   "article.blg"
-["pdflatex"] 1606939249 "article.tex" "/home/ao/projects/beaver/examples/point_defects/article/article.pdf" "article" 1607221116
+["pdflatex"] 1607972269 "article.tex" "/home/ao/projects/beaver/examples/point_defects/article/article.pdf" "article" 1607972272
   "./plots/concentration_profiles_MOOSE_Analytical_Neutron_0.png" 1605856072 49018 36599c93d8e1bbde4c23beeca66f1296 ""
+  "./plots/defect_production_500-5000nm.png" 1605550425 84794 1d44861d2ddf163d5fe5484a19698b5d ""
   "./plots/interstitial_concentration_500-5000nm-high_neutron-0.png" 1605732602 36439 be14627c05d243846b953dd8d9afbdfa ""
   "./plots/interstitial_concentration_500-5000nm-high_neutron-5.png" 1605730819 73177 4724672498564f3822a4933a2c4eb8af ""
   "./plots/interstitial_concentration_500-5000nm-ion-0.png" 1605548647 74141 b5c85e98ec71895f26b9602af8b0fc61 ""
@@ -38,7 +39,7 @@
   "./plots/vacancy_concentration_500-5000nm-neutron-0.png" 1605550124 46607 10a465e85347a6b301f26997d0678272 ""
   "./plots/vacancy_concentration_500-5000nm-neutron-5.png" 1605330936 64823 e037bb719d4768cd4c5ea7299635d81d ""
   "/etc/texmf/web2c/texmf.cnf" 1603731169 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/ao/projects/beaver/examples/point_defects/article/article.aux" 1606939256 4458 e8bc596ecf2b2bfdb28e16c5b83c05d2 ""
+  "/home/ao/projects/beaver/examples/point_defects/article/article.aux" 1607972272 4638 e540492a85e47b41b17f2298263c2b14 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1480098698 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex9.tfm" 1480098698 996 a18840b13b499c08ac2de96a99eda4bc ""
@@ -119,10 +120,11 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1520210507 32485 c64754543d8ac501bea6e75e209ea521 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1603731188 75955 f78456fd1308dc295dc476a68e28d85b ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1603731189 724919 3019661ce84428e0572aa5157cb84860 ""
-  "article.aux" 1606939256 4458 e8bc596ecf2b2bfdb28e16c5b83c05d2 ""
-  "article.bbl" 1606934074 595 5baa52a2ad9a788341f26e06e2f2d839 "bibtex article"
-  "article.tex" 1606939248 15153 ac82f057bb5567d8ef9b9e5a221f240a ""
+  "article.aux" 1607972272 4638 e540492a85e47b41b17f2298263c2b14 ""
+  "article.bbl" 1607972126 595 5baa52a2ad9a788341f26e06e2f2d839 "bibtex article"
+  "article.tex" 1607972269 17525 823ae9cf5c1eb35cee84f74cab99c755 ""
   "plots/concentration_profiles_MOOSE_Analytical_Neutron_0.png" 1605856072 49018 36599c93d8e1bbde4c23beeca66f1296 ""
+  "plots/defect_production_500-5000nm.png" 1605550425 84794 1d44861d2ddf163d5fe5484a19698b5d ""
   "plots/interstitial_concentration_500-5000nm-high_neutron-0.png" 1605732602 36439 be14627c05d243846b953dd8d9afbdfa ""
   "plots/interstitial_concentration_500-5000nm-high_neutron-5.png" 1605730819 73177 4724672498564f3822a4933a2c4eb8af ""
   "plots/interstitial_concentration_500-5000nm-ion-0.png" 1605548647 74141 b5c85e98ec71895f26b9602af8b0fc61 ""
@@ -152,11 +154,11 @@
   "plots/vacancy_concentration_500-5000nm-neutron-0.png" 1605550124 46607 10a465e85347a6b301f26997d0678272 ""
   "plots/vacancy_concentration_500-5000nm-neutron-5.png" 1605330936 64823 e037bb719d4768cd4c5ea7299635d81d ""
   (generated)
+  "article.toc"
+  "/home/ao/projects/beaver/examples/point_defects/article/article.log"
+  "article.log"
   "article.lof"
   "article.aux"
-  "/home/ao/projects/beaver/examples/point_defects/article/article.pdf"
-  "/home/ao/projects/beaver/examples/point_defects/article/article.log"
-  "article.toc"
   "article.pdf"
-  "article.log"
   "article.lot"
+  "/home/ao/projects/beaver/examples/point_defects/article/article.pdf"

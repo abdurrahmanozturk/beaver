@@ -162,6 +162,9 @@ INPUT ./plots/sink_strength_moose_neutron_5_k.png
 INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/sink_strength_moose_neutron_5_Z.png
 INPUT ./plots/sink_strength_moose_neutron_5_Z.png
 INPUT ./plots/sink_strength_moose_neutron_5_Z.png
+INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/defect_production_500-5000nm.png
+INPUT ./plots/defect_production_500-5000nm.png
+INPUT ./plots/defect_production_500-5000nm.png
 INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/interstitial_concentration_500-5000nm-ion-0.png
 INPUT ./plots/interstitial_concentration_500-5000nm-ion-0.png
 INPUT ./plots/interstitial_concentration_500-5000nm-ion-0.png

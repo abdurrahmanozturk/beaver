@@ -102,8 +102,10 @@ The simulation results for different irradiation types are presented by defect c
 
 
   \subsection{Neutron Irradiation} \hspace{10pt}
-  Neutrons have an energy spectrum that varies a couple of orders of magnitude. This makes defect generation possible at different energies. Also, the high penetration depth of neutrons allow them travel through material corresponding to their energy and end up with an uniform or flat-like defect profiles.
+  Neutrons have an energy spectrum that varies a couple of orders of magnitude. This makes defect generation possible at different energies. Also, the high penetration depth of neutrons allow them travel through material corresponding to their energy and end up with an uniform or flat-like defect production profiles.
     \subsubsection{Concentrations} \hspace{10pt}
+    As a result of uniform defect production and sink at boundaries, the concentration profiles are symmetrical around domain center. For unbiased case, representing the equal amount of point defect production, the steady state value of concentrations are not changing significantly with increasing domain size as shown in Fig. \ref{figure:concentrations_neutron_0_1e-6}. The centerline concentration is sensitive to domain size and might change with increasing domain size. High neutron dose rate raises concentration levels and provides sharper and more stable profiles (see Fig. \ref{figure:concentrations_neutron_0_1e-3}) in the same domain.
+
       \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %0 Bias rate
         \centering
         \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-neutron-0}}
@@ -120,6 +122,8 @@ The simulation results for different irradiation types are presented by defect c
         \caption{Concentration profiles for high dose neutron irradation with 0\% Production Bias}
         \label{figure:concentrations_neutron_0_1e-3}
       \end{figure}
+      \hspace{10pt}
+      In reality, even though atomic collisions create vacancy-interstitial pairs, following events cause a gap between the amount of point defects. The amount of vacancies would be more than interstitials. Production bias is used to ensure this imbalance. Unlike unbiased case, the steady state concentration profiles change significantly. The centerline interstitial concentration decreases, and its profile turns down after a specific domain size (1000 nm). Moreover, the ratio between miniumum and maximum peaks gets bigger with increasing domain size, which could be explained as interstitial atom segregation near boundary. The vacancy concentration, on the other hand, increases proportional to domain size, and its profile having peak at higher concentrations as shown in Fig. \ref{figure:concentrations_neutron_5_1e-6}. Similar to unbiased case, average concentration levels increases with dose rate. But, the most important effect of high neutron dose rate is causing the interstitial concentration profile to flip in smaller domain sizes than 500 nm (see Fig. \ref{figure:concentrations_neutron_5_1e-3}).
       \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
         \centering
         \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-neutron-5}}
@@ -170,7 +174,14 @@ The simulation results for different irradiation types are presented by defect c
       \end{figure}
 
   \subsection{Ion Irradiation} \hspace{10pt}
-  Unlike neutrons, ions have relatively narrow energy channel width which is almost monoenergetic. Furtmermore, they cannot penetrate through material a lot because of high energy loss in collisions. These characteristic causes a non-uniform defect profiles.
+  Unlike neutrons, ions have relatively narrow energy channel width which is almost monoenergetic. Furtmermore, they cannot penetrate through material too much because of their high energy loss in collisions. These characteristic causes a non-uniform defect profiles. The Fig. \ref{figure:defect_production_500-5000nm} shows the defect production profiles in different domain sizes for ion irradation.
+    \begin{figure}[h!]  %Ion irradation
+      \centering
+      \subfloat{\includegraphics[scale=0.6]{defect_production_500-5000nm}}
+      \qquad
+      \caption{Defect production profiles for ion irradation.}
+      \label{figure:defect_production_500-5000nm}
+    \end{figure}
     \subsubsection{Concentrations}
       \begin{figure}[h!]  %Ion - 1e-3 dpa/s - %0 Bias rate
         \centering
@@ -267,7 +278,8 @@ appear again in nano-scale domain.\cite{was2016}
 \section{Conclusion} \hspace{10pt}
 
 The most significant parameters are found as domain size and bias rate as shown in plots in this section.
-
+The shape of profile is defined by balance between parameters(bias,dose rate, domain size,..)
+An online tool could be created to play with different parameters.
 % \begin{thebibliography}{00}
 % \bibitem{b2} Garry S. Was.
 % \end{thebibliography}

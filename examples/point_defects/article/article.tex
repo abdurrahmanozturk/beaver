@@ -48,8 +48,49 @@ We present a detailed investigation of the effect of size on the segregation of 
 % \listoffigures
 
 \section{Introduction} \hspace{10pt}
-
+\newpage
 \section{Methodology} \hspace{10pt}
+
+\subsection{Point Defect Equations} \hspace{10pt}
+The irradiation of a material causes the creation of vacancies and interstitial because of
+atomic collisions. The point defects can diffuse through material, recombine with each other,
+and react with sinks which are present in microstructure. The concentration of point defects is
+described mathematically by the chemical rate balance equations given in following sets of equations.\\
+
+\begin{equation}
+  \begin{aligned}
+    &\frac{dC_i}{dt} = K_0 - K_{iv}C_iC_v - K_{is}C_iC_s + \nabla\cdot D_i\nabla C_i\\
+    &\frac{dC_v}{dt} = K_0 - K_{iv}C_iC_v - K_{vs}C_vC_s + \nabla\cdot D_v\nabla C_v\\
+  \end{aligned}}
+  \label{equation:point_defect_equations}
+\end{equation}\\
+
+There are different terms with different rate coefficients as seen in Eq. \ref{equation:point_defect_equations}. The first term on the RHS is a source term, representing defect generation with rate of K\textsubscript{0}. The second term is a reaction term, referring the recombination process if the defect x reacts with defect y with a rate of K\textsubscript{xy}. The third term is also a reaction term, representing the reaction between the defect x and the sink s with a rate of K\textsubscript{xs}. In this study, the sink concentration is assumed constant and uniformly distributed over domain. The last term is diffusion term which is resolving the spatial behavior of defects.\\
+
+Another form of point defect equations can be written by using sink strength, \textit{k} definition for sink reaction term.\\
+
+\begin{equation}
+  \begin{aligned}
+    &k_i^2D_iC_i = K_{is}C_iC_s \\
+    &k_v^2D_vC_v = K_{vs}C_vC_s \\
+  \end{aligned}}
+  \label{equation:sink_reaction_term}
+\end{equation}\\
+\begin{equation}
+  \begin{aligned}
+    &\frac{dC_i}{dt} = K_0 - K_{iv}C_iC_v - k_i^2D_iC_i + \nabla\cdot D_i\nabla C_i\\
+    &\frac{dC_v}{dt} = K_0 - K_{iv}C_iC_v - k_v^2D_vC_v + \nabla\cdot D_v\nabla C_v\\
+  \end{aligned}}
+  \label{equation:point_defect_equations_sink_strength}
+\end{equation}\\
+
+!!!mention!!! The production bias is a factor that is used to create a difference between interstitial and vacancy generation in domain.}
+
+\subsection{Non-dimensionalization of Point Defect Equations} \hspace{10pt}
+The time space of defect interactions is enormously large, which could differ from nanoseconds to hours. In addition, rate coefficients also have different orders. To make it easier to solve point defect equations numerically, their non-dimensionalized forms are implemented in MOOSE. The non-dimensionalization scheme and final form of equations are given in this section.
+
+\subsection{Model Settings and Parameters} \hspace{10pt}
+Nickel is selected as a base material, and its properties are used in calculations.
 
 \begin{table}[h!]
   \centering
@@ -93,151 +134,179 @@ We present a detailed investigation of the effect of size on the segregation of 
   \end{tabular}
 \end{table}
 
-!!!mention!!! The production bias is a factor that is used to create a difference between interstitial
-and vacancy generation in domain.}
-
+\newpage
 \section{Results} \hspace{10pt}
 
 In reactor environment, materials are exposed to different types of particle radiation such as electron, proton, neutron and ion. This study covers two most significant irradation types, neutrons and ions. The results obtained from MOOSE simulations are presented in this section by plots of defect concentration, vacancy supersaturation and sink strengths. %The calculated sink strengths are also tabulated for different domain size and bias rates.
 
-
   \subsection{Neutron Irradiation} \hspace{10pt}
-  Neutrons have an energy spectrum that varies a couple of orders of magnitude. This makes defect generation possible at different energies. Also, the high penetration depth of neutrons allow them travel through material corresponding to their energy and end up with a uniform or flat-like defect production profiles.
+  Neutrons have an energy spectrum that varies a couple of orders of magnitude. This makes defect generation possible at different energies. Also, the high penetration depth of neutrons allow them to travel through material corresponding to their energies. Thus, they end up with a uniform or flat-like defect production profiles.
+
+  Numerical models are frequently used to solve scientific problems. Users of these models are making decisions based on results obtained from simulations, so the numerical approach should be reliable. Before presenting MOOSE results of this study, a simple 1D spherical grain approach is tested in MOOSE and the results are compared to analytical results for validation.
+
+  In this approach the recombination term in Eq. \ref{equation:point_defect_equations_sink_strength} is neglected, and the steady state analytical solutions for spherical grain of radius \textit{a} are found as below.\cite{heald1977}\\
+
+  \begin{equation}
+    \begin{aligned}
+      &0 = \frac{K_0}{D_i} - k_i^2C_i + \frac{d^2C_i}{dr^2}+\frac{2}{r}\frac{dC_i}{dr}\\
+      &0 = \frac{K_0}{D_v} - k_v^2C_v + \frac{d^2C_v}{dr^2}+\frac{2}{r}\frac{dC_v}{dr}\\
+    \end{aligned}}
+    \label{equation:spherical_norecomb_point_defect_equations}
+  \end{equation}\\
+  \begin{equation}
+    \begin{aligned}
+      &C_i(r)=\frac{K_0}{D_ik_i^2}\bigg(1-\frac{a\sinh{k_ir}}{r\sinh{k_ia}}\bigg)\\
+      &C_v(r)=\frac{K_0}{D_vk_v^2}\bigg(1-\frac{a\sinh{k_vr}}{r\sinh{k_va}}\bigg)\\
+    \end{aligned}}
+    \label{equation:spherical_grain_analytical_solution}
+  \end{equation}\\
+
+  As seen in Fig. \ref{figure:concentrations_MOOSE_analytical}, MOOSE results exactly match with the analytical solution, which makes it a useful tool to analyze behavior of defect concentrations.
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.55]{concentration_profiles_MOOSE_Analytical_Neutron_0}
+    \caption{Comparison of MOOSE results with analytical solution for a 1D spherical grain.}
+    \label{figure:concentrations_MOOSE_analytical}
+  \end{figure}
     \subsubsection{Concentrations} \hspace{10pt}
     Even though atomic collisions create vacancy-interstitial pairs, following events creates gap between the amount of point defects in favor of vacancies. At steady state condition, there are more vacancies than interstitials in microstructure. Since producing equal amount of point defects is not physically correct, production bias is used to ensure this imbalance while modeling point defects. For unbiased case, as a result of uniform defect production and reaching equilibrium at boundaries, the concentration profiles are symmetrical around domain center. The steady state concentration at center is not changing significantly with increasing size as shown in Fig. \ref{figure:concentrations_neutron_0_1e-6}. In case of high neutron dose rate, concentration levels increase, profiles become more stable (see Fig. \ref{figure:concentrations_neutron_0_1e-3}).
 
       \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %0 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-neutron-0}}
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-0}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{vacancy_concentration_500-5000nm-neutron-0}}
+        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-0}}
         \caption{Concentration profiles for neutron irradation with 0\% Production Bias}
         \label{figure:concentrations_neutron_0_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Neutron - 1e-3 dpa/s - %0 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-high_neutron-0}}
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-0}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{vacancy_concentration_500-5000nm-high_neutron-0}}
+        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-0}}
         \caption{Concentration profiles for high dose neutron irradation with 0\% Production Bias}
         \label{figure:concentrations_neutron_0_1e-3}
       \end{figure}
-      \hspace{10pt}
+
        Unlike unbiased case, the steady state concentration profiles change significantly. The interstitial concentration at center decreases, and its spatial profile turns down after a specific domain size (1000 nm in Fig. \ref{figure:concentrations_neutron_5_1e-6}). Moreover, the depth of profile gets larger with increasing domain size, which could be explained as acumulation of more interstitial atoms trying to reach equilibrium at boundary. The vacancy concentration, on the other hand, increases proportional to domain size, and its profile having peak at higher concentrations as shown in Fig. \ref{figure:concentrations_neutron_5_1e-6}. Similar to unbiased case, average concentration levels increases with dose rate. But, the most important effect of high neutron dose rate is causing the interstitial concentration profile to flip in smaller domain sizes than 500 nm (see Fig. \ref{figure:concentrations_neutron_5_1e-3}).
       \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-neutron-5}}
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-5}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{vacancy_concentration_500-5000nm-neutron-5}}
+        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-5}}
         \caption{Concentration profiles for neutron irradation with 5\% Production Bias}
         \label{figure:concentrations_neutron_5_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Neutron - 1e-3 dpa/s - %5 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-high_neutron-5}}
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-5}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{vacancy_concentration_500-5000nm-high_neutron-5}}
+        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-5}}
         \caption{Concentration profiles for high dose neutron irradation with 5\% Production Bias}
         \label{figure:concentrations_neutron_5_1e-3}
       \end{figure}
+
+    \newpage
+    \subsubsection{Supersaturation} \hspace{10pt}
       \begin{figure}[h!]  %Nuetron - Vacancy Supersaturation - 5% Bias
         \centering
-        \subfloat{\includegraphics[scale=0.6]{super_saturation_500-5000nm-neutron-5}}
+        \subfloat{\includegraphics[scale=0.55]{super_saturation_500-5000nm-neutron-5}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{super_saturation_500-5000nm-high_neutron-5}}
+        \subfloat{\includegraphics[scale=0.55]{super_saturation_500-5000nm-high_neutron-5}}
         \caption{Vacancy Supersaturation profiles for normal and high dose neutron irradation with 5\% Production Bias}
         \label{figure:vacancy_supersaturation_neutron_5}
       \end{figure}
-    \subsubsection{Sink Strengths}
-    The grain boundary sink strengths are calculated by using the equation \ref{equation:sink_strength}. First of all the defect concentration profile found by MOOSE is validated by comparing to analytical result as shown in Fig.\ref{figure:concentrations_MOOSE_analytical}
-      \begin{figure}[h!]
-        \centering
-        \includegraphics[scale=0.6]{concentration_profiles_MOOSE_Analytical_Neutron_0}
-        \caption{Comparison of MOOSE results with analytical solution for a 1D spherical grain.\cite{heald1977}}
-        \label{figure:concentrations_MOOSE_analytical}
-      \end{figure}
+
+    \newpage
+    \subsubsection{Sink Strengths} \hspace{10pt}
+    The grain boundary sink strengths are calculated by using the equation \ref{equation:sink_strength}.
       \begin{figure}[h!]  %Sink Strength - Neutron 1e-6 dpa/s - 0% Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{sink_strength_moose_neutron_0_k}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_neutron_0_k}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{sink_strength_moose_neutron_0_Z}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_neutron_0_Z}}
         \caption{Sink Strengths for neutron irradiation with 0\% Production Bias}
         \label{figure:sink_strengths_neutron_0_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Sink Strength - Neutron 1e-6 dpa/s - 5% Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{sink_strength_moose_neutron_5_k}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_neutron_5_k}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{sink_strength_moose_neutron_5_Z}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_neutron_5_Z}}
         \caption{Sink Strengths for neutron irradation with 5\% Production Bias}
         \label{figure:sink_strengths_neutron_5_1e-6}
       \end{figure}
 
   \subsection{Ion Irradiation} \hspace{10pt}
-  Unlike neutrons, ions have relatively narrow energy channel width which is almost monoenergetic. Furtmermore, they cannot penetrate through material too much because of their high energy loss in collisions. These characteristic causes a non-uniform defect profiles. The Fig. \ref{figure:defect_production_500-5000nm} shows the defect production profiles in different domain sizes for ion irradation.
+  Unlike neutrons, ions have relatively narrow energy channel width which is almost monoenergetic. Furthermore, they cannot penetrate through material too much because of their high energy loss in collisions. These characteristic causes a non-uniform defect profiles. The Fig. \ref{figure:defect_production_500-5000nm} shows the defect production profiles in different domain sizes for ion irradation.
     \begin{figure}[h!]  %Ion irradation
       \centering
-      \subfloat{\includegraphics[scale=0.6]{defect_production_500-5000nm}}
+      \subfloat{\includegraphics[scale=0.55]{defect_production_500-5000nm}}
       \qquad
       \caption{Defect production profiles for ion irradation.}
       \label{figure:defect_production_500-5000nm}
     \end{figure}
+    \newpage
     \subsubsection{Concentrations}
       \begin{figure}[h!]  %Ion - 1e-3 dpa/s - %0 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-ion-0}}
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-ion-0}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{vacancy_concentration_500-5000nm-ion-0}}
+        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-ion-0}}
         \caption{Concentration profiles for low dose ion irradation with 0\% Production Bias}
         \label{figure:concentrations_ion_0_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Ion - 1e-6 dpa/s - %0 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-low_ion-0}}
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-low_ion-0}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{vacancy_concentration_500-5000nm-low_ion-0}}
+        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-low_ion-0}}
         \caption{Concentration profiles for ion irradiation with 0\% Production Bias}
         \label{figure:concentrations_ion_0_1e-3}
       \end{figure}
       \begin{figure}[h!]  %Ion - 1e-3 dpa/s - %5 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-ion-5}}
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-ion-5}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{vacancy_concentration_500-5000nm-ion-5}}
+        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-ion-5}}
         \caption{Concentration profiles for low dose ion irradation with 5\% Production Bias}
         \label{figure:concentrations_ion_5_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Ion - 1e-6 dpa/s - %5 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{interstitial_concentration_500-5000nm-low_ion-5}}
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-low_ion-5}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{vacancy_concentration_500-5000nm-low_ion-5}}
+        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-low_ion-5}}
         \caption{Concentration profiles for ion irradation with 5\% Production Bias}
         \label{figure:concentrations_ion_5_1e-3}
       \end{figure}
+
+    \newpage
+    \subsubsection{Supersaturation}
       \begin{figure}[h!]  %Ion - %5 Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{super_saturation_500-5000nm-ion-5}}
+        \subfloat{\includegraphics[scale=0.55]{super_saturation_500-5000nm-ion-5}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{super_saturation_500-5000nm-low_ion-5}}
+        \subfloat{\includegraphics[scale=0.55]{super_saturation_500-5000nm-low_ion-5}}
         \caption{Vacancy Supersaturation profiles for low dose and ion irradation with 5\% Production Bias}
         \label{figure:vacancy_supersaturation_ion_5}
       \end{figure}
 
+    \newpage
     \subsubsection{Sink Strengths}
       \begin{figure}[h!]  %Sink Strength - ion 1e-3 dpa/s - 0% Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{sink_strength_moose_ion_0_k}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_ion_0_k}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{sink_strength_moose_ion_0_Z}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_ion_0_Z}}
         \caption{Sink Strengths for low dose ion irradation with 0\% Production Bias}
         \label{figure:sink_strengths_ion_0_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Sink Strength - ion 1e-3 dpa/s - 5% Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.6]{sink_strength_moose_ion_5_k}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_ion_5_k}}
         \qquad
-        \subfloat{\includegraphics[scale=0.6]{sink_strength_moose_ion_5_Z}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_ion_5_Z}}
         \caption{Sink Strengths for ion irradiation with 5\% Production Bias}
         \label{figure:sink_strengths_ion_5_1e-6}
       \end{figure}

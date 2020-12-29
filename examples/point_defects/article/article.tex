@@ -186,7 +186,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \label{figure:concentrations_neutron_0_1e-3}
       \end{figure}
       \newpage
-       If production bias is applied, the steady state concentration profiles change significantly. The interstitial concentration at center decreases, and its spatial profile turns down after \textit{critical domain size} (${\sim}$1000 nm in Fig. \ref{figure:concentrations_neutron_5_1e-6}). Moreover, the depth of profile gets larger with increasing domain size, which could be explained as acumulation of more interstitial atoms trying to reach equilibrium at boundary. The vacancy concentration, on the other hand, increases proportional to domain size, and its profile having peak at higher concentrations as shown in Fig. \ref{figure:concentrations_neutron_5_1e-6}.\\
+       If production bias is applied, the steady state concentration profiles change significantly. The interstitial concentration at center decreases, and its spatial profile turns down after \textit{critical grain size} (${\sim}$1000 nm in Fig. \ref{figure:concentrations_neutron_5_1e-6}). Moreover, the depth of profile gets larger with increasing domain size, which could be explained as acumulation of more interstitial atoms trying to reach equilibrium at boundary. The vacancy concentration, on the other hand, increases proportional to domain size, and its profile having peak at higher concentrations as shown in Fig. \ref{figure:concentrations_neutron_5_1e-6}.\\
       \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
         \centering
         \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-5}}
@@ -274,7 +274,7 @@ In reactor environment, materials are exposed to different types of particle rad
       \end{aligned}
     \end{equation}\\
 
-    Sink strengths are calculated based on MOOSE simulation results and presented in Fig. \ref{figure:sink_strengths_neutron_5_1e-6} and \ref{figure:sink_strengths_ion_5_1e-3}. The effect of flipping behavior is not visible in grain boundary sink strength, ${Z^{gb}}$ plot, but in total grain boundary sink strength, ${k^2}$ plot, there is a significant change on trend of ${k^2_i}$ line after critical domain size of ${\sim}$1000 nm. In high dose rate plot, the critical domain size is seen clearly around at ${\sim}$250 nm.
+    Sink strengths are calculated based on MOOSE simulation results and presented in Fig. \ref{figure:sink_strengths_neutron_5_1e-6} and \ref{figure:sink_strengths_ion_5_1e-3}. The effect of flipping behavior is not visible in grain boundary sink strength, ${Z^{gb}}$ plot, but in total grain boundary sink strength, ${k^2}$ plot, there is a significant change on ${k^2_i}$ after critical grain size of ${\sim}$1000 nm. In high dose rate plot, the critical grain size is seen clearly around at ${\sim}$250 nm.
       % \begin{figure}[h!]  %Sink Strength - Neutron 1e-6 dpa/s - 0% Bias rate
       %   \centering
       %   \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_neutron_0_k}}
@@ -330,7 +330,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \label{figure:concentrations_ion_0_1e-3}
       \end{figure}
       \newpage
-      In case of applying production bias, profiles become completely different. Although the flipping behavior observed in neutron irradation case is also visible in ion irradation case, the non-uniform defect production causes asymmetrical interstitial concentration profile in Fig. \ref{figure:concentrations_ion_5_1e-6}. The vacancy concentration profiles also become asymmetrical and shift up with increasing domain size. Increasing ion dose rate from 1e-6 dpa/s to 1e-3 dpa/s reduces the effect of defect production profile as well as critical domain size to flip (see Fig. \ref{figure:concentrations_ion_5_1e-3}).
+      In case of applying production bias, profiles become completely different. Although the flipping behavior observed in neutron irradation case is also visible in ion irradation case, the non-uniform defect production causes asymmetrical interstitial concentration profile in Fig. \ref{figure:concentrations_ion_5_1e-6}. The vacancy concentration profiles also become asymmetrical and shift up with increasing domain size. Increasing ion dose rate from 1e-6 dpa/s to 1e-3 dpa/s reduces the effect of defect production profile as well as critical grain size to flip (see Fig. \ref{figure:concentrations_ion_5_1e-3}).
       \begin{figure}[h!]  %Ion - 1e-3 dpa/s - %5 Bias rate
         \centering
         \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-low_ion-5}}
@@ -361,7 +361,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \label{figure:vacancy_supersaturation_ion_5}
       \end{figure}
     \subsubsection{Sink Strengths} \hspace{10pt}
-    The sink strengths are directly related to concentration at center and flow at boundary. The change in centerline defect concentrations are not as considerable as neutron case. So, the flow or flux at boundary becomes more dominant on sink strength profiles.
+    The sink strengths are directly related to concentration at center and flow at boundary. The change in centerline defect concentrations are not as considerable as neutron case. So, the flow or flux at boundary becomes more dominant on sink strength profiles (see Fig. \ref{figure:sink_strengths_ion_5_1e-6} and \ref{figure:sink_strengths_ion_5_1e-3}).
       % \begin{figure}[h!]  %Sink Strength - ion 1e-3 dpa/s - 0% Bias rate
       %   \centering
       %   \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_ion_0_k}}

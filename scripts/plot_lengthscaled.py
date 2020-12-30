@@ -17,7 +17,7 @@ scale = 1e-1 # scaling factor for imported DATA
 
 w = 9.036600512379032e-12 #time scale used in MOOSE
 l = 1e-10  #length scale used in MOOSE
-domain = "full"   #full or half
+coordinates = "spherical"   #cartesian or spherical
 
 def getHelp():
     print('\033[96m'+"\n# ------------------------------------------------------- #\n"
@@ -49,15 +49,18 @@ def getHelp():
           '\033[93m'+"\tplot filename column_x column_y1.....column_yn -g\n"+'\033[0m')
     sys.exit()
 
-def getSinkStrength(df,l,scale,domain="full"):
+def getSinkStrength(df,l,scale,coordinates="cartesian"):
     ss_file = open('sink_strength_moose.csv', 'a')
     nrow = df.shape[0] #number of columns in dataframe
-    size = df.loc[nrow-1,'x']
-    flow_area=1
-    if df.loc[nrow-1,'y']==0 and df.loc[nrow-1,'z']==0:
+    size = df.loc[nrow-1,'x']/scale
+    d = size
+    flow_area=1 # !check this number for 2D and 3D
+    if df.loc[nrow-1,'y']==0 and df.loc[nrow-1,'z']==0: # check 1D domain
         flow_area=size*size
-    if domain == "half":
-        print('\033[91m'+"Domain is choosen as \""+domain+"\""+'\033[0m')
+    if coordinates == "spherical": # for spherical grains
+        print('\033[91m'+"Coordinate system is \""+coordinates+"\""+'\033[0m')
+        d = size * 2 # dimater of grain
+        flow_area = 4*np.pi*size**2 # surface are of grain
         xi = df.loc[0,'xi']  # at center(r=0) for spherical coordinate system
         xv = df.loc[0,'xv']  # at center(r=0) for spherical coordinate system
     else:
@@ -71,7 +74,7 @@ def getSinkStrength(df,l,scale,domain="full"):
     Dv = df.loc[(nrow+1)/2,'Dv']
     Zi = Fi/(xi*Di)
     Zv = Fv/(xv*Dv)
-    rho = 6/(np.pi*(size*2)**3)
+    rho = 6/(np.pi*(d**3))
     ki = rho*Zi
     kv = rho*Zv
     print('\033[94m'+'\033[4m'+'\033[1m'+"\nNondimensionalized Results for length_scale= "+str(l)+" m"+'\033[0m')
@@ -233,7 +236,7 @@ for fid in range(0,len(csvfile)):
         num+=1
 
     # Sink Strength Calculations
-    getSinkStrength(df,l,scale,domain)
+    getSinkStrength(df,l,scale,coordinates)
     # ssi = getSinkStrength(df,'i')      # Interstitial sink strength
     # ssv = getSinkStrength(df,'v')      # Vacancy sink strength
 

@@ -52,15 +52,15 @@ def getHelp():
 def getSinkStrength(df,l,scale,coordinates="cartesian"):
     ss_file = open('sink_strength_moose.csv', 'a')
     nrow = df.shape[0] #number of columns in dataframe
-    size = df.loc[nrow-1,'x']/scale
-    d = size
+    size = df.loc[nrow-1,'x']
+    d = size/scale
     flow_area=1 # !check this number for 2D and 3D
     if df.loc[nrow-1,'y']==0 and df.loc[nrow-1,'z']==0: # check 1D domain
-        flow_area=size*size
+        flow_area=d**2
     if coordinates == "spherical": # for spherical grains
         print('\033[91m'+"Coordinate system is \""+coordinates+"\""+'\033[0m')
-        d = size * 2 # dimater of grain
-        flow_area = 4*np.pi*size**2 # surface are of grain
+        d = d * 2 # dimater of grain
+        flow_area = np.pi*d**2 # surface are of grain 4pir^2=piD^2
         xi = df.loc[0,'xi']  # at center(r=0) for spherical coordinate system
         xv = df.loc[0,'xv']  # at center(r=0) for spherical coordinate system
     else:
@@ -73,23 +73,27 @@ def getSinkStrength(df,l,scale,coordinates="cartesian"):
     Di = df.loc[(nrow+1)/2,'Di']
     Dv = df.loc[(nrow+1)/2,'Dv']
     Zi = Fi/(xi*Di)
+    Zi_scaled = Zi*l
     Zv = Fv/(xv*Dv)
+    Zv_scaled = Zv*l
     rho = 6/(np.pi*(d**3))
     ki = rho*Zi
+    ki_scaled = ki/(l**2)
     kv = rho*Zv
+    kv_scaled = kv/(l**2)
     print('\033[94m'+'\033[4m'+'\033[1m'+"\nNondimensionalized Results for length_scale= "+str(l)+" m"+'\033[0m')
     print('\033[97m'+"Domain Size = "+str(size))
     print("xi = "+str(xi)+", jix = "+str(Ji)+", Di = "+str(Di))
     print("xv = "+str(xv)+", jvx = "+str(Jv)+", Dv = "+str(Dv))
     print('\033[93m'+"Zi: "+str(Zi)+" \nZv: "+str(Zv))
     print('\033[97m'+"ki^2: "+str(ki)+" \nkv^2: "+str(kv)+" "+'\033[0m')
-    ss_file.write(str(size)+","+str(xi)+","+str(xv)+","+str(Fi)+","+str(Fv)+","+str(Di)+","+str(Dv)+","+str(Zi)+","+str(Zv)+","+str(rho)+","+str(rho)+","+str(ki)+","+str(kv)+"\n")
+    ss_file.write(str(size)+","+str(xi)+","+str(xv)+","+str(Fi)+","+str(Fv)+","+str(Di)+","+str(Dv)+","+str(rho)+","+str(Zi)+","+str(Zv)+","+str(ki)+","+str(kv)+","+str(Zi_scaled)+","+str(Zv_scaled)+","+str(ki_scaled)+","+str(kv_scaled)+"\n")
     ss_file.close()
     return 0
 
 os.system("rm -rf sink_strength_moose.csv")
 ss_file = open('sink_strength_moose.csv', 'a')
-ss_file.write("x,Ci_Center,Cv_center,Fi,Fv,Di,Dv,Zi,Zv,rho,rho,ki,kv\n")
+ss_file.write("x,Ci_Center,Cv_center,Fi,Fv,Di,Dv,rho,Zi,Zv,ki,kv,Zi_scaled,Zv_scaled,ki_scaled,kv_scaled\n")
 ss_file.close()
 
 if sys.argv[-1]=="-"+"h":

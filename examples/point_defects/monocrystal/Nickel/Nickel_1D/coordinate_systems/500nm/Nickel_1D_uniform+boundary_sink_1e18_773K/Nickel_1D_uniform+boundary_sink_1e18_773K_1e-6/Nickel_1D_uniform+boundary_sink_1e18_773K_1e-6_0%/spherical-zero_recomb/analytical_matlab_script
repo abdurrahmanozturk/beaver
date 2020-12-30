@@ -1,0 +1,86 @@
+format long;
+clear all;
+clc;
+hold on;
+% l = 1e-10  %length scale
+% w = 9.036600512379032e-12  %time scale
+% beta    = 1.0000000000000001e-20  %l*l
+% omega   = 1.206e-29 %atomic volume
+% Cs      = 1e18  %1/m3
+% Di      = 1.1066108307323346e-09 %m2/s
+% Dv      = 2.0050685348844685e-13 %m2/s
+% K0      = 1e-06
+% Kiv     = 4.895827716833875e-17
+% Kis     = 4.894940802345933e-17
+% Kvs     = 3.779465147482258e-21
+% ki=((Cs*Kis)/Di)^0.5 %1/m
+% kv=((Cs*Kvs)/Dv)^0.5 %1/m
+%
+% a=500;      %nm
+% k=1e15^0.5   %1/m from paper
+% Di=1.107e-09;  %m2/s
+% Dv=2.005e-13;  %m2/s
+% K0=1e-06;      %dpa/s
+% for i=1:501
+%     x(i)=(i-1); %nm
+% %     ci(i)=(K0/(Di*ki^2))*(1-a*sinh(ki*1e-9*x(i))/(x(i)*sinh(ki*1e-9*a)));
+% %     cv(i)=(K0/(Dv*kv^2))*(1-a*sinh(kv*1e-9*x(i))/(x(i)*sinh(kv*1e-9*a)));
+%     ci(i)=(K0/(Di*k^2))*(1-a*sinh(k*1e-9*x(i))/(x(i)*sinh(k*1e-9*a)));
+%     cv(i)=(K0/(Dv*k^2))*(1-a*sinh(k*1e-9*x(i))/(x(i)*sinh(k*1e-9*a)));
+% end
+% plot(x,ci)
+% plot(x,cv)
+%
+%Nondimensionalized
+l       = 1e-10  %m
+a_ND    = 5000
+xs      = 1.206e-11
+K0_ND   = 9.036600512379031e-18
+Kiv_ND  = 36.68460966373172
+Kis_ND  = 36.67796398220919
+Kvs_ND  = 0.0066456815225353315
+Di_ND   = 1.0
+Dv_ND   = 0.00018119003349692062
+ki_ND   =((xs*Kis_ND)/Di_ND)^0.5
+kv_ND   =((xs*Kvs_ND)/Dv_ND)^0.5
+rhoGB_ND=6/(pi*(2*a_ND)^3);
+for i=1:5001
+    x(i)=(i-1);
+    xi(i)=(K0_ND/(xs*Kis_ND))*(1-a_ND*sinh(ki_ND*x(i))/(x(i)*sinh(ki_ND*a_ND)));
+    xv(i)=(K0_ND/(xs*Kvs_ND))*(1-a_ND*sinh(kv_ND*x(i))/(x(i)*sinh(kv_ND*a_ND)));
+    if i>1
+        Ji(i)=-Di_ND*(xi(i)-xi(i-1))/(x(i)-x(i-1));  %4*pi*x(i)*x(i)*
+        Jv(i)=-Dv_ND*(xv(i)-xv(i-1))/(x(i)-x(i-1));  %4*pi*x(i)*x(i)*
+        Fi= (4*pi*K0_ND*a_ND/ki_ND^2)*(ki_ND*a_ND*coth(ki_ND*a_ND)-1);
+        Fv= (4*pi*K0_ND*a_ND/kv_ND^2)*(kv_ND*a_ND*coth(kv_ND*a_ND)-1);
+        Zi(i)=Fi/(Di_ND*xi(2));
+        ki(i)=rhoGB_ND*Zi(i);
+%         kigb=6*ki_ND^0.5/(a_ND*2*l*l)   6k/d for d=2a>0.1 nm
+        Zv(i)=Fv/(Dv_ND*xv(2));
+        kv(i)=rhoGB_ND*Zv(i);
+    end
+end
+disp("Fi="+string(Fi)+",  Fv="+string(Fv));
+disp("xi="+string(xi(2))+", Ji="+string(Ji(end))+", Zi="+string(Zi(end))+", ki^2="+string(ki(end)))
+disp("xv="+string(xv(2))+", Jv="+string(Jv(end))+", Zv="+string(Zv(end))+", kv^2="+string(kv(end)))
+Zi_gb=Zi(end)*l  %m
+Zv_gb=Zv(end)*l  %m
+ki_gb=ki(end)/(l^2)  %1/m^2
+kv_gb=kv(end)/(l^2)  %1/m^2
+% Fi= (4*pi*K0_ND*a/ki_ND^2)*(ki_ND*a*coth(ki_ND*a)-1)*l
+% Fv= (4*pi*K0_ND*a/kv_ND^2)*(kv_ND*a*coth(kv_ND*a)-1)*l
+% Zi=Fi(i)/(Di_ND*xi(2))
+% Zv=Fv(i)/(Dv_ND*xv(2))
+% Zv_gb=4*pi*a*((kv_ND*a*cosh(kv_ND*a)-sinh(kv_ND*a))/(sinh(kv_ND*a)-kv_ND*a))
+% Zi_gb=4*pi*a*((ki_ND*a*cosh(ki_ND*a)-sinh(ki_ND*a))/(sinh(ki_ND*a)-ki_ND*a))
+set(gca, 'YScale', 'log')
+xlabel('x')
+ylabel('Defect Concentration')
+plot(x,xi)
+plot(x,xv)
+% hold off;
+% figure(2)
+% hold on;
+% plot(Ji);
+% plot(Jv);
+% hold off;

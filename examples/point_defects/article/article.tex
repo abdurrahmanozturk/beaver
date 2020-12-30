@@ -140,7 +140,7 @@ In reactor environment, materials are exposed to different types of particle rad
   \subsection{Neutron Irradiation} \hspace{10pt}
   Neutrons have an energy spectrum that varies a couple of orders of magnitude. This makes defect generation possible at different energies. Also, the high penetration depth of neutrons allow them to travel through material corresponding to their energies. Thus, they cause a uniform or flat-like defect production profile in material.\cite{was2016}
 
-  Numerical models are frequently used to solve scientific problems and make decisions based on results obtained from simulations, but first, the numerical approach should be reliable. Before presenting results from this study, a simple spherical grain problem for neutron irradation is solved by MOOSE, and its results are compared to analytical results for validation.
+  Numerical models are frequently used to solve scientific problems and make decisions based on results obtained from simulations, but first, the numerical approach should be reliable. Before presenting results from this study, a simple spherical grain problem for neutron irradation is solved by MOOSE as bencmark problem, and its results are compared to analytical results for validation.
 
   In this approach the mutual recombination term in Eq. \ref{equation:point_defect_equations_sink_strength} is neglected, and the steady state analytical solutions for spherical grain of radius \textit{a} are found as below.\cite{heald1977}\\
 
@@ -241,19 +241,19 @@ In reactor environment, materials are exposed to different types of particle rad
     \begin{equation}
       \begin{aligned}
         &F=Z_{gb}DC_0\\
+        &Z_{gb}=\frac{F}{DC_0}\\
       \end{aligned}
-    \end{equation}
+      \end{equation}\\
 
     where ${F}$ is total flow at grain boundary, ${Z_{gb}}$ is grain boundary sink strength, ${D}$ is diffusion coefficient and ${C_0}$ is defect concentration at the domain center.\\\\
-    So that the grain boundary sink strength is
+    The total flow at boundary is equal to multiplication of surface area and current as below,\\
 
     \begin{equation}
       \begin{aligned}
-        &Z_{gb}=\frac{F}{DC_0}\\
+        &F=-\bigg(4\pi r^2D\frac{\partial C(r)}{\partial r}\bigg)_{r=a}\\
       \end{aligned}
     \end{equation}\\
-    The total flow, ${F}$ is equal to current multiplied by surface area at grain boundary. ${F}$ and ${C_0}$ can be taken from directly MOOSE simulation results. The total grain boundary sink strength, ${k^2_{gb}}$ is calculated by multiplying ${Z_{gb}}$ by the grain density, ${\rho_{gb}}$.\cite{heald1977}
-
+    The total grain boundary sink strength, ${k^2_{gb}}$ is calculated by multiplying ${Z_{gb}}$ by the grain density, ${\rho_{gb}}$.\cite{heald1977}
     \begin{equation}
       \begin{aligned}
         &\rho_{gb}=\frac{6}{\pi d^3}\\
@@ -262,19 +262,51 @@ In reactor environment, materials are exposed to different types of particle rad
     \end{equation}
 
     where ${d}$ is diameter of the grain, ${d=2a}$\\\\
-    Grain boundary sink strength, ${Z_{gb}}$ can also be calculated analytically by using Eq. \ref{equation:spherical_grain_analytical_solution} to find ${F}$ and ${C_0}$. This solution helps to associate the grain boundary sink strength with the domain sink strength, ${k^2}$. \cite{heald1977}\\
+    Grain boundary sink strengths, ${Z_{gb}}$ and ${k_{gb}}$, is calculated analytically by substituting Eq.  \ref{equation:spherical_grain_analytical_solution} into expressions above. Thus, grain boundary sink strengths are associated with the domain sink strength, ${k^2}$.\cite{heald1977}
 
     \begin{equation}
       \begin{aligned}
-        &F=-\bigg(4\pi r^2D\frac{\partial C(r)}{\partial r}\bigg)_{r=a}\\
-        &C_0=C(r=0)\\
+        &C_0=C(r=0)=\frac{K_0}{Dk^2}\bigg(1-\frac{ka}{\sinh{ka}}\bigg)\\\\
+        &F=-\bigg(4\pi r^2D\frac{\partial C(r)}{\partial r}\bigg)_{r=a}=\frac{4\pi aK_0}{k^2}\bigg(ka\coth{ka}-1\bigg)\\
+      \end{aligned}
+    \end{equation}\\
+    So that, grain boundary sink strengths are
+    \begin{equation}
+      \begin{aligned}
         &Z_{gb}=4\pi a\bigg(\frac{ka\cosh ka-\sinh ka}{\sinh ka-ka}\bigg)\\
-        &\rho_{gb}=\frac{6}{\pi d^3}\\
         &k^2_{gb}=\frac{12}{d^2}\bigg(\frac{ka\cosh ka-\sinh ka}{\sinh ka-ka}\bigg)\\
       \end{aligned}
     \end{equation}\\
 
-    Sink strengths are calculated based on MOOSE simulation results and presented in Fig. \ref{figure:sink_strengths_neutron_5_1e-6} and \ref{figure:sink_strengths_ion_5_1e-3}. The effect of flipping behavior is not visible in grain boundary sink strength, ${Z^{gb}}$ plot, but in total grain boundary sink strength, ${k^2}$ plot, there is a significant change on ${k^2_i}$ after critical grain size of ${\sim}$1000 nm. In high dose rate plot, the critical grain size is seen clearly around at ${\sim}$250 nm.
+    Using appropriate diffusion coefficient (${D}$), domain sink strength (${k^2}$) and concentration (${C_0}$) will give  relevant sink strengths. The analytical expressions for each defect type given by following equations
+
+    \begin{equation}
+      \begin{aligned}
+        &Z_{gb,i}=4\pi a\bigg(\frac{k_ia\cosh k_ia-\sinh k_ia}{\sinh k_ia-k_ia}\bigg)\\
+        &k^2_{gb,i}=\frac{12}{d^2}\bigg(\frac{k_ia\cosh k_ia-\sinh k_ia}{\sinh k_ia-k_ia}\bigg)\\\\
+        &Z_{gb,v}=4\pi a\bigg(\frac{k_va\cosh k_va-\sinh k_va}{\sinh k_va-k_va}\bigg)\\
+        &k^2_{gb,v}=\frac{12}{d^2}\bigg(\frac{k_va\cosh k_va-\sinh k_va}{\sinh k_va-k_va}\bigg)\\
+      \end{aligned}
+    \end{equation}\\
+
+  The results of bencmark problem, previously discussed in Fig. \ref{figure:concentrations_MOOSE_analytical}, can also be used to validate MOOSE sink strength calculations. Table \ref{table:sink_strengths_calculations} show the comparison of calculations.
+    \begin{table}[h!]
+      \centering
+      \caption{Comparison of sink strength calculations}
+      \label{table:sink_strengths_calculations}
+      \begin{tabular}{ ||p{2cm}|p{3cm}|p{3cm}||  }
+         \hline
+          & MOOSE & Analytical\\
+         \hline\hline\hline
+         ${Z_{gb,i}}$  & 1.257206e-05 m & 1.257332e-05 m\\
+         ${Z_{gb,v}}$  & 1.256941e-05 m & 1.257332e-05 m\\
+         ${k_{gb,i}}$  & 2.401086e+13 m^{-2} & 2.401327e+13 m^{-2}\\
+         ${k_{gb,v}}$  & 2.400580e+13 m^{-2} & 2.401327e+13 m^{-2}\\
+         \hline
+      \end{tabular}
+    \end{table}
+    \newpage
+    Sink strength plots are presented in Fig. \ref{figure:sink_strengths_neutron_5_1e-6} and \ref{figure:sink_strengths_neutron_5_1e-3}. The effect of flipping behavior is not visible in grain boundary sink strength, ${Z^{gb}}$ plot, but in total grain boundary sink strength, ${k^2}$ plot, there is a significant change on ${k^2_i}$ after critical grain size of ${\sim}$1000 nm. In high dose rate plot, the critical grain size is seen clearly around at ${\sim}$250 nm.
       % \begin{figure}[h!]  %Sink Strength - Neutron 1e-6 dpa/s - 0% Bias rate
       %   \centering
       %   \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_neutron_0_k}}

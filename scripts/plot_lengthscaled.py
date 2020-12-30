@@ -17,7 +17,7 @@ scale = 1e-1 # scaling factor for imported DATA
 
 w = 9.036600512379032e-12 #time scale used in MOOSE
 l = 1e-10  #length scale used in MOOSE
-coordinates = "spherical"   #cartesian or spherical
+coordinates = "cartesian"   #cartesian or spherical
 
 def getHelp():
     print('\033[96m'+"\n# ------------------------------------------------------- #\n"

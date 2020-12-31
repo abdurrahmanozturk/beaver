@@ -87,6 +87,36 @@ Another form of point defect equations can be written by using sink strength, \t
 \subsection{Non-dimensionalization of Point Defect Equations} \hspace{10pt}
 The time space of defect interactions is enormously large, which could differ from nanoseconds to hours. In addition, rate coefficients also have different orders. To make it easier to solve point defect equations numerically, their non-dimensionalized forms are implemented in MOOSE. The non-dimensionalization scheme and final form of equations are given in this section.
 
+Scaling factors and non-dimensionalized variables are introduced as,
+
+\begin{equation}
+  \begin{aligned}
+    &X = \Omega C\\
+    &\tau = \frac{t}{\omega}\\
+  \end{aligned}
+  \label{equation:non-dimensionalization_variables}
+\end{equation}
+
+where ${\Omega}$ is atomic volume in ${m^3}$, ${l}$ is length scale in ${m}$ and ${\omega}$ is time scale in ${s}$, ${\omega= l^2/D_i}$\\
+
+After substituting Eq. \ref{equation:non-dimensionalization_variables} into \ref{equation:point_defect_equations} and reorganizing, the non-dimensionalized version of point defect equations are,
+
+\begin{equation}
+  \begin{aligned}
+    &\frac{dX_i}{dt} = \Omega\omega K_0 - \frac{\omega K_{iv}}{\Omega}X_iX_v - \frac{\omega K_{is}}{\Omega}X_iX_s + \omega D_i\nabla^2 X_i\\
+    &\frac{dX_v}{dt} = \Omega\omega K_0 - \frac{\omega K_{iv}}{\Omega}X_iX_v - \frac{\omega K_{vs}}{\Omega}X_vX_s + \omega D_v\nabla^2 X_v\\
+  \end{aligned}
+  \label{equation:non-dimensionalized_point_defect_equations}
+\end{equation}\\
+or
+\begin{equation}
+  \begin{aligned}
+    &\frac{dX_i}{dt} = \widetilde{K_0} - \widetilde{K_{iv}}X_iX_v - \widetilde{K_{is}}X_iX_s + \widetilde{D_i}\widetilde{\nabla}^2 X_i\\
+    &\frac{dX_v}{dt} = \widetilde{K_0} - \widetilde{K_{iv}}X_iX_v - \widetilde{K_{vs}}X_vX_s + \widetilde{D_v}\widetilde{\nabla}^2 X_v\\
+  \end{aligned}
+  \label{equation:non-dimensionalized_point_defect_equations}
+\end{equation}\\
+
 \subsection{Model Settings and Parameters} \hspace{10pt}
 Nickel is selected as a base material, and its properties are used in calculations.
 
@@ -166,45 +196,46 @@ In reactor environment, materials are exposed to different types of particle rad
     \caption{Comparison of MOOSE results with analytical solution for spherical grain.}
     \label{figure:concentrations_MOOSE_analytical}
   \end{figure}
-    \subsubsection{Concentrations} \hspace{10pt}
-    Even though atomic collisions create vacancy-interstitial pairs, following events creates gap between the amount of point defects in favor of vacancies. At steady state condition, there are more vacancies than interstitials in microstructure. Since producing equal amount of point defects is not physically correct, production bias is used to ensure this imbalance in modeling point defects. For unbiased case, as a result of uniform defect production and equilibrium condition at boundaries, the concentration profiles are symmetrical around domain center. The steady state concentration at center is not changing significantly with increasing size as shown in Fig. \ref{figure:concentrations_neutron_0_1e-6}. In case of high neutron dose rate, concentration levels increase, profiles become more stable (see Fig. \ref{figure:concentrations_neutron_0_1e-3}).\\
+  \newpage
+  \subsubsection{Concentrations} \hspace{10pt}
+  Even though atomic collisions create vacancy-interstitial pairs, following events creates gap between the amount of point defects in favor of vacancies. At steady state condition, there are more vacancies than interstitials in microstructure. Since producing equal amount of point defects is not physically correct, production bias is used to ensure this imbalance in modeling point defects. For unbiased case, as a result of uniform defect production and equilibrium condition at boundaries, the concentration profiles are symmetrical around domain center. The steady state concentration at center is not changing significantly with increasing size as shown in Fig. \ref{figure:concentrations_neutron_0_1e-6}. In case of high neutron dose rate, concentration levels increase, profiles become more stable (see Fig. \ref{figure:concentrations_neutron_0_1e-3}).\\
 
-      \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %0 Bias rate
-        \centering
-        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-0}}
-        \qquad
-        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-0}}
-        \caption{Concentration profiles for low dose rate neutron irradation with 0\% Production Bias}
-        \label{figure:concentrations_neutron_0_1e-6}
-      \end{figure}
-      \begin{figure}[h!]  %Neutron - 1e-3 dpa/s - %0 Bias rate
-        \centering
-        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-0}}
-        \qquad
-        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-0}}
-        \caption{Concentration profiles for high dose neutron irradation with 0\% Production Bias}
-        \label{figure:concentrations_neutron_0_1e-3}
-      \end{figure}
-      \newpage
-       If production bias is applied, the steady state concentration profiles change significantly. The interstitial concentration at center decreases, and its spatial profile turns down after \textit{critical grain size} (${\sim}$1000 nm in Fig. \ref{figure:concentrations_neutron_5_1e-6}). Moreover, the depth of profile gets larger with increasing domain size, which could be explained as acumulation of more interstitial atoms trying to reach equilibrium at boundary. The vacancy concentration, on the other hand, increases proportional to domain size, and its profile having peak at higher concentrations as shown in Fig. \ref{figure:concentrations_neutron_5_1e-6}.\\
-      \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
-        \centering
-        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-5}}
-        \qquad
-        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-5}}
-        \caption{Concentration profiles for low dose rate neutron irradation with 5\% Production Bias}
-        \label{figure:concentrations_neutron_5_1e-6}
-      \end{figure}\\
+    \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %0 Bias rate
+      \centering
+      \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-0}}
+      \qquad
+      \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-0}}
+      \caption{Concentration profiles for low dose rate neutron irradation with 0\% Production Bias}
+      \label{figure:concentrations_neutron_0_1e-6}
+    \end{figure}
+    \begin{figure}[h!]  %Neutron - 1e-3 dpa/s - %0 Bias rate
+      \centering
+      \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-0}}
+      \qquad
+      \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-0}}
+      \caption{Concentration profiles for high dose neutron irradation with 0\% Production Bias}
+      \label{figure:concentrations_neutron_0_1e-3}
+    \end{figure}
+    \newpage
+     If production bias is applied, the steady state concentration profiles change significantly. The interstitial concentration at center decreases, and its spatial profile turns down after \textit{critical grain size} (${\sim}$1000 nm in Fig. \ref{figure:concentrations_neutron_5_1e-6}). Moreover, the depth of profile gets larger with increasing domain size, which could be explained as acumulation of more interstitial atoms trying to reach equilibrium at boundary. The vacancy concentration, on the other hand, increases proportional to domain size, and its profile having peak at higher concentrations as shown in Fig. \ref{figure:concentrations_neutron_5_1e-6}.\\
+    \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
+      \centering
+      \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-5}}
+      \qquad
+      \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-5}}
+      \caption{Concentration profiles for low dose rate neutron irradation with 5\% Production Bias}
+      \label{figure:concentrations_neutron_5_1e-6}
+    \end{figure}\\
 
-      Similar to unbiased case, average concentration levels increases with dose rate. But, the most important effect of high neutron dose rate is causing the interstitial concentration profile to flip in smaller domain sizes than 500 nm (see Fig. \ref{figure:concentrations_neutron_5_1e-3}).\\
-      \begin{figure}[htb!]  %Neutron - 1e-3 dpa/s - %5 Bias rate
-        \centering
-        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-5}}
-        \qquad
-        \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-5}}
-        \caption{Concentration profiles for high dose neutron irradation with 5\% Production Bias}
-        \label{figure:concentrations_neutron_5_1e-3}
-      \end{figure}
+    Similar to unbiased case, average concentration levels increases with dose rate. But, the most important effect of high neutron dose rate is causing the interstitial concentration profile to flip in smaller domain sizes than 500 nm (see Fig. \ref{figure:concentrations_neutron_5_1e-3}).\\
+    \begin{figure}[htb!]  %Neutron - 1e-3 dpa/s - %5 Bias rate
+      \centering
+      \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-5}}
+      \qquad
+      \subfloat{\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-5}}
+      \caption{Concentration profiles for high dose neutron irradation with 5\% Production Bias}
+      \label{figure:concentrations_neutron_5_1e-3}
+    \end{figure}
 
     \newpage
     \subsubsection{Supersaturation} \hspace{10pt}

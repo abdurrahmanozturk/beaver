@@ -93,7 +93,7 @@ def getSinkStrength(df,l,scale,coordinates="cartesian"):
 
 os.system("rm -rf sink_strength_moose.csv")
 ss_file = open('sink_strength_moose.csv', 'a')
-ss_file.write("size,Ci_Center,Cv_center,Fi,Fv,Di,Dv,rho,Zi,Zv,ki,kv,Zi_scaled,Zv_scaled,ki_scaled,kv_scaled\n")
+ss_file.write("size,Ci_center,Cv_center,Fi,Fv,Di,Dv,rho,Zi,Zv,ki,kv,Zi_scaled,Zv_scaled,ki_scaled,kv_scaled\n")
 ss_file.close()
 
 if sys.argv[-1]=="-"+"h":

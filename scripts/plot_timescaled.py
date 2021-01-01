@@ -1,3 +1,4 @@
+import re
 import os
 import sys
 import csv
@@ -5,10 +6,18 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-scale = 9.036600512379032e-12 # for time scale
-# scale = 1e-1 #for length scale
-# omega = 1.206e-29 # Atomic volume for Nickel
-cve = 3.7e-11   #vacancy equilibrium concentration for Nickel
+
+# -------------------------------------------------------------------------------------------------------------- #
+# ============================================================================================================== #
+#                           Pyhton script to plot data from MOOSE csv output files.                              #
+# ============================================================================================================== #
+# -----------------------------------------------------------------------------------------------------eigenturk #
+
+scale = 9.036600512379032e-12 # scaling factor for imported DATA
+
+w = 9.036600512379032e-12 #time scale used in MOOSE
+l = 1e-10  #length scale used in MOOSE
+coordinates = "cartesian"   #cartesian or spherical
 
 def getHelp():
     print('\033[96m'+"\n# ------------------------------------------------------- #\n"
@@ -17,121 +26,119 @@ def getHelp():
           "# ======================================================= #\n"
           "# ----------------------------------------------eigenturk #\n"+'\033[0m')
     print("This script is a tool for plotting csv files based on specified column numbers.\n\n"
-          "Usage: plot [filename] [column_number1] [column_number2] ... [-f] [-s]\n\n"
+          "Usage: plot [filename] [column_number1] [column_number2] ... [-h] [-s]\n\n"
           "Arguments:\n\n"
           "\tfilename\t\tName of the data file with extension\n"
-          "\tcolumn_number\t\tThe column number of the data in csv file\n\n"
+          "\tcolumn(number or name)\t\tThe column number(name) of the data in csv file\n\n"
           "Optional arguments:\n\n"
           "  -h, Show this help message and exit.\n"
-          "  -f, Multiple file mode, data from multiple files will be pllotted on the same figure.\n"
-          "  -s, Save only mode, plot wont be shown.\n\n"
+          "  -s, Save only mode, plot wont be shown.\n"
+          "  -g, Gray scale mode, plot will be in black and white scale.\n\n"
+          "  -f, Multiple file mode."+'\033[91m'+" << ! Depricated, will be deleted. !\n\n"+'\033[0m'
           '\033[4m'+'\033[1m'+"Manual for commands :\n\n"+'\033[0m'
-          "Note  : To make using this script easy, create 'plot' command by adding following line to bash profile.\n"
-          '\033[91m'+"\tCheck script file path(e.g. projects/scripts/plot.py)\n"+'\033[0m'
-          '\033[91m'+"\talias plot=\"python projects/scripts/plot.py\"\n"+'\033[0m'
-          "\n1. Plotting multiple y values from same csv file\n"
-          '\033[93m'+"\tplot filename column_number(x) column_number(y1) column_number(y2)....column_number(yn)\n"+'\033[0m'
-          "\n2. Plotting multiple y values from multiple csv files\n"
-          '\033[91m'+"\tAppend name of all csv files to a seperate file,then use it in command. (e.g. csvfiles)\n"
-          '\033[93m'+"\tplot csvfiles column_number(x) column_number(y) -f\n"+'\033[0m'
-          "\n3. Save a plot without showing it\n"
-          '\033[91m'+"\tAdd -s to end of the command\n"
-          '\033[93m'+"\tplot . . . -s")+'\033[0m'
+          "Note  : To make it easy, create 'plot' command by adding following line to your shell profile.\n"
+          '\033[92m'+"\talias plot=\"python projects/scripts/plot.py\"\n"+'\033[0m'
+          "\n-Plotting data from a single file\n"
+          '\033[93m'+"\tplot filename column_x column_y1.....column_yn\n"+'\033[0m'
+          "\n-Plotting data from multiple files\n"
+          '\033[91m'+"\tFirst, append name of all csv files to a seperate file (e.g. \"csvfiles\"),then use name of that file in command line.\n"
+          '\033[93m'+"\tplot csvfiles column_x column_y\n"+'\033[0m'
+          "\n-Save a plot without showing it by adding \"-s\" at end of the command\n"
+          '\033[93m'+"\tplot filename column_x column_y1.....column_yn -s\n"+'\033[0m'
+          "\n-Use gray color scale for plotting by adding \"-g\" at end of the command\n"
+          '\033[93m'+"\tplot filename column_x column_y1.....column_yn -g\n"+'\033[0m')
     sys.exit()
-
-def getSinkStrength(data,defect):
-    if defect=="i":
-        C = data[-1,1]
-        J = data[-1,3]
-        D = data[-1,9]
-    elif defect=="v":
-        C = data[-1,2]
-        J = data[-1,4]
-        D = data[-1,10]
-    print(C,J,D)
-    return J/(D*C)
-
-def getSuperSaturation(data,cve):
-    Ci = data[-1,1]
-    Cv = data[-1,2]
-    Cve= cve
-    Di = data[-1,9]
-    Dv = data[-1,10]
-    print(Ci,Cv,Cve,Di,Dv)
-    return (Dv*Cv-Di*Ci)/(Dv*Cve)
-
-# ------------------------------------------------------- #
-# ======================================================= #
-# Pyhton script to plot data from MOOSE csv output files. #
-# ======================================================= #
-# ----------------------------------------------eigenturk #
-
-# print 'Number of arguments:', len(sys.argv), 'arguments.'
-# print 'Argument List:', str(sys.argv)
 
 if sys.argv[-1]=="-"+"h":
     getHelp()
 
-filename = sys.argv[1]
-figname=filename[:-4]+".png"
-csvfile = [filename]
+# print 'Number of arguments:', len(sys.argv), 'arguments.'
+# print 'Argument List:', str(sys.argv)
 n=len(sys.argv)
-smode=False
+filename = sys.argv[1]
+file = open(filename)
+figname=filename[:-4]+".png"
+
+fmode = False
+if sys.argv[-2]=="-"+"f" or sys.argv[-1]=="-"+"f":   # WILL BE DEPRICATED
+    fmode = True
+    n=n-1
+
+gmode = False   #black and white mode
+if sys.argv[-2]=="-"+"g" or sys.argv[-1]=="-"+"g":
+    gmode = True
+    n=n-1
+
+if re.search(".csv",file.readlines()[0]):
+    print('\033[92m'+"Multiple File Mode : Data from multiple files was plotted on the same figure.\n"+'\033[0m')
+    fmode = True
+    # Read file names from file
+    csvfile=[]
+    file = open(filename)
+    filenames = file.readlines()
+    for i in range(0,len(filenames)):
+        csvfile.append(filenames[i][:-1])
+else:
+    fmode = False
+    print('\033[92m'+"Single File Mode : Data from a single file was plotted.\n"+'\033[0m')
+    csvfile = [filename]
+
+smode = False
 if sys.argv[-2]=="-"+"s" or sys.argv[-1]=="-"+"s":
     print("-s mode : save only mode, plot wont be shown")
     smode = True
     n=n-1
-fmode=False
-if sys.argv[-2]=="-"+"f" or sys.argv[-1]=="-"+"f":
-    print("-f mode : multiple file mode, multiple files will be shown on the same plot")
-    fmode = True
-    n=n-1
-    # Read file names from file
-    file = open(filename)
-    csvfile = file.readlines()
-    for i in range(0,len(csvfile)):
-        csvfile[i]=csvfile[i][:-1]
 
-# Create fig
-fig = plt.figure()
-# Create a color palette
-palette = plt.get_cmap('Set2')
-# Style
+# tmode = False    # WORK ON THIS
+# if sys.argv[-2]=="-"+"t" or sys.argv[-1]=="-"+"t":
+#     print("-t mode : add secondary axis for column_y2")
+#     tmode = True
+#     n=n-1
+
+#=============================================================================
+#                               Figure Settings
+#=============================================================================
+mf=10000   #Marker frequency
+
+#Create Figure
+fig = plt.figure(figsize=(5, 5))
+ax = fig.add_subplot(1, 1, 1)
+
+# if tmode==True:  # ADD SECONDARY AXIS FEATURE, WORK ON THIS!!
+#     ax2 = ax.twiny()
+
+# Plotting Style,Color Palette,Markers and Line Styles
+linestyles = ["solid","dotted","dashdot","dashed"]
+markers = ["","","","",""]
 plt.style.use('seaborn-whitegrid')
 
+if gmode == True: # Use Gray Color Scale
+    palette = plt.get_cmap('gray')  # Black and White Color Scale, {gnuplot}
+    if fmode == True:  #For Single file, use only linestyles, dont use markers,
+        markers = ["","o", "s", "v","X"]
+else: # Colorful plotting
+    palette = plt.get_cmap('Set1')  # Color Scale, {Set1,Set2,Set3,Dark2,tab10},tab20,Pastel1}
+
+
+#=============================================================================
+
 for fid in range(0,len(csvfile)):
-    # print(csvfile)
+    print('\033[92m'+"Reading file......"+'\033[0m'+csvfile[fid][-40:])
     with open(csvfile[fid], 'r') as f:
         reader = csv.reader(f, delimiter=',')
         headers = next(reader)
         data = np.array(list(reader)).astype(float)
-
-    # Back Scaling
-    data[:,0] *= scale
-    # data[:,1] /= omegategrid')
-
-for fid in range(0,len(csvfile)):
-    print(csvfile[fid][-30:])
-    with open(csvfile[fid], 'r') as f:
-        reader = csv.reader(f, delimiter=',')
-        headers = next(reader)
-        data = np.array(list(reader)).astype(float)
-
-    # Back Scaling
-    data[:,0] *= scale
-    # data[:,1] /= omega
-    # data[:,2] /= omega
 
     # print(headers)
     # print(data.shape)
     # print(data[:5])
 
-    # Make a data frame
+    #Scale data and make a DataFrame
+    data[:,0] *= scale
     df=pd.DataFrame(data,columns=headers)
 
     # Read Command Line Arguments
-    # print(sys.argv)
-    log = [0]*n
+    log = [0]*n  #list to check if log-plot was requested for commandline argument
     for i in range(2,n):
         c=0
         if isinstance(sys.argv[i][0],str):
@@ -148,8 +155,6 @@ for fid in range(0,len(csvfile)):
                         sys.argv[i]=str(j)
                         break
 
-    # print(sys.argv)
-
     #Labels
     xlbl = headers[int(sys.argv[2])]
     ylbl = headers[int(sys.argv[3])]
@@ -157,71 +162,83 @@ for fid in range(0,len(csvfile)):
     # ylbl = "y(x) [unit]"       # define y label manually
 
     #Axis Limits
-    xmin=np.min(data[:, int(sys.argv[2])])
-    xmax=np.max(data[:, int(sys.argv[2])])
-    ymin=np.min(data[:, int(sys.argv[3])])
-    ymax=np.max(data[:, int(sys.argv[3])])*1.05
+    xmin=np.floor(np.min(data[:, int(sys.argv[2])]))
+    xmax=np.ceil(np.max(data[:, int(sys.argv[2])]))
+    ymin=np.floor(np.min(data[:, int(sys.argv[3])]))
+    ymax=np.ceil(np.max(data[:, int(sys.argv[3])]))#*1.05
 
-    # Plot the data  ::  CHECK THIS !!!
-
-    # #Using DataFrame
-    # num=0
-    # for column in df.drop(arg[2], axis=1):
-    #     num+=1
-    #     plt.plot(df[arg[2], df[column], marker='', color=palette(num), linewidth=1, alpha=0.9, label=column)
-
-
-    # PLOT DATA
-    # Multiple lines plot
+    #=============================================================================
+    #                           Plotting Data
+    #=============================================================================
     num=0
-    # lbl=""
+    markevery=len(data)/(10*mf)
     for column in range(3,n):
-        num+=1
         if fmode==1:
-            lbl = csvfile[fid]#[-28:-21]     ## CHANGE THIS ACCORDING TO PARAMETER IN THE END OF FILENAME
+            lbl = csvfile[fid]#[-30:]     ## CHANGE THIS ACCORDING TO PARAMETER IN THE END OF FILENAME
             figname = ylbl
         else:
             lbl = headers[int(sys.argv[column])]
         if log[column]==1:
-            plt.semilogy(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num+fid), linewidth=1.5, alpha=1,label=lbl)
+            ax.semilogy(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],ls=linestyles[num%4],marker=markers[fid%5],markersize=5,markevery=markevery,color=palette(fid), linewidth=1.5, alpha=1,label=lbl)
         else:
-            plt.plot(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],marker='', color=palette(num+fid), linewidth=1.5, alpha=1,label=lbl)
+            ax.plot(data[:, int(sys.argv[2])], data[:, int(sys.argv[column])],ls=linestyles[num%4],marker=markers[fid%5],markersize=5,markevery=markevery, color=palette(fid), linewidth=1.5, alpha=1,label=lbl)
         if log[2]==1:
-            plt.xscale('log',basex=10)
+            ax.set_xscale('log',basex=10)
         if np.min(data[:, int(sys.argv[column])])<ymin:
             ymin=np.min(data[:, int(sys.argv[column])])
-            plt.ylim(ymin,ymax)
-        if np.max(data[:, int(sys.argv[column])])*1.05>ymax:
-            ymax=np.max(data[:, int(sys.argv[column])])*1.05
-            plt.ylim(ymin,ymax)
+            ax.set_ylim(ymin,ymax)
+        if np.ceil(np.max(data[:, int(sys.argv[column])]))>ymax:
+            np.ceil(ymax=np.max(data[:, int(sys.argv[column])]))
+            ax.set_ylim(ymin,ymax)
+        num+=1
 
-    #Sink Strength Calculations
-    ssi = getSinkStrength(data,'i')      # Interstitial sink strength
-    ssv = getSinkStrength(data,'v')      # Vacancy sink strength
-    ss_str = "Zi: "+str(ssi)+" m\nZv: "+str(ssv)+" m"
-    print('\033[93m'+ss_str+'\033[0m')
-    Sv = getSuperSaturation(data,cve)   # Average Vacancy supersaturation
-    S_str = "Vacancy Supersaturation: "+str(Sv)+"\n"
-    print('\033[93m'+S_str+'\033[0m')
 
-print(headers)
+print('\033[92m'+"\nAvailable parameters for plotting: \n"+'\033[0m'+str(headers))
 
-# Plot Settings
-# Title
-plt.title(filename, loc='center', fontsize=14, fontweight=0, color='black')
-# Labels
-plt.xlim(xmin,xmax)
-plt.xlabel(xlbl)
-plt.ylabel(ylbl)
+
+#=============================================================================
+#                               Plot Settings
+#=============================================================================
+# if tmode==True:   # !WORK ON THIS,  NOT READY TO USE
+#     # Tick Settings
+#     ax2.xaxis.set_tick_params(which='major', size=7, width=1, direction='in', top=True)
+#     ax2.xaxis.set_tick_params(which='minor', size=2, width=1, direction='in', top=True)
+#     ax2.yaxis.set_tick_params(which='major', size=7, width=1, direction='in', right=True)
+#     ax2.yaxis.set_tick_params(which='minor', size=2, width=1, direction='in', right=True)
+#     # Hide or Show the top and right spines of the axis
+#     ax2.spines['right'].set_visible(True)
+#     ax2.spines['top'].set_visible(True)
+#     # Set Labels
+#     ax2.set_xlim(xmin,xmax)
+#     ax2.set_xlabel(xlbl)
+#     ax2.set_ylabel(ylbl)
+
+# Font Settings
+plt.rcParams['font.family']='Times New Roman'
+plt.rcParams['font.size'] = 12
+# Tick Settings
+ax.xaxis.set_tick_params(which='major', size=7, width=1, direction='in', top=True)
+ax.xaxis.set_tick_params(which='minor', size=2, width=1, direction='in', top=True)
+ax.yaxis.set_tick_params(which='major', size=7, width=1, direction='in', right=True)
+ax.yaxis.set_tick_params(which='minor', size=2, width=1, direction='in', right=True)
+# Hide or Show the top and right spines of the axis
+ax.spines['right'].set_visible(True)
+ax.spines['top'].set_visible(True)
+# Set Labels
+ax.set_xlim(xmin,xmax)
+ax.set_xlabel(xlbl)
+ax.set_ylabel(ylbl)
+
+# Add Legend and title
+plt.legend(loc=0, ncol=1,fontsize='medium')
+plt.title(filename)
+
 # plt.axis('equal')               # fix x and y axis
 # plt.autoscale(enable=True, axis='x', tight=True)   #autoscale x and y axis
-# Add Legend
-plt.legend(loc=0, ncol=1, fontsize=14)
-plt.text(1e-2, 5e-13, ss_str , size=10,
-         ha="right", va="top",
-         bbox=dict(boxstyle="square", ec=(1., 0.5, 0.5),fc=(1., 0.8, 0.8),))
 if smode == True: #save only
-    fig.savefig(figname, box_inches='tight',dpi=150)
+    fig.savefig(figname, bbox_inches='tight',dpi=150, transparent=False)
 else:
     plt.show()
-    fig.savefig(figname, box_inches='tight',dpi=150)
+    fig.savefig(figname, bbox_inches='tight',dpi=150, transparent=False)
+
+#=============================================================================

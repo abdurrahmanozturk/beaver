@@ -365,25 +365,31 @@ In reactor environment, materials are exposed to different types of particle rad
       \end{figure}
       \begin{figure}[h!]  %GB Sink Strength - Neutron 1e-6 dpa/s
         \centering
-        \subfloat{\includegraphics[scale=0.55]{sink_strength_Zi_scaled}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_Zi_scaled_neutron}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_Zi_scaled_neutron_500-5000nm}}
         \qquad
-        \subfloat{\includegraphics[scale=0.55]{sink_strength_Zv_scaled}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_Zv_scaled_neutron}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_Zv_scaled_neutron_500-5000nm}}
         \caption{GB Sink Strengths for low dose rate neutron irradation}
         \label{figure:sink_strengths_neutron_bias_Z}
       \end{figure}
       \begin{figure}[h!]  %Total GB Sink Strength - Neutron 1e-6 dpa/s
         \centering
-        \subfloat{\includegraphics[scale=0.55]{sink_strength_ki_scaled}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_ki_scaled_neutron}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_ki_scaled_neutron_500-5000nm}}
         \qquad
-        \subfloat{\includegraphics[scale=0.55]{sink_strength_kv_scaled}}
-        \caption{Total GB Sink Strengths for high dose rate neutron irradation}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_kv_scaled_neutron}}
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_kv_scaled_neutron_500-5000nm}}
+        \caption{Total GB Sink Strengths for low dose rate neutron irradation}
         \label{figure:sink_strengths_neutron_bias_k}
       \end{figure}
       \begin{figure}[h!]  %Sink Strength - Neutron 1e-6 dpa/s
         \centering
-        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_neutron_3D_Z_scaled}}
+        \subfloat{a)\includegraphics[scale=0.45]{sink_strength_moose_neutron_3D_Zi_scaled}}
+        \subfloat{b)\includegraphics[scale=0.45]{sink_strength_moose_neutron_3D_Zv_scaled}}
         \qquad
-        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_neutron_3D_k_scaled}}
+        \subfloat{c)\includegraphics[scale=0.45]{sink_strength_moose_neutron_3D_ki_scaled}}
+        \subfloat{d)\includegraphics[scale=0.45]{sink_strength_moose_neutron_3D_kv_scaled}}
         \caption{Sink Strengths for low dose rate neutron irradiation}
         \label{figure:sink_strength_moose_neutron_3D}
       \end{figure}
@@ -515,6 +521,9 @@ In reactor environment, materials are exposed to different types of particle rad
 % to each other because the production compensates more absorption at sinks than previous.
 % Based on this, if the production rate increased sufficiently, the recombination zone would
 % appear again in nano-scale domain.
+\newpage
+\section{Discussion} \hspace{10pt}
+-Comparison of Neutron and Ion irradation.
 
 \newpage
 \section{Conclusion} \hspace{10pt}

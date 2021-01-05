@@ -49,9 +49,9 @@ for id in range(4,n):
                 if row[sys.argv[2]]==X[i][j] and row[sys.argv[3]]==Y[i][j]:
                     Z[i][j]=row[sys.argv[id]]
     if wf == True:
-        wf = ax.plot_wireframe(X, Y, np.log10(Z), label=sys.argv[id], linewidth=1, color=palette(id-4), antialiased=False)
+        wf = ax.plot_wireframe(X, Y, Z, label=sys.argv[id], linewidth=1, color=palette(id-4), antialiased=False)
     else:
-        surf = ax.plot_surface(X, Y, np.log10(Z), label=sys.argv[id], cmap=cm.coolwarm, linewidth=1, antialiased=True)
+        surf = ax.plot_surface(X, Y, Z, label=sys.argv[id], cmap=cm.coolwarm, linewidth=1, antialiased=True)
 
 
 # ax.set_xscale('log',basex=10)

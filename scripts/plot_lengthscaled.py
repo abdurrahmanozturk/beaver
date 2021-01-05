@@ -51,7 +51,7 @@ def getHelp():
 
 def getSinkStrength(df,l,scale,coordinates="cartesian"):
     ss_file = open('sink_strength_moose.csv', 'a')
-    nrow = df.shape[0] #number of columns in dataframe
+    nrow = df.shape[0] #number of rows in dataframe
     size = df.loc[nrow-1,'x']
     d = size/scale
     flow_area=1 # !check this number for 2D and 3D

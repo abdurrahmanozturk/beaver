@@ -58,11 +58,6 @@ if sys.argv[-2]=="-"+"f" or sys.argv[-1]=="-"+"f":   # WILL BE DEPRICATED
     fmode = True
     n=n-1
 
-gmode = False   #black and white mode
-if sys.argv[-2]=="-"+"g" or sys.argv[-1]=="-"+"g":
-    gmode = True
-    n=n-1
-
 if re.search(".csv",file.readlines()[0]):
     print('\033[92m'+"Multiple File Mode : Data from multiple files was plotted on the same figure.\n"+'\033[0m')
     fmode = True
@@ -76,6 +71,12 @@ else:
     fmode = False
     print('\033[92m'+"Single File Mode : Data from a single file was plotted.\n"+'\033[0m')
     csvfile = [filename]
+
+
+gmode = False   #black and white mode
+if sys.argv[-2]=="-"+"g" or sys.argv[-1]=="-"+"g":
+    gmode = True
+    n=n-1
 
 smode = False
 if sys.argv[-2]=="-"+"s" or sys.argv[-1]=="-"+"s":

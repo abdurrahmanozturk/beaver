@@ -1,13 +1,13 @@
 # Fdb version 3
-["bibtex article"] 1609925427 "article.aux" "article.bbl" "article" 1609925511
+["bibtex article"] 1609925427 "article.aux" "article.bbl" "article" 1609962436
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/unsrt.bst" 1480098433 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "article.aux" 1609925433 7137 1c02859c9f2289d1973ce5b02c054779 ""
+  "article.aux" 1609962436 7137 1c02859c9f2289d1973ce5b02c054779 ""
   "article.bcf" 0 -1 0 ""
   "ref.bib" 1605858575 1083 04a2f824d8bdce1eba4a2a6765df9e28 ""
   (generated)
   "article.blg"
   "article.bbl"
-["pdflatex"] 1609925427 "article.tex" "/home/ao/projects/beaver/examples/point_defects/article/article.pdf" "article" 1609925511
+["pdflatex"] 1609962431 "article.tex" "/home/ao/projects/beaver/examples/point_defects/article/article.pdf" "article" 1609962436
   "./plots/average_concentration_high_neutron_5_size.png" 1609487991 74537 ba058edda93a4e4706c80832447cb1a5 ""
   "./plots/average_concentration_ion_5_size.png" 1609487449 72116 fd8250f7a292dc11db33d98db9e6e05c ""
   "./plots/average_concentration_low_ion_5_size.png" 1609488300 64973 a50abde0b1c50bbd8e8aca1716694a5e ""
@@ -51,7 +51,7 @@
   "./plots/vacancy_concentration_500-5000nm-neutron-0.png" 1605550124 46607 10a465e85347a6b301f26997d0678272 ""
   "./plots/vacancy_concentration_500-5000nm-neutron-5.png" 1605330936 64823 e037bb719d4768cd4c5ea7299635d81d ""
   "/etc/texmf/web2c/texmf.cnf" 1603731169 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/ao/projects/beaver/examples/point_defects/article/article.aux" 1609925433 7137 1c02859c9f2289d1973ce5b02c054779 ""
+  "/home/ao/projects/beaver/examples/point_defects/article/article.aux" 1609962436 7137 1c02859c9f2289d1973ce5b02c054779 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1480098698 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -140,9 +140,9 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1520210507 32485 c64754543d8ac501bea6e75e209ea521 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1609910899 127853 b41f58aff49fe1af38af8d065f49d51c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1609910905 724917 2ddd2a57bdc6eebf66de6e3c22f91d12 ""
-  "article.aux" 1609925433 7137 1c02859c9f2289d1973ce5b02c054779 ""
+  "article.aux" 1609962436 7137 1c02859c9f2289d1973ce5b02c054779 ""
   "article.bbl" 1609925427 595 531463d98befdc78600e2ac124978cab "bibtex article"
-  "article.tex" 1609925422 35863 234ea657f8ca7d2a6e08518558f3c008 ""
+  "article.tex" 1609962431 36075 c7c93b1736b503a363c0d8d1906f9309 ""
   "plots/average_concentration_high_neutron_5_size.png" 1609487991 74537 ba058edda93a4e4706c80832447cb1a5 ""
   "plots/average_concentration_ion_5_size.png" 1609487449 72116 fd8250f7a292dc11db33d98db9e6e05c ""
   "plots/average_concentration_low_ion_5_size.png" 1609488300 64973 a50abde0b1c50bbd8e8aca1716694a5e ""
@@ -186,11 +186,11 @@
   "plots/vacancy_concentration_500-5000nm-neutron-0.png" 1605550124 46607 10a465e85347a6b301f26997d0678272 ""
   "plots/vacancy_concentration_500-5000nm-neutron-5.png" 1605330936 64823 e037bb719d4768cd4c5ea7299635d81d ""
   (generated)
-  "article.toc"
-  "article.lot"
-  "/home/ao/projects/beaver/examples/point_defects/article/article.pdf"
   "article.lof"
-  "article.aux"
+  "article.lot"
   "/home/ao/projects/beaver/examples/point_defects/article/article.log"
   "article.log"
+  "article.aux"
+  "article.toc"
+  "/home/ao/projects/beaver/examples/point_defects/article/article.pdf"
   "article.pdf"

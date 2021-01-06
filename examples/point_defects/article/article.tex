@@ -19,7 +19,7 @@
 % \tableofcontents
 
 \title{Numerical Solution of Point Defect Equations by MOOSE}
-\author{Abdurrahman Ozturk$^{1}$, Author2$^{1}$, Author3$^{1}$, Karim Ahmed$^{1}$  \\
+\author{Abdurrahman Ozturk$^{1}$, Author$^{1}$, Author$^{1}$, Karim Ahmed$^{1}$  \\
         \small $^{1}$Texas A\&M University \\
         % \small $^{2}$University B \\
 }
@@ -420,9 +420,9 @@ In reactor environment, materials are exposed to different types of particle rad
 
     \begin{figure}[h!]  %Neutron - average conc - %5 Bias rate
       \centering
-      \subfloat{a)\includegraphics[scale=0.55]{average_concentration_ion_5_size}}
+      \subfloat{a)\includegraphics[scale=0.55]{average_concentration_low_ion_5_size}}
       \qquad
-      \subfloat{b)\includegraphics[scale=0.55]{average_concentration_low_ion_5_size}}
+      \subfloat{b)\includegraphics[scale=0.55]{average_concentration_ion_5_size}}
       \caption{Average Concentration profiles for low(a) and high(b) dose ion irradation with 5\% Production Bias}
       \label{figure:average_concentrations_ion_5}
     \end{figure}
@@ -472,9 +472,9 @@ In reactor environment, materials are exposed to different types of particle rad
     The vacancy supersaturation curves for ion irradation case are quite similar to ones for neutron irradation case. The only difference is the asymmetrical shape of curves originates from concentration profiles. The non-linear increase in supersaturation values as domain gets larger is observed for ion irradation too.
       \begin{figure}[h!]  %Ion - %5 Bias rate
         \centering
-        \subfloat{a)\includegraphics[scale=0.55]{super_saturation_500-5000nm-ion-5}}
+        \subfloat{a)\includegraphics[scale=0.55]{super_saturation_500-5000nm-low_ion-5}}
         \qquad
-        \subfloat{b)\includegraphics[scale=0.55]{super_saturation_500-5000nm-low_ion-5}}
+        \subfloat{b)\includegraphics[scale=0.55]{super_saturation_500-5000nm-ion-5}}
         \caption{Vacancy Supersaturation profiles for low(a) and high(b) dose ion irradation with 5\% Production Bias}
         \label{figure:vacancy_supersaturation_ion_5}
       \end{figure}
@@ -539,7 +539,13 @@ In reactor environment, materials are exposed to different types of particle rad
 % Based on this, if the production rate increased sufficiently, the recombination zone would
 % appear again in nano-scale domain.
   \subsection{Discussion} \hspace{10pt}
-  -Comparison of Neutron and Ion irradation.
+  What happens when switched from neutron irradation to ion irradiation
+  \begin{enumerate}
+    \item Loosing symmetry/uniformity in concentration profiles
+    \item Reduction in average concentration
+    \item Reduction in supersaturation
+  \end{enumerate}
+
 
 \newpage
 \section{Conclusion} \hspace{10pt}

@@ -28,7 +28,7 @@ ax.set_ylabel(sys.argv[3])
 # ax.set_zlabel(sys.argv[4])
 ax.set_xlabel('Grain Size (nm)')
 ax.set_ylabel('Production Bias (%)')
-ax.set_zlabel('logZ$_i$ (m)')
+ax.set_zlabel('logC$_{i,center}$')
 # ax.set_zlabel('Total GB Sink Strength (1/m^2)')
 
 #Create meshgrid from dataframe

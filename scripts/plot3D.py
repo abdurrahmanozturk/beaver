@@ -7,6 +7,8 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
 
+scale = 1e-1 # scaling factor for imported DATA
+
 #Read File
 n = len(sys.argv)
 filename = sys.argv[1]
@@ -15,6 +17,9 @@ with open(filename, 'r') as f:
     reader = csv.reader(f, delimiter=',')
     headers = next(reader)
     data = np.array(list(reader)).astype(float)
+
+#scaling data
+data[:,1] *= scale
 df=pd.DataFrame(data,columns=headers)
 
 #Read Command Line Arguments

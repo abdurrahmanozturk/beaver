@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{verbatim}
+\usepackage[font=scriptsize]{caption}
 \pagenumbering{arabic}
 \graphicspath{ {./plots/} }
 
@@ -205,7 +206,7 @@ In reactor environment, materials are exposed to different types of particle rad
       \subfloat{a)\includegraphics[scale=0.55]{average_concentration_neutron_5_size}}
       \qquad
       \subfloat{b)\includegraphics[scale=0.55]{average_concentration_high_neutron_5_size}}
-      \caption{Average Concentration profiles for low(a) and high(b) dose neutron irradation with 5\% Production Bias}
+      \caption{Time-dependent behavior of average defect concentration  with 5\% production bias, a)low neutron dose rate, b) high neutron dose rate}
       \label{figure:average_concentrations_neutron_5}
     \end{figure}
 
@@ -218,7 +219,7 @@ In reactor environment, materials are exposed to different types of particle rad
       \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-0}}
       \qquad
       \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-0}}
-      \caption{Concentration profiles for low dose rate neutron irradation with 0\% Production Bias}
+      \caption{Concentration profiles for low neutron dose rate with 0\% production bias, a) interstitial concentration, b) vacancy concentration}
       \label{figure:concentrations_neutron_0_1e-6}
     \end{figure}
     \begin{figure}[h!]  %Neutron - 1e-3 dpa/s - %0 Bias rate
@@ -226,7 +227,7 @@ In reactor environment, materials are exposed to different types of particle rad
       \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-0}}
       \qquad
       \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-0}}
-      \caption{Concentration profiles for high dose neutron irradation with 0\% Production Bias}
+      \caption{Concentration profiles for high neutron dose rate with 0\% production bias, a) interstitial concentration, b) vacancy concentration}
       \label{figure:concentrations_neutron_0_1e-3}
     \end{figure}
     \newpage
@@ -236,7 +237,7 @@ In reactor environment, materials are exposed to different types of particle rad
       \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-5}}
       \qquad
       \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-5}}
-      \caption{Concentration profiles for low dose rate neutron irradation with 5\% Production Bias}
+      \caption{Concentration profiles for low neutron dose rate with 5\% production bias, a) interstitial concentration, b) vacancy concentration}
       \label{figure:concentrations_neutron_5_1e-6}
     \end{figure}\\
 
@@ -246,7 +247,7 @@ In reactor environment, materials are exposed to different types of particle rad
       \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-5}}
       \qquad
       \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-5}}
-      \caption{Concentration profiles for high dose neutron irradation with 5\% Production Bias}
+      \caption{Concentration profiles for high neutron dose rate with 0\% production bias, a) interstitial concentration b) vacancy concentration}
       \label{figure:concentrations_neutron_5_1e-3}
     \end{figure}
 
@@ -268,7 +269,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{a)\includegraphics[scale=0.55]{super_saturation_500-5000nm-neutron-5}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{super_saturation_500-5000nm-high_neutron-5}}
-        \caption{Vacancy Supersaturation profiles for low(a) and high(b) dose neutron irradation with 5\% Production Bias}
+        \caption{Vacancy supersaturation profiles for 5\% production bias, a)low neutron dose rate, b) high neutron dose rate}
         \label{figure:vacancy_supersaturation_neutron_5}
       \end{figure}
 
@@ -357,7 +358,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_neutron_5_Z_scaled}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{sink_strength_moose_high_neutron_5_Z_scaled}}
-        \caption{GB Sink Strength for low(a) and high(b) dose neutron irradation with 5\% Production Bias}
+        \caption{Change of GB sink strength with grain size for 5\% production bias, a) low neutron dose rate, b) high neutron dose rate}
         \label{figure:sink_strengths_neutron_5_1e-6}
       \end{figure}
 
@@ -366,7 +367,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_neutron_5_k_scaled}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{sink_strength_moose_high_neutron_5_k_scaled}}
-        \caption{Total GB Sink Strengths for high dose neutron irradation with 5\% Production Bias}
+        \caption{Change of total GB sink strength with grain size for 5\% production bias, a) low neutron dose rate, b) high neutron dose rate}
         \label{figure:sink_strengths_neutron_5_1e-3}
       \end{figure}
 
@@ -379,29 +380,30 @@ In reactor environment, materials are exposed to different types of particle rad
         \qquad
         \subfloat{c)\includegraphics[scale=0.55]{sink_strength_moose_neutron_3D_ki_scaled}}
         \subfloat{d)\includegraphics[scale=0.55]{sink_strength_moose_neutron_3D_kv_scaled}}
-        \caption{Sink Strengths for low dose rate neutron irradiation}
+        \caption{Change of sink strengths with grain size and production bias for low neutron dose rate in log scale, a)interstitial GB sink strength, b) vacancy GB sink strength, c) total interstitial GB sink strength, d) total vacancy GB sink strength}
         \label{figure:sink_strength_moose_neutron_3D}
       \end{figure}
 
       \begin{figure}[h!]  %GB Sink Strength - Neutron 1e-6 dpa/s
         \centering
-        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_Zi_scaled_neutron}}
-        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_Zv_scaled_neutron}}
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_neutron_Zi_scaled_nolegend}}
+        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_neutron_Zv_scaled_nolegend}}
+        \subfloat{\includegraphics[scale=0.35]{legend}}
         \qquad
         % \subfloat{a)\includegraphics[scale=0.55]{sink_strength_Zi_scaled_neutron_500-5000nm}}
         % \subfloat{b)\includegraphics[scale=0.55]{sink_strength_Zv_scaled_neutron_500-5000nm}}
-        \caption{GB Sink Strengths for low dose rate neutron irradation}
+        \caption{Change of sink strengths with production bias for low neutron dose rate, a) interstitial GB sink strength, b) vacancy GB sink strength}
         \label{figure:sink_strengths_neutron_bias_Z}
       \end{figure}
 
       \begin{figure}[h!]  %Total GB Sink Strength - Neutron 1e-6 dpa/s
         \centering
-        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_ki_scaled_neutron}}
-        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_kv_scaled_neutron}}
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_neutron_ki_scaled_nolegend}}
+        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_neutron_kv_scaled_nolegend}}                \subfloat{\includegraphics[scale=0.35]{legend}}
         \qquad
         % \subfloat{b)\includegraphics[scale=0.55]{sink_strength_ki_scaled_neutron_500-5000nm}}
         % \subfloat{b)\includegraphics[scale=0.55]{sink_strength_kv_scaled_neutron_500-5000nm}}
-        \caption{Total GB Sink Strengths for low dose rate neutron irradation}
+        \caption{Change of sink strengths with production bias for low neutron dose rate, a) total interstitial GB sink strength, b) total vacancy GB sink strength}
         \label{figure:sink_strengths_neutron_bias_k}
       \end{figure}
 
@@ -415,6 +417,7 @@ In reactor environment, materials are exposed to different types of particle rad
       \caption{Defect production profile for ion irradation.}
       \label{figure:defect_production}
     \end{figure}
+    \newpage
     \subsubsection{Concentrations} \hspace{10pt}
     Even though ion irradation has non-uniform defect production, average defect concentrations show a time-dependent trend that is identical to the one in neutron irradation case. The only difference is the change in concentration levels as a result of less defect production (see Fig. \ref{figure:average_concentrations_ion_5}).
 
@@ -423,11 +426,10 @@ In reactor environment, materials are exposed to different types of particle rad
       \subfloat{a)\includegraphics[scale=0.55]{average_concentration_low_ion_5_size}}
       \qquad
       \subfloat{b)\includegraphics[scale=0.55]{average_concentration_ion_5_size}}
-      \caption{Average Concentration profiles for low(a) and high(b) dose ion irradation with 5\% Production Bias}
+      \caption{Time-dependent behavior of average defect concentration  with 5\% production bias, a) low ion dose rate, b) high ion dose rate}
       \label{figure:average_concentrations_ion_5}
     \end{figure}
 
-    \newpage
     The effect of defect production distribution can be observed obviously in concentration profiles. Since, defect production has peak at around half of the grain, the concentration profiles are taking shape under same behavior and reaching maximum at the center of domain, then waning through boundaries.
 
     If production bias is zero, maximum concentration of each type of point defect becomes independent of grain sizes shown in Fig. \ref{figure:concentrations_ion_0_1e-6}. High ion dose rate only scales up the concentration levels without making any significant change in profiles (see Fig. \ref{figure:concentrations_ion_0_1e-3}).
@@ -436,7 +438,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-low_ion-0}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-low_ion-0}}
-        \caption{Concentration profiles for low dose ion irradation with 0\% Production Bias}
+        \caption{Concentration profiles for low ion dose rate with 0\% production bias, a) interstitial concentration, b) vacancy concentration}
         \label{figure:concentrations_ion_0_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Ion - 1e-6 dpa/s - %0 Bias rate
@@ -444,7 +446,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-ion-0}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-ion-0}}
-        \caption{Concentration profiles for high dose rate ion irradiation with 0\% Production Bias}
+        \caption{Concentration profiles for high ion dose rate with 0\% production bias, a) interstitial concentration, b) vacancy concentration}
         \label{figure:concentrations_ion_0_1e-3}
       \end{figure}
       \newpage
@@ -454,7 +456,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-low_ion-5}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-low_ion-5}}
-        \caption{Concentration profiles for low dose ion irradation with 5\% Production Bias}
+        \caption{Concentration profiles for low ion dose rate with 5\% production bias, a) interstitial concentration, b) vacancy concentration}
         \label{figure:concentrations_ion_5_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Ion - 1e-6 dpa/s - %5 Bias rate
@@ -462,7 +464,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-ion-5}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-ion-5}}
-        \caption{Concentration profiles for high dose rate ion irradation with 5\% Production Bias}
+        \caption{Concentration profiles for high ion dose rate with 5\% production bias, a) interstitial concentration, b) vacancy concentration}
         \label{figure:concentrations_ion_5_1e-3}
       \end{figure}
 
@@ -475,7 +477,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{a)\includegraphics[scale=0.55]{super_saturation_500-5000nm-low_ion-5}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{super_saturation_500-5000nm-ion-5}}
-        \caption{Vacancy Supersaturation profiles for low(a) and high(b) dose ion irradation with 5\% Production Bias}
+        \caption{Vacancy supersaturation profiles for 5\% production bias, a) low ion dose rate, b) high ion dose rate}
         \label{figure:vacancy_supersaturation_ion_5}
       \end{figure}
       \newpage
@@ -494,7 +496,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_Z_scaled}}
         \qquad
         \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_ion_5_Z_scaled}}
-        \caption{GB Sink Strengths for low(a) and high(b) dose rate ion irradiation with 5\% Production Bias}
+        \caption{Change of GB sink strength with grain size for 5\% production bias, a) low ion dose rate, b) high ion dose rate}
         \label{figure:sink_strengths_ion_5_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Sink Strength - ion 1e-3 dpa/s - 5% Bias rate
@@ -502,7 +504,7 @@ In reactor environment, materials are exposed to different types of particle rad
         \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_k_scaled}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{sink_strength_moose_ion_5_k_scaled}}
-        \caption{Total GB Sink Strengths for low(a) and high(b) dose rate ion irradiation with 5\% Production Bias}
+        \caption{Change of total GB sink strength with grain size for 5\% production bias, a) low neutron dose rate, b) high neutron dose rate}
         \label{figure:sink_strengths_ion_5_1e-3}
       \end{figure}
 

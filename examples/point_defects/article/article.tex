@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{verbatim}
+\usepackage{xcolor}
 \usepackage[font=scriptsize]{caption}
 \pagenumbering{arabic}
 \graphicspath{ {./plots/} }
@@ -120,6 +121,7 @@ or
 
 \subsection{Model Settings and Parameters} \hspace{10pt}
 Nickel is selected as a base material, and its properties are used in calculations.
+\textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}
 
 \begin{table}[h!]
   \centering
@@ -251,6 +253,9 @@ In reactor environment, materials are exposed to different types of particle rad
       \label{figure:concentrations_neutron_5_1e-3}
     \end{figure}
 
+    \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Add 3D plots.}
+
+
     \newpage
     \subsubsection{Supersaturation} \hspace{10pt}
     Supersaturation is a condition that the actual concentration of point defect is larger than its equilibrium concentration. The opposite condition is called undersaturation which is being smaller than equilibrium concentration. In both cases, the system is not at the minimum free energy. Both vacancies and interstitials could be supersaturated, then aggiomerate into voids or discs of interstitial atoms. These can produce stacking faults in crystal microstructure.
@@ -264,7 +269,7 @@ In reactor environment, materials are exposed to different types of particle rad
     \end{equation}\\
 
     The vacancy supersaturation curves for biased neutron irradation is given in Fig. \ref{figure:vacancy_supersaturation_neutron_5}. Since the defect concentrations have symmetrical profiles for neutron irradation, supersaturation curves are also symmetrical around grain center. The plot shows a non-linear increase in supersaturation values as grain gets larger.
-      \begin{figure}[h!]  %Nuetron - Vacancy Supersaturation - 5% Bias
+      \begin{figure}[h!]  %Neutron - Vacancy Supersaturation - 5% Bias
         \centering
         \subfloat{a)\includegraphics[scale=0.55]{super_saturation_500-5000nm-neutron-5}}
         \qquad
@@ -272,6 +277,8 @@ In reactor environment, materials are exposed to different types of particle rad
         \caption{Vacancy supersaturation profiles for 5\% production bias, a)low dose rate neutron, b) high dose rate neutron}
         \label{figure:vacancy_supersaturation_neutron_5}
       \end{figure}
+
+      \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Add 3D plots.}
 
     \newpage
     \subsubsection{Sink Strengths} \hspace{10pt}
@@ -468,6 +475,9 @@ In reactor environment, materials are exposed to different types of particle rad
         \label{figure:concentrations_ion_5_1e-3}
       \end{figure}
 
+      \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Add 3D plots.}
+
+
     \newpage
     \subsubsection{Supersaturation} \hspace{10pt}
 
@@ -480,17 +490,23 @@ In reactor environment, materials are exposed to different types of particle rad
         \caption{Vacancy supersaturation profiles for 5\% production bias, a) low ion dose rate, b) high ion dose rate}
         \label{figure:vacancy_supersaturation_ion_5}
       \end{figure}
+
+      \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Add 3D plots.}
+
       \newpage
     \subsubsection{Sink Strengths} \hspace{10pt}
     The sink strengths are directly related to concentration at center and flow at boundary. The change in centerline defect concentrations are not as considerable as neutron case. So, the flow or flux at boundary becomes more dominant on sink strength profiles (see Fig. \ref{figure:sink_strengths_ion_5_1e-6} and \ref{figure:sink_strengths_ion_5_1e-3}).
-      % \begin{figure}[h!]  %Sink Strength - ion 1e-3 dpa/s - 0% Bias rate
-      %   \centering
-      %   \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_ion_0_k}}
-      %   \qquad
-      %   \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_ion_0_Z}}
-      %   \caption{Sink Strengths for low dose ion irradation with 0\% Production Bias}
-      %   \label{figure:sink_strengths_ion_0_1e-6}
-      % \end{figure}
+      \begin{figure}[h!]  %
+        \centering
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_5-5000nm-low_ion-5}}
+        \qquad
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_5-5000nm-ion-5}}
+        \caption{Concentration profiles for high ion dose rate with 5\% production bias, a) interstitial concentration, b) vacancy concentration}
+        \label{figure:concentrations_ion_5_1e-3_5-5000nm}
+      \end{figure}
+
+      \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Explain the profile change in GB sink strength by using concentration or defect flow plots.}
+
       \begin{figure}[h!]  %Sink Strength - ion 1e-6 dpa/s - 5% Bias rate
         \centering
         \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_Z_scaled}}
@@ -540,6 +556,7 @@ In reactor environment, materials are exposed to different types of particle rad
 % to each other because the production compensates more absorption at sinks than previous.
 % Based on this, if the production rate increased sufficiently, the recombination zone would
 % appear again in nano-scale domain.
+\newpage
   \subsection{Discussion} \hspace{10pt}
   What happens when switched from neutron irradation to ion irradiation
   \begin{enumerate}
@@ -548,8 +565,6 @@ In reactor environment, materials are exposed to different types of particle rad
     \item Reduction in supersaturation
   \end{enumerate}
 
-
-\newpage
 \section{Conclusion} \hspace{10pt}
 
 The rate theory equations resolve the temporal and spatial concentration profiles of point defects. The behavior of concentration distributions are controlled by parameters given in equation, representing their reactions and diffusion in domain. According to the results obtained in this study, the combination of production bias, production dose rate, production profile and grain size determine whether the steady state point defect concentration profile is symmetrical, flipped or both. There is always a critical value for parameters that could change the defect concentration profile entirely.

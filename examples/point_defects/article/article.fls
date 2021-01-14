@@ -45,6 +45,10 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
@@ -126,6 +130,7 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/concentration_profiles_MOOSE_Analytical_Neutron_0.png
 INPUT ./plots/concentration_profiles_MOOSE_Analytical_Neutron_0.png
 INPUT ./plots/concentration_profiles_MOOSE_Analytical_Neutron_0.png
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/average_concentration_neutron_5_size.png
 INPUT ./plots/average_concentration_neutron_5_size.png
@@ -243,6 +248,12 @@ INPUT ./plots/super_saturation_500-5000nm-low_ion-5.png
 INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/super_saturation_500-5000nm-ion-5.png
 INPUT ./plots/super_saturation_500-5000nm-ion-5.png
 INPUT ./plots/super_saturation_500-5000nm-ion-5.png
+INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/interstitial_concentration_5-5000nm-low_ion-5.png
+INPUT ./plots/interstitial_concentration_5-5000nm-low_ion-5.png
+INPUT ./plots/interstitial_concentration_5-5000nm-low_ion-5.png
+INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/interstitial_concentration_5-5000nm-ion-5.png
+INPUT ./plots/interstitial_concentration_5-5000nm-ion-5.png
+INPUT ./plots/interstitial_concentration_5-5000nm-ion-5.png
 INPUT /home/ao/projects/beaver/examples/point_defects/article/./plots/sink_strength_moose_low_ion_5_Z_scaled.png
 INPUT ./plots/sink_strength_moose_low_ion_5_Z_scaled.png
 INPUT ./plots/sink_strength_moose_low_ion_5_Z_scaled.png

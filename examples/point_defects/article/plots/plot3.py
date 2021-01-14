@@ -30,11 +30,11 @@ ax.set_ylabel(sys.argv[3])
 ax.set_zlabel(sys.argv[4])
 
 #Custom Labels
-ax.set_xlabel('x (nm)')
-# ax.set_xlabel('Grain Size (nm)')
+# ax.set_xlabel('x (nm)')
+ax.set_xlabel('Grain Size (nm)')
 ax.set_ylabel('Production Bias (%)')
-ax.set_zlabel('Interstitial Concentration')
-# ax.set_zlabel('logC$_{i,center}$')
+# ax.set_zlabel('Interstitial Concentration')
+ax.set_zlabel('C$_{i,center}$')
 # ax.set_zlabel('Total GB Sink Strength (1/m^2)')
 
 #Create meshgrid from dataframe
@@ -63,5 +63,5 @@ for id in range(4,len(sys.argv)):
 # fig.colorbar(surf, shrink=0.5, aspect=5)
 # plt.legend(loc=0, ncol=1,fontsize='medium')
 ax.view_init(elev=20., azim=-122)
-# plt.show()
+plt.show()
 fig.savefig(figname, bbox_inches='tight',dpi=150, transparent=False)

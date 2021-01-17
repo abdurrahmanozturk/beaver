@@ -17,27 +17,30 @@ import re
 #Read Command Line Arguments
 n=len(sys.argv)
 
-for i in range(2,len(sys.argv)):
-    arg = sys.argv[i]
-    if re.search("=",arg):
-        arg_name = arg.split('=')[0]
-        if re.search(',',arg.split('=')[1]):
-            str_arg_value = arg.split('=')[1].split(',')
-            arg_value = [float(str_arg_value[a]) for a in range(0,len(str_arg_value))]
-        # elif re.search(":",arg.split('=')[1]):
-        #     range = arg.split('=')[1]
-        #     #Check range Argument
-        #     [l,u,ck] = range.split(':')
-        #     [lower,upper] = [float(l),float(u)]
-        #     if re.search('x',ck):
-        #         n = int(ck.split('x')[0])
-        #         arg_value = np.arange(lower, upper+1, float((upper-lower)/(n-1)))
-        #     else:
-        #         arg_value = np.arange(lower, upper+1, float(ck))
-        else:
-            arg_value=[float(arg.split('=')[1])]
+argmode = False
+if len(sys.argv)>2:
+    argmode = True
+    for i in range(2,len(sys.argv)):
+        arg = sys.argv[i]
+        if re.search("=",arg):
+            arg_name = arg.split('=')[0]
+            if re.search(',',arg.split('=')[1]):
+                str_arg_value = arg.split('=')[1].split(',')
+                arg_value = [float(str_arg_value[a]) for a in range(0,len(str_arg_value))]
+            # elif re.search(":",arg.split('=')[1]):
+            #     range = arg.split('=')[1]
+            #     #Check range Argument
+            #     [l,u,ck] = range.split(':')
+            #     [lower,upper] = [float(l),float(u)]
+            #     if re.search('x',ck):
+            #         n = int(ck.split('x')[0])
+            #         arg_value = np.arange(lower, upper+1, float((upper-lower)/(n-1)))
+            #     else:
+            #         arg_value = np.arange(lower, upper+1, float(ck))
+            else:
+                arg_value=[float(arg.split('=')[1])]
 
-print(arg_name,arg_value)
+    print(arg_name,arg_value)
 
 filename = sys.argv[1]
 file = open(filename)
@@ -52,6 +55,7 @@ if re.search(".csv",lines[0]):
         csvfile.append(filenames[fid][:-1])
 else:
     csvfile = [filename]
+    filename= filename[:-4]
 
 data = []
 df = pd.DataFrame(data)
@@ -63,8 +67,12 @@ for fid in range(0,len(csvfile)):
         _data = np.array(list(_reader)).astype(float)
     # Create data frames
     _df = pd.DataFrame(_data,columns=_headers)
-    arg_list = [arg_value[fid]]*_df.shape[0]
-    _df.insert(loc=0, column=arg_name, value=arg_list)
+    if argmode:
+        if fmode:
+            arg_list = [arg_value[fid]]*_df.shape[0]
+        else:
+            arg_list = arg_value
+        _df.insert(loc=0, column=arg_name, value=arg_list)
     df = pd.concat([df,_df],ignore_index=True)
 
 print(df)

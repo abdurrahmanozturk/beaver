@@ -50,7 +50,7 @@ def getHelp():
     sys.exit()
 
 def getSinkStrength(df,l,scale,coordinates="cartesian"):
-    ss_file = open('sink_strength_moose.csv', 'a')
+    ss_file = open(ss_filename, 'a')
     nrow = df.shape[0] #number of rows in dataframe
     size = df.loc[nrow-1,'x']
     d = size/scale
@@ -81,21 +81,17 @@ def getSinkStrength(df,l,scale,coordinates="cartesian"):
     ki_scaled = ki/(l**2)
     kv = rho*Zv
     kv_scaled = kv/(l**2)
-    super_saturation = df.loc[(nrow+1)/2,'super_saturation']
+    super_saturation_center = df.loc[(nrow+1)/2,'super_saturation']
     print('\033[94m'+'\033[4m'+'\033[1m'+"\nNondimensionalized Results for length_scale= "+str(l)+" m"+'\033[0m')
     print('\033[97m'+"Domain Size = "+str(size))
     print("xi = "+str(xi)+", jix = "+str(Ji)+", Di = "+str(Di))
     print("xv = "+str(xv)+", jvx = "+str(Jv)+", Dv = "+str(Dv))
     print('\033[93m'+"Zi: "+str(Zi)+" \nZv: "+str(Zv))
     print('\033[97m'+"ki^2: "+str(ki)+" \nkv^2: "+str(kv)+" "+'\033[0m')
-    ss_file.write(str(size)+","+str(xi)+","+str(xv)+","+str(Fi)+","+str(Fv)+","+str(Di)+","+str(Dv)+","+str(rho)+","+str(Zi)+","+str(Zv)+","+str(ki)+","+str(kv)+","+str(Zi_scaled)+","+str(Zv_scaled)+","+str(ki_scaled)+","+str(kv_scaled)+","+str(super_saturation)+"\n")
+    ss_file.write(str(size)+","+str(xi)+","+str(xv)+","+str(Fi)+","+str(Fv)+","+str(Di)+","+str(Dv)+","+str(rho)+","+str(Zi)+","+str(Zv)+","+str(ki)+","+str(kv)+","+str(Zi_scaled)+","+str(Zv_scaled)+","+str(ki_scaled)+","+str(kv_scaled)+","+str(super_saturation_center)+"\n")
     ss_file.close()
     return 0
 
-os.system("rm -rf sink_strength_moose.csv")
-ss_file = open('sink_strength_moose.csv', 'a')
-ss_file.write("size,Ci_center,Cv_center,Fi,Fv,Di,Dv,rho,Zi,Zv,ki,kv,Zi_scaled,Zv_scaled,ki_scaled,kv_scaled,super_saturation\n")
-ss_file.close()
 
 if sys.argv[-1]=="-"+"h":
     getHelp()
@@ -106,6 +102,12 @@ n=len(sys.argv)
 filename = sys.argv[1]
 file = open(filename)
 figname=filename[:-4]+".png"
+
+ss_filename = "sink_strength_"+filename+".csv"
+os.system("rm -rf "+ss_filename)
+ss_file = open(ss_filename, 'a')
+ss_file.write("size,xi_center,xv_center,Fi,Fv,Di,Dv,rho,Zi,Zv,ki,kv,Zi_scaled,Zv_scaled,ki_scaled,kv_scaled,super_saturation_center\n")
+ss_file.close()
 
 fmode = False
 if sys.argv[-2]=="-"+"f" or sys.argv[-1]=="-"+"f":   # WILL BE DEPRICATED

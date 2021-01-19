@@ -121,7 +121,8 @@ or
 
 \subsection{Model Settings and Parameters} \hspace{10pt}
 Nickel is selected as a base material, and its properties are used in calculations.
-\textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}
+
+\textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!ADD PARAGRAPH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}
 
 \begin{table}[h!]
   \centering
@@ -253,8 +254,14 @@ In reactor environment, materials are exposed to different types of particle rad
       \label{figure:concentrations_neutron_5_1e-3}
     \end{figure}
 
-    \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Add 3D plots.}
-
+    \begin{figure}[htb!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
+      \centering
+      \subfloat{a)\includegraphics[scale=0.28]{data_neutron_250nm}}
+      \qquad
+      \subfloat{b)\includegraphics[scale=0.28]{data_neutron_1000nm}}
+      \caption{Change of interstitial concentration profiles with production bias for low dose rate neutron in a grain of a) 250 $nm$ and b) 1000 $nm$ }
+      \label{figure:3D_concentrations_neutron_1e-6}
+    \end{figure}
 
     \newpage
     \subsubsection{Supersaturation} \hspace{10pt}
@@ -278,8 +285,14 @@ In reactor environment, materials are exposed to different types of particle rad
         \label{figure:vacancy_supersaturation_neutron_5}
       \end{figure}
 
-      \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Add 3D plots.}
-
+      \begin{figure}[htb!]  %Neutron - Vacancy Supersaturation
+        \centering
+        \subfloat{a)\includegraphics[scale=0.38]{data_neutron_Sv_center}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.38]{data_high_neutron_Sv_center}}
+        \caption{Change of vacancy supersaturation at center with grain size and production bias for a)low dose rate neutron, b) high dose rate neutron}
+        \label{figure:3D_supersaturation_neutron}
+      \end{figure}
     \newpage
     \subsubsection{Sink Strengths} \hspace{10pt}
     The sink reaction term in Eq. \ref{equation:point_defect_equations_sink_strength} represents the total loss of point defects to sinks that are voids and dislocations within the domain. It can be written in expanded form as below,
@@ -475,8 +488,14 @@ In reactor environment, materials are exposed to different types of particle rad
         \label{figure:concentrations_ion_5_1e-3}
       \end{figure}
 
-      \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Add 3D plots.}
-
+      \begin{figure}[htb!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.28]{data_low_ion_250nm}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.28]{data_low_ion_1000nm}}
+        \caption{Change of interstitial concentration profiles with production bias for low dose rate ion in a grain of a) 250 $nm$ and b) 1000 $nm$ }
+        \label{figure:3D_concentrations_ion_1e-6}
+      \end{figure}
 
     \newpage
     \subsubsection{Supersaturation} \hspace{10pt}
@@ -491,37 +510,57 @@ In reactor environment, materials are exposed to different types of particle rad
         \label{figure:vacancy_supersaturation_ion_5}
       \end{figure}
 
-      \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Add 3D plots.}
+      \begin{figure}[htb!]  %Neutron - Vacancy Supersaturation
+        \centering
+        \subfloat{a)\includegraphics[scale=0.38]{data_low_ion_Sv_center}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.38]{data_ion_Sv_center}}
+        \caption{Change of vacancy supersaturation at center with grain size and production bias for a) low dose rate ion, b) high dose rate ion}
+        \label{figure:3D_supersaturation_ion}
+      \end{figure}
+
+      The vacancy supersaturation behavior, shown in Fig. \ref{figure:3D_supersaturation_ion}, is identical to one in given for neutron irradiation case (see Fig. \ref{figure:3D_supersaturation_neutron}). This similarity makes it possible to use ions instead of neutrons to analyze swelling of reactor materials.
 
       \newpage
     \subsubsection{Sink Strengths} \hspace{10pt}
     The sink strengths are directly related to concentration at center and flow at boundary. The change in centerline defect concentrations are not as considerable as neutron case. So, the flow or flux at boundary becomes more dominant on sink strength profiles (see Fig. \ref{figure:sink_strengths_ion_5_1e-6} and \ref{figure:sink_strengths_ion_5_1e-3}).
       \begin{figure}[h!]  %
         \centering
-        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_5-5000nm-low_ion-5}}
+        \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_5-5000nm-low_ion-5}}
         \qquad
-        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_5-5000nm-ion-5}}
-        \caption{Concentration profiles for high ion dose rate with 5\% production bias, a) interstitial concentration, b) vacancy concentration}
+        \subfloat{b)\includegraphics[scale=0.55]{interstitial_concentration_5-5000nm-ion-5}}
+        \caption{Interstitial concentration profiles with 5\% production bias for a) low ion dose rate, b) high ion dose rate}
         \label{figure:concentrations_ion_5_1e-3_5-5000nm}
       \end{figure}
 
-      \textcolor{red}{!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Explain the profile change in GB sink strength by using concentration or defect flow plots.}
+      As it is discussed previously, since ions can not penetrate till the end of domain, they cause a non-uniform defect production. If the grain is small enough compared to penetration depth, concentration profiles are symmetrical, and the effect of distribution profile is not visible (up to 1000 $nm$ in Fig. \ref{figure:concentrations_ion_5_1e-3_5-5000nm}a and 50 $nm$ in Fig. \ref{figure:concentrations_ion_5_1e-3_5-5000nm}b). Yet, for larger grains, the defect concentrations are highly affected by non-uniformity. The flux at the far boundary oscillates and approaches to zero as grain size increases. Since sink strengths are related to the ratio of flux to concentration, they are affected by the oscillations in flux and concentration (see Fig. \ref{figure:sink_strengths_ion_5_1e-6}).
 
       \begin{figure}[h!]  %Sink Strength - ion 1e-6 dpa/s - 5% Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_Z_scaled}}
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_Z_scaled}}
         \qquad
-        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_ion_5_Z_scaled}}
+        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_moose_ion_5_Z_scaled}}
         \caption{Change of GB sink strength with grain size for 5\% production bias, a) low ion dose rate, b) high ion dose rate}
         \label{figure:sink_strengths_ion_5_1e-6}
       \end{figure}
       \begin{figure}[h!]  %Sink Strength - ion 1e-3 dpa/s - 5% Bias rate
         \centering
-        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_k_scaled}}
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_k_scaled}}
         \qquad
         \subfloat{b)\includegraphics[scale=0.55]{sink_strength_moose_ion_5_k_scaled}}
         \caption{Change of total GB sink strength with grain size for 5\% production bias, a) low dose rate neutron, b) high dose rate neutron}
         \label{figure:sink_strengths_ion_5_1e-3}
+      \end{figure}
+
+      \begin{figure}[h!]  %Sink Strength 3D - Ion 1e-6 dpa/s
+        \centering
+        \subfloat{a)\includegraphics[scale=0.25]{data_low_ion_Zi}}
+        \subfloat{b)\includegraphics[scale=0.25]{data_low_ion_Zv}}
+        \qquad
+        \subfloat{c)\includegraphics[scale=0.25]{data_low_ion_ki}}
+        \subfloat{d)\includegraphics[scale=0.25]{data_low_ion_kv}}
+        \caption{Change of sink strengths with grain size and production bias for low dose rate ion in log scale, a)interstitial GB sink strength, b) vacancy GB sink strength, c) total interstitial GB sink strength, d) total vacancy GB sink strength}
+        \label{figure:sink_strength_moose_neutron_3D}
       \end{figure}
 
 
@@ -568,6 +607,8 @@ In reactor environment, materials are exposed to different types of particle rad
 \section{Conclusion} \hspace{10pt}
 
 The rate theory equations resolve the temporal and spatial concentration profiles of point defects. The behavior of concentration distributions are controlled by parameters given in equation, representing their reactions and diffusion in domain. According to the results obtained in this study, the combination of production bias, production dose rate, production profile and grain size determine whether the steady state point defect concentration profile is symmetrical, flipped or both. There is always a critical value for parameters that could change the defect concentration profile entirely.
+
+Suplementary materials and extra figures are available at https://github.com/abdurrahmanozturk/articles
 
 % An online tool could be created to play with different parameters.
 % \begin{thebibliography}{00}

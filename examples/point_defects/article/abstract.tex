@@ -1,0 +1,52 @@
+\documentclass[a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{xcolor}
+\usepackage[font=scriptsize]{caption}
+\pagenumbering{arabic}
+\graphicspath{ {./plots/} }
+
+
+% Keywords command
+\providecommand{\keywords}[1]
+{
+  \small
+  \textbf{\textit{Keywords---}} #1
+}
+
+% \tableofcontents
+
+\title{Numerical Solution of Point Defect Equations by MOOSE}
+\author{Abdurrahman Ozturk$^{1}$, Karim Ahmed$^{1}$  \\
+        \small $^{1}$Texas A\&M University \\
+        % \small $^{2}$University B \\
+}
+% \date{} % Comment this line to show today's date
+\begin{document}
+\maketitle
+
+\begin{abstract}
+
+We present a detailed investigation of the effect of size on the segregation of point defects to interfaces and the resultant nucleation of voids. We utilize the spatially-resolved rate-theory (SRRT) modeling technique valid for modeling surfaces as discrete sinks. The effects of defect production rate, bias, and profile are thoroughly studied. The model predictions are generally different from the textbook ones obtained by the classical homogenized rate theory approach. The simulations show a strong dependence of the steady state defect profiles on the grain size, temperature, and production rate, bias, and profile. Moreover, the sink strength of each boundary is also affected by these factors. Furthermore, it is predicted that whenever there is a production bias, no neutral sinks can exist, i.e., there is always a preference for surfaces/interfaces to absorb one type of defects over another. The model predictions demonstrate the shortcomings of the classical homogenous rate-theory approach and shed light on the limitations of using ion irradiation to mimic neutron irradiation.
+
+% Irradiation of a material creates point defects, vacancies and interstitials, as a result of
+% atomic collisions. Those point defects are mobile and able to diffuse through material, recombine with each other,
+% and disappear when they react with sinks. The concentration of both vacancy and interstitial can be described mathematically by chemical rate balance equations, named point defect equations (rate theory equations). Production, recombination, diffusion and reaction of point defects are given by separate terms in those equations, which makes it easy to solve and analyze each of them individually. In this work, spatially resolved non-dimensional point defect equations are solved in 1D by using MOOSE Framework. The effect of irradiation dose rate, sink density, temperature, uniform defect production, non-uniform defect production and biased defect production on steady state defect concentration profile and on grain boundary sink strength are studied. The calculations are also repeated for different grain sizes changing from 5\emph{nm} to 5$\mu$\emph{m} to investigate the effect of grain size on defect concentration and grain boundary sink strength. According to results, the grain size and defect production profile/bias have a significant effect on concentration profiles. They could create a flipped concentration profile through domain, which ends up with a defect segregation near grain boundary.
+
+\end{abstract} \hspace{10pt}
+
+%TC:ignore
+\keywords{point defect equations, rate theory, interstitial, vacancy, radiation damage, MOOSE}
+%TC:endignore
+
+% Word count
+% \verbatiminput{\jobname.wordcount.tex}
+
+% \listoftables
+% \listoffigures
+
+\end{document}

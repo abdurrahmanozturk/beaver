@@ -21,7 +21,7 @@
 % \tableofcontents
 
 \title{Numerical Solution of Point Defect Equations by MOOSE}
-\author{Abdurrahman Ozturk$^{1}$, Karim Ahmed$^{1}$  \\
+\author{Abdurrahman Ozturk$^{1}$, Merve Gencturk$^{1}$, Author$^{1}$, Karim Ahmed$^{1}$  \\
         \small $^{1}$Texas A\&M University \\
         % \small $^{2}$University B \\
 }
@@ -31,7 +31,7 @@
 
 \begin{abstract}
 
-We present a detailed investigation of the effect of size on the segregation of point defects to interfaces and the resultant nucleation of voids. We utilize the spatially-resolved rate-theory (SRRT) modeling technique valid for modeling surfaces as discrete sinks. The effects of defect production rate, bias, and profile are thoroughly studied. The model predictions are generally different from the textbook ones obtained by the classical homogenized rate theory approach. The simulations show a strong dependence of the steady state defect profiles on the grain size, temperature, and production rate, bias, and profile. Moreover, the sink strength of each boundary is also affected by these factors. Furthermore, it is predicted that whenever there is a production bias, no neutral sinks can exist, i.e., there is always a preference for surfaces/interfaces to absorb one type of defects over another. The model predictions demonstrate the shortcomings of the classical homogenous rate-theory approach and shed light on the limitations of using ion irradiation to mimic neutron irradiation.
+We present a detailed investigation of the effect of size on the segregation of point defects to interfaces and the resultant nucleation of voids. We utilize the spatially-resolved rate-theory (SRRT) modeling technique valid for modeling surfaces as discrete sinks. The effects of defect production rate, bias, and profile are thoroughly studied. The model predictions are generally different from the textbook ones obtained by the classical homogenized rate theory approach. The simulations show a strong dependence of the steady state defect profiles on the grain size, temperature, and production rate, bias, and profile. Moreover, the sink strength of each boundary is also affected by these factors. Furthermore, it is predicted that whenever there is a production bias, no neutral sinks can exist, i.e., there is always a preference for surfaces/interfaces to absorb one type of defects over another. The model predictions demonstrate the shortcomings of the classical homogeneous rate-theory approach and shed light on the limitations of using ion irradiation to mimic neutron irradiation.
 
 % Irradiation of a material creates point defects, vacancies and interstitials, as a result of
 % atomic collisions. Those point defects are mobile and able to diffuse through material, recombine with each other,
@@ -48,5 +48,728 @@ We present a detailed investigation of the effect of size on the segregation of 
 
 % \listoftables
 % \listoffigures
+
+\section{Introduction} \hspace{10pt}
+\newpage
+//
+radiation damage/interactions//
+motivation about paper//
+Harsh conditions//
+neutron-ion case comparison//
+instabilities, extended defects (Ghoniem paper)//
+in this study, focusing effect of grain size, bias, discrete surfaces,
+homogenized RT, spatially resolution//
+qualifying extended defects//
+profiles change with increasing radiation damage//
+
+
+\section{Methodology} \hspace{10pt}
+
+\subsection{Point Defect Equations} \hspace{10pt}
+The irradiation of a material causes the creation of vacancies and interstitial because of
+atomic collisions. The point defects can diffuse through material, recombine with each other,
+and react with sinks which are present in microstructure. The concentration of point defects is
+described mathematically by the chemical rate balance equations given in following sets of equations.\\
+
+\begin{equation}
+  \begin{aligned}
+    &\frac{dC_i}{dt} = K_0 - K_{iv}C_iC_v - K_{is}C_iC_s + \nabla\cdot D_i\nabla C_i\\
+    &\frac{dC_v}{dt} = (1+b)K_0 - K_{iv}C_iC_v - K_{vs}C_vC_s + \nabla\cdot D_v\nabla C_v\\
+  \end{aligned}
+  \label{equation:point_defect_equations}
+\end{equation}\\
+
+There are different terms with different rate coefficients as seen in Eq. \ref{equation:point_defect_equations}. The first term on the RHS is a source term, representing defect generation with rate of \textit{K\textsubscript{0}}. In vacancy equation, \textit{b} is used as percent production bias to create a difference between interstitial and vacancy generation in domain. The second term is a reaction term, referring the recombination process if the defect \textit{x} reacts with defect \textit{y} with a rate of \textit{K\textsubscript{xy}}. The third term is also a reaction term, representing the reaction between the defect \textit{x} and the sink \textit{s} with a rate of \textit{K\textsubscript{xs}}. In this study, the sink concentration is assumed constant and uniformly distributed over domain. The last term is diffusion term which is resolving the spatial behavior of defects.\\
+
+Another form of point defect equations can be written by using sink strength, \textit{k} definition for sink reaction term.\\
+
+\begin{equation}
+  \begin{aligned}
+    &k_i^2D_iC_i = K_{is}C_iC_s \\
+    &k_v^2D_vC_v = K_{vs}C_vC_s \\
+  \end{aligned}
+  \label{equation:sink_reaction_term}
+\end{equation}\\
+\begin{equation}
+  \begin{aligned}
+    &\frac{dC_i}{dt} = K_0 - K_{iv}C_iC_v - k_i^2D_iC_i + \nabla\cdot D_i\nabla C_i\\
+    &\frac{dC_v}{dt} = (1+b)K_0 - K_{iv}C_iC_v - k_v^2D_vC_v + \nabla\cdot D_v\nabla C_v\\
+  \end{aligned}
+  \label{equation:point_defect_equations_sink_strength}
+\end{equation}\\
+
+\subsection{Non-dimensionalization of Point Defect Equations} \hspace{10pt}
+The time space of defect interactions is enormously large, which could differ from nanoseconds to hours. In addition, rate coefficients also have different orders. To make it easier to solve point defect equations numerically, their non-dimensionalized forms are implemented in MOOSE. The Multiphysics Object-Oriented Simulation Environment (MOOSE) is an open-source framework that provides users to solve partial differential equations (PDEs) and build a state-of-the-art, computationally scalable finite element-based simulations.     \textcolor{red}{ref.} \\ The non-dimensionalization scheme and final form of equations are given in this section.
+
+Scaling factors and non-dimensionalized variables are introduced as,
+
+\begin{equation}
+  \begin{aligned}
+    &X = \Omega C\\
+    &\tau = \frac{t}{\omega}\\
+  \end{aligned}
+  \label{equation:non-dimensionalization_variables}
+\end{equation}
+
+where ${\Omega}$ is atomic volume in ${m^3}$, ${l}$ is length scale in ${m}$ and ${\omega}$ is time scale in ${s}$, ${\omega= l^2/D_i}$\\
+
+After substituting Eq. \ref{equation:non-dimensionalization_variables} into \ref{equation:point_defect_equations} and reorganizing, the non-dimensionalized version of point defect equations are,
+
+\begin{equation}
+  \begin{aligned}
+    &\frac{dX_i}{dt} = \Omega\omega K_0 - \frac{\omega K_{iv}}{\Omega}X_iX_v - \frac{\omega K_{is}}{\Omega}X_iX_s + \omega D_i\nabla^2 X_i\\
+    &\frac{dX_v}{dt} = \Omega\omega K_0 - \frac{\omega K_{iv}}{\Omega}X_iX_v - \frac{\omega K_{vs}}{\Omega}X_vX_s + \omega D_v\nabla^2 X_v\\
+  \end{aligned}
+  \label{equation:non-dimensionalized_point_defect_equations}
+\end{equation}\\
+or
+\begin{equation}
+  \begin{aligned}
+    &\frac{dX_i}{dt} = \widetilde{K_0} - \widetilde{K_{iv}}X_iX_v - \widetilde{K_{is}}X_iX_s + \widetilde{D_i}\widetilde{\nabla}^2 X_i\\
+    &\frac{dX_v}{dt} = \widetilde{K_0} - \widetilde{K_{iv}}X_iX_v - \widetilde{K_{vs}}X_vX_s + \widetilde{D_v}\widetilde{\nabla}^2 X_v\\
+  \end{aligned}
+  \label{equation:non-dimensionalized_point_defect_equations}
+\end{equation}\\
+
+\subsection{Model Settings and Parameters} \hspace{10pt}
+    Ni-based alloys have been used in many nuclear reactors applications because of their excellent corrosion resistance and high mechanical properties. For example, Ni-based alloys containing 15-30\% Cr are generally used in the cooling systems of reactors due to their corrosion resistance. However, radiation embrittlement, phase instability, and swelling caused by radiation in these materials can cause them to lose their properties. It is essential to predict the material structure changes due to radiation accurately.
+    To make a more detailed examination, for the neutron irradiation and ion irradiation case, Nickel is selected as a base material, and its properties are used in calculations.
+
+
+
+
+\begin{table}[h!]
+  \centering
+  \caption{Material Properties for Nickel\cite{walgraef1996}}
+  \label{table:Ni_material_properties}
+  \begin{tabular}{ ||p{5.5cm}|p{2cm}|p{2cm}||p{2cm}|p{2cm}||  }
+     % \hline
+     % \multicolumn{5}{|c|}{Material Properties} \\
+     \hline
+     Input Parameter & Symbol & Value & Units\\
+     \hline\hline
+
+    Lattice parameter & a  & 0.352  & nm\\
+    Volume & V  & 0.01206 & nm^3 \\
+    Migration energy for interstitial & E_{m,i}  & 0.30 & eV \\
+    Migration energy for vacancy & E_{m,v}  & 1.30 & eV \\
+    Formation energy for interstitial & E_{f,i}  & 4.27 & eV \\
+    Formation energy for vacancy & E_{f,v}  & 1.60 & eV  \\
+    Diffusion coefficient for interstitial & D_{0,i}  & 1e-7 & m^2/s  \\
+    Diffusion coefficient for vacancy & D_{0,v}  & 6e-5 & m^2/s  \\
+
+     \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \caption{Simulation Parameters}
+  \label{table:simulation_parameters}
+  \begin{tabular}{ ||p{2cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}||  }
+     % \multicolumn{5}{|c|}{Simulation Parameters} \\
+     \hline
+     Type & Dose Rate (dpa/s) & Defect Production & Temperature (K) & Sink Density (m^{-3})\\
+     \hline
+     \hline
+     Neutron  & 1e-3  & Uniform     & 773 & 1e18\\
+              & 1e-6  & Uniform     & 773 & 1e18\\
+     \hline
+     Ion      & 1e-3  & Distributed & 773 & 1e18\\
+              & 1e-6  & Distributed & 773 & 1e18\\
+     \hline
+  \end{tabular}
+\end{table}
+
+\newpage
+\section{Results} \hspace{10pt}
+
+Regarding cost and time, it can be understood that ion radiation has been used for a long time in experimental studies. However, with the development of reactor designs and the increase of long-term licensed reactors, it has been necessary to search for more reliable materials that can operate for a long time under extreme conditions. Therefore, it is essential to investigate the effects of neutron irradiation and ion irradiation in microstructure to determine the equality of neutron and ion irradiation results.
+
+The results obtained from MOOSE simulations are presented in this section by plots of defect concentration, vacancy supersaturation and sink strengths. The equations are solved in one direction using Lagrange elements and a second-order time integration scheme. In this work, the surfaces represent free surfaces or grain boundaries.  %The calculated sink strengths are also tabulated for different grain size and bias rates.
+
+
+  \subsection{Neutron Irradiation} \hspace{10pt}
+  Neutrons have an energy spectrum that varies a couple of orders of magnitude. This makes defect generation possible at different energies. Also, the high penetration depth of neutrons allow them to travel through material corresponding to their energies. Thus, they cause a uniform or flat-like defect production profile in material.\cite{was2016}
+
+  Numerical models are frequently used to solve scientific problems and make decisions based on results obtained from simulations, but first, the numerical approach should be reliable. Before presenting results from this study, a simple spherical grain problem for neutron irradiation is solved by MOOSE as benchmark problem, and its results are compared to analytical results for validation.
+
+  In this approach, unlike the simulations in this study, the mutual recombination term in Eq. \ref{equation:point_defect_equations_sink_strength} is neglected, and the steady state analytical solutions for a spherical grain of radius \textit{a} are found as below.\cite{heald1977}\\
+
+  \begin{equation}
+    \begin{aligned}
+      &0 = \frac{K_0}{D_i} - k_i^2C_i + \frac{d^2C_i}{dr^2}+\frac{2}{r}\frac{dC_i}{dr}\\
+      &0 = \frac{K_0}{D_v} - k_v^2C_v + \frac{d^2C_v}{dr^2}+\frac{2}{r}\frac{dC_v}{dr}\\
+    \end{aligned}
+    \label{equation:spherical_norecomb_point_defect_equations}
+  \end{equation}\\
+  \begin{equation}
+    \begin{aligned}
+      &C_i(r)=\frac{K_0}{D_ik_i^2}\bigg(1-\frac{a\sinh{k_ir}}{r\sinh{k_ia}}\bigg)\\
+      &C_v(r)=\frac{K_0}{D_vk_v^2}\bigg(1-\frac{a\sinh{k_vr}}{r\sinh{k_va}}\bigg)\\
+    \end{aligned}
+    \label{equation:spherical_grain_analytical_solution}
+  \end{equation}\\
+
+  This approach is tested in MOOSE by solving point defect concentrations for a spherical grain having radius of 500 nm. As seen in Fig. \ref{figure:concentrations_MOOSE_analytical}, MOOSE results exactly match with the analytical solution, which makes it a useful tool to analyze behavior of defect concentrations.
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.55]{concentration_profiles_MOOSE_Analytical_Neutron_0}
+    \caption{Comparison of MOOSE results with analytical solution for spherical grain (\textit{a}=500 nm).}
+    \label{figure:concentrations_MOOSE_analytical}
+  \end{figure}
+  \newpage
+  \subsubsection{Concentrations} \hspace{10pt}
+  The defect concentrations can follow different patterns depending on their properties. Interstitials diffuse to sinks faster than vacancies, so their steady-state concentrations become lower (see Fig. \ref{figure:average_concentrations_neutron_5}). The effect of grain size and dose rate are shown in the same figure. The effect of grain size on the point defect kinetics resembles to some extent the effect of temperature. This is due to the fact that both factors affect the diffusion kinetics of defects. However, as will be discussed shortly, its effect on the steady-state spatial profiles is even more complicated. The dose rate acts as an amplifier and changes the intensity of the defect behavior. Thus the separation between defect concentrations becomes more explicit.
+
+//
+instability (flipping) affects the steady state concentrations levels//
+abnormal concentration behaviors for both transient(proposed in papers) steady state(observed in this study)//
+with grain size increase, defect concentrations diverges. this might initiate problems for physical properties, mechanical properties//
+less recombination, more vacancy more void more swelling//
+
+    \begin{figure}[h!]  %Neutron - average conc - %5 Bias rate
+      \centering
+      \subfloat{a)\includegraphics[scale=0.55]{average_concentration_neutron_5_size}}
+      \qquad
+      \subfloat{b)\includegraphics[scale=0.55]{average_concentration_high_neutron_5_size}}
+      \caption{Time-dependent behavior of average defect concentration  with 5\% production bias, a)low dose rate neutron, b) high dose rate neutron}
+      \label{figure:average_concentrations_neutron_5}
+    \end{figure}
+
+    Atomic collisions create vacancy-interstitial pairs, but following events cause a vacancy dense defect population. This situation must be considered to make simulations physically more accurate. Production bias is used to ensure this imbalance in modeling point defects. The equal defect production, unbiased condition, is also studied for comparison.
+
+    As a result of uniform defect production and equilibrium condition at boundaries, the concentration profiles are symmetrical around the domain center for an unbiased case. The steady-state concentration at the center doesn't change significantly with increasing size, as shown in Fig. \ref{figure:concentrations_neutron_0_1e-6}. In the case of high dose rate neutron, concentration levels increase at the center of domain with higher gradients close to the boundaries. (see Fig. \ref{figure:concentrations_neutron_0_1e-3}).\\
+
+    \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %0 Bias rate
+      \centering
+      \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-0}}
+      \qquad
+      \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-0}}
+      \caption{Concentration profiles for low dose rate neutron with 0\% production bias, a) interstitial concentration, b) vacancy concentration}
+      \label{figure:concentrations_neutron_0_1e-6}
+    \end{figure}
+    \begin{figure}[h!]  %Neutron - 1e-3 dpa/s - %0 Bias rate
+      \centering
+      \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-0}}
+      \qquad
+      \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-0}}
+      \caption{Concentration profiles for high dose rate neutron with 0\% production bias, a) interstitial concentration, b) vacancy concentration}
+      \label{figure:concentrations_neutron_0_1e-3}
+    \end{figure}
+    \newpage
+    Whenever a production bias exists, the steady-state profiles of defects show different trends. Depending on production rate and bias, a critical grain size exists above which the spatial dependence of the interstitial, the defect type with lower production rate, is reversed. This result can be attributed to the fact that production bias breaks the symmetry of the point defect balance leading to the manifestation of distinct steady-state profiles for the different defects. It is worth noting that such instability will make irradiation damage more pronounced.
+    Since it will enhance the clustering of different point defects into distinct extended defects, vacancies at the center of the domain will cluster into voids. Simultaneously, interstitials close to the boundaries will form dislocation loops.
+     In (\%5) production bias case, we have observed that the steady-state concentration profile has changed significantly. The interstitial concentration at center decreases, and its spatial profile turns down after \textit{critical grain size} (${\sim}$1000 nm in Fig. \ref{figure:concentrations_neutron_5_1e-6}a). Moreover, the depth of profile gets larger with increasing grain size, which could be explained as accumulation of more interstitial atoms trying to reach equilibrium at boundary. On the other hand, the vacancy concentration increases equivalent to grain size, as seen in Fig. \ref{figure:concentrations_neutron_5_1e-6}b.\\
+    \begin{figure}[h!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
+      \centering
+      \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-neutron-5}}
+      \qquad
+      \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-neutron-5}}
+      \caption{Concentration profiles for low dose rate neutron with 5\% production bias, a) interstitial concentration, b) vacancy concentration}
+      \label{figure:concentrations_neutron_5_1e-6}
+    \end{figure}\\
+
+    Similar to the unbiased case, average concentration levels increase with the dose rate. The most significant effect of high dose rate neutron is causing the interstitial concentration profile to reverse in smaller grain sizes than 500 nm. (see Fig. \ref{figure:concentrations_neutron_5_1e-3}).\\
+    \begin{figure}[htb!]  %Neutron - 1e-3 dpa/s - %5 Bias rate
+      \centering
+      \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-high_neutron-5}}
+      \qquad
+      \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-high_neutron-5}}
+      \caption{Concentration profiles for high dose rate neutron with 0\% production bias, a) interstitial concentration b) vacancy concentration}
+      \label{figure:concentrations_neutron_5_1e-3}
+    \end{figure}
+
+    \begin{figure}[htb!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
+      \centering
+      \subfloat{a)\includegraphics[scale=0.28]{data_neutron_250nm}}
+      \qquad
+      \subfloat{b)\includegraphics[scale=0.28]{data_neutron_1000nm}}
+      \caption{Change of interstitial concentration profiles with production bias for low dose rate neutron in a grain of a) 250 $nm$ and b) 1000 $nm$ }
+      \label{figure:3D_concentrations_neutron_1e-6}
+    \end{figure}
+
+//
+change font size //
+comment on trends//
+1 paragraph//
+being radiation tolerant of nanocrystals//
+larger grain size increases clustering//
+
+    \newpage
+    \subsubsection{Supersaturation} \hspace{10pt}
+    Voids are the result of vacancy agglomeration. Therefore,  supersaturated vacancies in microstructure can lead to void formation. Moreover, void formation affects the properties of the material as it will change the material volume. The volume expansion of materials under irradiation is known as void swelling. In order to understand the details of void swelling behavior as a function of irradiation dose rate, the effective vacancy supersaturation is calculated.
+
+    Supersaturation is a condition that the actual concentration of point defect is larger than its equilibrium concentration. The opposite condition is called undersaturation which is being smaller than equilibrium concentration. In both cases, the system is not at the minimum free energy.
+
+    The effective vacancy supersaturation, ${S_v}$ is calculated by using following equation, \cite{was2016}\\
+
+    \begin{equation}
+      \begin{aligned}
+        &S_v=\frac{D_vC_v-D_iC_i}{D_vC_v^e}\\
+      \end{aligned}
+    \end{equation}\\
+
+    The vacancy supersaturation curves for biased neutron irradiation is given in Fig. \ref{figure:vacancy_supersaturation_neutron_5}. Since the defect concentrations have symmetrical profiles for neutron irradiation, supersaturation curves are also symmetrical around grain center. The plot shows a non-linear increase in supersaturation values as grain gets larger.
+      \begin{figure}[h!]  %Neutron - Vacancy Supersaturation - 5% Bias
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{super_saturation_500-5000nm-neutron-5}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{super_saturation_500-5000nm-high_neutron-5}}
+        \caption{Vacancy supersaturation profiles for 5\% production bias, a)low dose rate neutron, b) high dose rate neutron}
+        \label{figure:vacancy_supersaturation_neutron_5}
+      \end{figure}
+
+      \begin{figure}[htb!]  %Neutron - Vacancy Supersaturation
+        \centering
+        \subfloat{a)\includegraphics[scale=0.38]{data_neutron_Sv_center}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.38]{data_high_neutron_Sv_center}}
+        \caption{Change of vacancy supersaturation at center with grain size and production bias for a)low dose rate neutron, b) high dose rate neutron}
+        \label{figure:3D_supersaturation_neutron}
+      \end{figure}
+
+//
+linear dependence with production rate, non linear dependency with grain size and production bias//
+
+
+    \newpage
+    \subsubsection{Sink Strengths} \hspace{10pt}
+    The sink reaction term in Eq. \ref{equation:point_defect_equations_sink_strength} represents the total loss of point defects to sinks that are voids and dislocations within the domain. It can be written in expanded form as below,
+
+    \begin{equation}
+      \begin{aligned}
+        &k^2DC=(Z\rho_d+4\pi r_h\rho_h)DC\\
+      \end{aligned}
+    \end{equation}\\
+    Similarly, grain boundary sink strength can be calculated by considering total flow of point defect to grain boundary.
+
+    \begin{equation}
+      \begin{aligned}
+        &F=Z_{gb}DC_0\\
+        &Z_{gb}=\frac{F}{DC_0}\\
+      \end{aligned}
+      \end{equation}\\
+
+    where ${F}$ is total flow at grain boundary, ${Z_{gb}}$ is grain boundary sink strength, ${D}$ is diffusion coefficient and ${C_0}$ is defect concentration at the domain center.\\\\
+    The total flow at boundary is equal to multiplication of surface area and current as below,\\
+
+    \begin{equation}
+      \begin{aligned}
+        &F=-\bigg(4\pi r^2D\frac{\partial C(r)}{\partial r}\bigg)_{r=a}\\
+      \end{aligned}
+    \end{equation}\\
+    The total grain boundary sink strength, ${k^2_{gb}}$ is calculated by multiplying ${Z_{gb}}$ by the grain density, ${\rho_{gb}}$.\cite{heald1977}
+    \begin{equation}
+      \begin{aligned}
+        &\rho_{gb}=\frac{6}{\pi d^3}\\
+        &k^2_{gb}=\rho_{gb}Z_{gb}\\
+      \end{aligned}
+    \end{equation}
+
+    where ${d}$ is diameter of the grain, ${d=2a}$\\\\
+    Grain boundary sink strengths, ${Z_{gb}}$ and ${k_{gb}}$, is calculated analytically by substituting Eq.  \ref{equation:spherical_grain_analytical_solution} into expressions above. Thus, grain boundary sink strengths are associated with the domain sink strength, ${k^2}$.\cite{heald1977}
+
+    \begin{equation}
+      \begin{aligned}
+        &C_0=C(r=0)=\frac{K_0}{Dk^2}\bigg(1-\frac{ka}{\sinh{ka}}\bigg)\\\\
+        &F=-\bigg(4\pi r^2D\frac{\partial C(r)}{\partial r}\bigg)_{r=a}=\frac{4\pi aK_0}{k^2}\bigg(ka\coth{ka}-1\bigg)\\
+      \end{aligned}
+    \end{equation}\\
+    So that, grain boundary sink strengths are
+    \begin{equation}
+      \begin{aligned}
+        &Z_{gb}=4\pi a\bigg(\frac{ka\cosh ka-\sinh ka}{\sinh ka-ka}\bigg)\\
+        &k^2_{gb}=\frac{12}{d^2}\bigg(\frac{ka\cosh ka-\sinh ka}{\sinh ka-ka}\bigg)\\
+      \end{aligned}
+    \end{equation}\\
+
+    Using appropriate diffusion coefficient (${D}$), domain sink strength (${k^2}$) and// concentration (${C_0}$) will give  relevant sink strengths. The analytical expressions for each defect type given by following equations//
+
+    \begin{equation}
+      \begin{aligned}
+        &Z_{gb,i}=4\pi a\bigg(\frac{k_ia\cosh k_ia-\sinh k_ia}{\sinh k_ia-k_ia}\bigg)\\
+        &k^2_{gb,i}=\frac{12}{d^2}\bigg(\frac{k_ia\cosh k_ia-\sinh k_ia}{\sinh k_ia-k_ia}\bigg)\\\\
+        &Z_{gb,v}=4\pi a\bigg(\frac{k_va\cosh k_va-\sinh k_va}{\sinh k_va-k_va}\bigg)\\
+        &k^2_{gb,v}=\frac{12}{d^2}\bigg(\frac{k_va\cosh k_va-\sinh k_va}{\sinh k_va-k_va}\bigg)\\
+      \end{aligned}
+    \end{equation}\\
+
+  The results of benchmark problem, previously discussed in Fig. \ref{figure:concentrations_MOOSE_analytical}, can also be used to validate MOOSE sink strength calculations. Table \ref{table:sink_strengths_calculations} show the comparison of calculations.
+    \begin{table}[h!]
+      \centering
+      \caption{Comparison of sink strength calculations}
+      \label{table:sink_strengths_calculations}
+      \begin{tabular}{ ||p{2cm}|p{3cm}|p{3cm}||  }
+         \hline
+          & MOOSE & Analytical\\
+         \hline\hline\hline
+         ${Z_{gb,i}}$  & 1.257206e-05 m & 1.257332e-05 m\\
+         ${Z_{gb,v}}$  & 1.256941e-05 m & 1.257332e-05 m\\
+         ${k_{gb,i}}$  & 2.401086e+13 m^{-2} & 2.401327e+13 m^{-2}\\
+         ${k_{gb,v}}$  & 2.400580e+13 m^{-2} & 2.401327e+13 m^{-2}\\
+         \hline
+      \end{tabular}
+    \end{table}
+    \newpage
+    Sink strength plots are presented in Fig. \ref{figure:sink_strengths_neutron_5_1e-6} and \ref{figure:sink_strengths_neutron_5_1e-3}. The effect of reversal behavior is not visible in the plot of grain boundary sink strength, ${Z^{gb}}$, but there is a significant change on total grain boundary sink strength, ${k^2_i}$ after critical grain size of ${\sim}$1000 nm. In case of high dose rate, the critical grain size drops to ${\sim}$250 nm (Fig.
+
+    //
+    more comment on trends related to grain size, production bias, production rate//
+    critical grain size >>> critical size//
+
+    \ref{figure:sink_strengths_neutron_5_1e-6}b).
+      \begin{figure}[h!]  %Sink Strength - Neutron 1e-6 dpa/s - 5% Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_neutron_5_Z_scaled}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_moose_high_neutron_5_Z_scaled}}
+        \caption{Change of GB sink strength with grain size for 5\% production bias, a) low dose rate neutron, b) high dose rate neutron}
+        \label{figure:sink_strengths_neutron_5_1e-6}
+      \end{figure}
+
+      \begin{figure}[h!]  %Sink Strength - Neutron 1e-6 dpa/s - 5% Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_neutron_5_k_scaled}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_moose_high_neutron_5_k_scaled}}
+        \caption{Change of total GB sink strength with grain size for 5\% production bias, a) low dose rate neutron, b) high dose rate neutron}
+        \label{figure:sink_strengths_neutron_5_1e-3}
+      \end{figure}
+
+      \newpage
+
+
+      \begin{figure}[h!]  %GB Sink Strength - Neutron 1e-6 dpa/s
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_neutron_Zi_scaled_nolegend}}
+        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_neutron_Zv_scaled_nolegend}}
+        \subfloat{\includegraphics[scale=0.35]{legend}}
+        \qquad
+        % \subfloat{a)\includegraphics[scale=0.55]{sink_strength_Zi_scaled_neutron_500-5000nm}}
+        % \subfloat{b)\includegraphics[scale=0.55]{sink_strength_Zv_scaled_neutron_500-5000nm}}
+        \caption{Change of sink strengths with production bias for low dose rate neutron, a) interstitial GB sink strength, b) vacancy GB sink strength}
+        \label{figure:sink_strengths_neutron_bias_Z}
+      \end{figure}
+
+      \begin{figure}[h!]  %Total GB Sink Strength - Neutron 1e-6 dpa/s
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_neutron_ki_scaled_nolegend}}
+        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_neutron_kv_scaled_nolegend}}                \subfloat{\includegraphics[scale=0.35]{legend}}
+        \qquad
+        % \subfloat{b)\includegraphics[scale=0.55]{sink_strength_ki_scaled_neutron_500-5000nm}}
+        % \subfloat{b)\includegraphics[scale=0.55]{sink_strength_kv_scaled_neutron_500-5000nm}}
+        \caption{Change of sink strengths with production bias for low dose rate neutron, a) total interstitial GB sink strength, b) total vacancy GB sink strength}
+        \label{figure:sink_strengths_neutron_bias_k}
+      \end{figure}
+  \newpage
+      The calculated sink strengths for different production bias and for different grain sizes are presented by a 3D surface plot as given in Fig. \ref{figure:sink_strength_moose_neutron_3D}.
+      \begin{figure}[h!]  %Sink Strength 3D - Neutron 1e-6 dpa/s
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_neutron_3D_Zi_scaled}}
+        \subfloat{b)\includegraphics[scale=0.5]{sink_strength_moose_neutron_3D_Zv_scaled}}
+        \qquad
+        \subfloat{c)\includegraphics[scale=0.55]{sink_strength_moose_neutron_3D_ki_scaled}}
+        \subfloat{d)\includegraphics[scale=0.55]{sink_strength_moose_neutron_3D_kv_scaled}}
+        \caption{Change of sink strengths with grain size and production bias for low dose rate neutron in log scale, a)interstitial GB sink strength, b) vacancy GB sink strength, c) total interstitial GB sink strength, d) total vacancy GB sink strength}
+        \label{figure:sink_strength_moose_neutron_3D}
+      \end{figure}
+  \newpage
+  \subsection{Ion Irradiation} \hspace{10pt}
+  Contrary to neutrons, ions have a relatively narrow energy channel width, which is almost monoenergetic. Furthermore, they cannot penetrate through material excessively because of their high energy loss in collisions. This characteristic behavior causes a non-uniform defect production profile. Figure \ref{figure:defect_production} shows the profile used for ion irradiation simulations. The dose rate, K\textsubscript{0} and grain size (1000 nm) would be scaled for the case of interest, but it does not create a change in the profile.
+    \begin{figure}[h!]  %Ion irradiation
+      \centering
+      \subfloat{\includegraphics[scale=0.27]{defect_production}}
+      \qquad
+      \caption{Defect production profile for ion irradiation.}
+      \label{figure:defect_production}
+    \end{figure}
+    \newpage
+    \subsubsection{Concentrations} \hspace{10pt}
+    Even though ion irradiation has non-uniform defect production, average defect concentrations show a time-dependent trend that is identical to the one in neutron irradiation case. The only difference is the change in concentration levels as a result of less defect production (see Fig. \ref{figure:average_concentrations_ion_5}).
+
+    \begin{figure}[h!]  %Neutron - average conc - %5 Bias rate
+      \centering
+      \subfloat{a)\includegraphics[scale=0.55]{average_concentration_low_ion_5_size}}
+      \qquad
+      \subfloat{b)\includegraphics[scale=0.55]{average_concentration_ion_5_size}}
+      \caption{Time-dependent behavior of average defect concentration  with 5\% production bias, a) low dose rate ion, b) high dose rate ion}
+      \label{figure:average_concentrations_ion_5}
+    \end{figure}
+
+    The effect of defect production distribution can be observed obviously in concentration profiles. Since, defect production has peak at around half of the grain, the concentration profiles are taking shape under same behavior and reaching maximum at the center of domain, then waning through boundaries.
+
+    If production bias is zero, maximum concentration of each type of point defect becomes independent of grain sizes shown in Fig. \ref{figure:concentrations_ion_0_1e-6}. High dose rate ion only scales up the concentration levels without making any significant change in profiles (see Fig. \ref{figure:concentrations_ion_0_1e-3}).
+      \begin{figure}[h!]  %Ion - 1e-3 dpa/s - %0 Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-low_ion-0}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-low_ion-0}}
+        \caption{Concentration profiles for low dose rate ion with 0\% production bias, a) interstitial concentration, b) vacancy concentration}
+        \label{figure:concentrations_ion_0_1e-6}
+      \end{figure}
+      \begin{figure}[h!]  %Ion - 1e-6 dpa/s - %0 Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-ion-0}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-ion-0}}
+        \caption{Concentration profiles for high dose rate ion with 0\% production bias, a) interstitial concentration, b) vacancy concentration}
+        \label{figure:concentrations_ion_0_1e-3}
+      \end{figure}
+      \newpage
+      In the case of applying production bias, profiles become completely different. The reversal behavior observed in neutron irradiation case repeats on ion irradiation case. In addition, the non-uniform defect production causes asymmetrical interstitial concentration profile given in Fig. \ref{figure:concentrations_ion_5_1e-6}a. The vacancy concentration profiles also loose their symmetry and shift up with increasing grain size (see Fig. \ref{figure:concentrations_ion_5_1e-6}b). Increase on ion dose rate, from 1e-6 dpa/s to 1e-3 dpa/s, combines with the effect of defect production profile and reduces the critical grain size to ${\sim}$250 nm. The reversal start to be visible through end of the grains. (see Fig. \ref{figure:concentrations_ion_5_1e-3}a).
+      \begin{figure}[h!]  %Ion - 1e-3 dpa/s - %5 Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-low_ion-5}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-low_ion-5}}
+        \caption{Concentration profiles for low dose rate ion with 5\% production bias, a) interstitial concentration, b) vacancy concentration}
+        \label{figure:concentrations_ion_5_1e-6}
+      \end{figure}
+      \begin{figure}[h!]  %Ion - 1e-6 dpa/s - %5 Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{interstitial_concentration_500-5000nm-ion-5}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{vacancy_concentration_500-5000nm-ion-5}}
+        \caption{Concentration profiles for high dose rate ion with 5\% production bias, a) interstitial concentration, b) vacancy concentration}
+        \label{figure:concentrations_ion_5_1e-3}
+      \end{figure}
+
+      \begin{figure}[htb!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.28]{data_low_ion_250nm}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.28]{data_low_ion_1000nm}}
+        \caption{Change of interstitial concentration profiles with production bias for low dose rate ion in a grain of a) 250 $nm$ and b) 1000 $nm$ }
+        \label{figure:3D_concentrations_ion_1e-6}
+      \end{figure}
+
+    \newpage
+    \subsubsection{Supersaturation} \hspace{10pt}
+
+    The vacancy supersaturation curves for ion irradiation case are quite similar to ones for neutron irradiation case. The only difference is the asymmetrical shape of curves originates from concentration profiles. The non-linear increase in supersaturation values as domain gets larger is observed for ion irradiation too.
+
+    %\textcolor{blue}
+    The vacancy supersaturation behavior, shown in Fig. \ref{figure:3D_supersaturation_ion}, is identical to one in given for neutron irradiation case (see Fig. \ref{figure:3D_supersaturation_neutron}). The only difference is the asymmetrical shape of curves originating from defect production distribution. This similarity makes it possible to use ions instead of neutrons to predict the swelling behavior of reactor materials. The non-linear increase in supersaturation peak values might result in more void creation and undesired swelling behavior.
+
+      \begin{figure}[h!]  %Ion - %5 Bias rate
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{super_saturation_500-5000nm-low_ion-5}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{super_saturation_500-5000nm-ion-5}}
+        \caption{Vacancy supersaturation profiles for 5\% production bias, a) low dose rate ion, b) high dose rate ion}
+        \label{figure:vacancy_supersaturation_ion_5}
+      \end{figure}
+
+      \begin{figure}[htb!]  %Neutron - Vacancy Supersaturation
+        \centering
+        \subfloat{a)\includegraphics[scale=0.38]{data_low_ion_Sv_center}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.38]{data_ion_Sv_center}}
+        \caption{Change of vacancy supersaturation at center with grain size and production bias for a) low dose rate ion, b) high dose rate ion}
+        \label{figure:3D_supersaturation_ion}
+      \end{figure}
+
+    \newpage
+    \subsubsection{Sink Strengths} \hspace{10pt}
+    The sink strengths are directly related to concentration at center and flow at boundary. The change in centerline defect concentrations are not as considerable as neutron case. So, the flow or flux at boundary becomes more dominant on sink strength profiles (see Fig. \ref{figure:sink_strengths_ion_5_1e-6} and \ref{figure:sink_strengths_ion_5_1e-3}).
+      \begin{figure}[h!]  %
+        \centering
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_5-5000nm-low_ion-5}}
+        \qquad
+        \subfloat{\includegraphics[scale=0.55]{interstitial_concentration_5-5000nm-ion-5}}
+        \caption{Interstitial concentration profiles with 5\% production bias for a) low dose rate ion, b) high dose rate ion}
+        \label{figure:concentrations_ion_5_1e-3_5-5000nm}
+      \end{figure}
+
+      %\textcolor{blue}{
+        As discussed previously, since ions can not penetrate until the end of the domain, they cause a non-uniform defect production. If the grain is small enough compared to penetration depth, concentration profiles become symmetrical (similar to neutron case), and the effect of distribution profile is not visible (up to 1000 $nm$ in Fig. \ref{figure:concentrations_ion_5_1e-3_5-5000nm}a and 50 $nm$ in Fig. \ref{figure:concentrations_ion_5_1e-3_5-5000nm}b). Yet, for larger grains, the defect concentrations are highly affected by non-uniformity. The flux at the far boundary oscillates and approaches zero as grain size increases. Since sink strengths are related to the ratio of flux to concentration, they are affected by those oscillations on the order of $10^{-9}$ (see Fig. \ref{figure:sink_strengths_ion_5_1e-6}).
+    %  }
+
+\newpage
+      \begin{figure}[h!]  %Sink Strength - ion 1e-6 dpa/s - 5% Bias rate
+        \centering
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_Z_scaled}}
+        \qquad
+        \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_ion_5_Z_scaled}}
+        \caption{Change of GB sink strength with grain size for 5\% production bias, a) low dose rate ion, b) high dose rate ion}
+        \label{figure:sink_strengths_ion_5_1e-6}
+      \end{figure}
+      \begin{figure}[h!]  %Sink Strength - ion 1e-3 dpa/s - 5% Bias rate
+        \centering
+        \subfloat{\includegraphics[scale=0.55]{sink_strength_moose_low_ion_5_k_scaled}}
+        \qquad
+        \subfloat{b)\includegraphics[scale=0.55]{sink_strength_moose_ion_5_k_scaled}}
+        \caption{Change of total GB sink strength with grain size for 5\% production bias, a) low dose rate neutron, b) high dose rate neutron}
+        \label{figure:sink_strengths_ion_5_1e-3}
+      \end{figure}
+
+//plot 3D sink strengths on python
+
+      \begin{figure}[h!]  %Sink Strength 3D - Ion 1e-6 dpa/s
+        \centering
+        \subfloat{a)\includegraphics[scale=0.25]{data_low_ion_Zi}}
+        \subfloat{b)\includegraphics[scale=0.25]{data_low_ion_Zv}}
+        \qquad
+        \subfloat{c)\includegraphics[scale=0.25]{data_low_ion_ki}}
+        \subfloat{d)\includegraphics[scale=0.25]{data_low_ion_kv}}
+        \caption{Change of sink strengths with grain size and production bias for low dose rate ion in log scale, a)interstitial GB sink strength, b) vacancy GB sink strength, c) total interstitial GB sink strength, d) total vacancy GB sink strength}
+        \label{figure:sink_strength_moose_ion_3D}
+      \end{figure}
+
+
+% In nano-scale case, since the grain size is not big enough, the boundaries become
+% closer to each other. This causes point defects to reach sinks before they react with each other
+% and recombination plateau to disappear as it can be seen in Fig. 2. The nanoscale case acts like
+% a high-sink and high-temp condition case despite its low-sink and low-temperature. Therefore,
+% change in production bias does not have a significant effect on average concentration behavior
+% in nanoscale
+%
+% On the other hand, in micro-scale case, the domain has reasonable size, and thus
+% boundaries are far from each other. This provides defects more time to accumulate inside the
+% domain and recombine with each other after they reach a specific concentration. Figure 3
+% clearly shows the effect of production bias on average concentration.
+%
+% Effect of production bias on spatial profile of defect concentrations for nanoscale is
+% shown in Figure 4. The results seem not affected too much because of the same reasons
+% mentioned previously for average concentration.
+%
+% The micro-scale results (Fig. 5) are quite interesting and worth to think over. The
+% concentration profiles of interstitials for 0.1%, 5% and 10% cases are flipped over. A closer look
+% at evolution of 5% case over time in Fig. 6, after the end of quasi-steady-state region (t=10 -4 s in
+% Fig 3.), the average interstitial concentration starts to decrease as they segregate through sinks.
+% At steady state, the average interstitial concentration becomes minimum at the center and
+% maximum near boundaries because of segregation.
+%
+% The defect production rate (K 0 ) is the source term in point defect equations and has a
+% significant effect on concentrations.
+% In nano-scale case, the average concentration behavior is like high-sink density behavior
+% because of narrow domain. But, when the defect production rate increases, the average
+% concentration is shifted upward, and interstitial and vacancy average concentrations get closer
+% to each other because the production compensates more absorption at sinks than previous.
+% Based on this, if the production rate increased sufficiently, the recombination zone would
+% appear again in nano-scale domain.
+
+\clearpage
+    \subsection{Radiation-induced Segregation} \hspace{10pt}
+
+    Ni-Cr based alloys is one of the most important structural materials for current and future advanced fission reactor designs. Currently, Ni-Cr based alloys are used widely in light water reactors (LWR), particularly for reactor coolant systems. These alloys show high strength and resistance to swelling at high temperatures and superior corrosion performance. Despite their many advantages, however, irradiation may cause dramatic changes to composition of alloy following that radiation induced segregation (RIS) can take place near microstructural defects where materials are sensitive to corrosive attack. Point defects can migrate, recombine, and cancel each other out on numerous sinks i.e., dislocations, free surfaces, or grain boundaries. The migration of these point defects causes significant changes in microstructure with similar changes in behavior. Ni-Cr based alloys contains a high Cr content to prevent corrosion. The decrease in the local composition of Cr may result in severe structural changes. Predictions of the effects of RIS in Ni-Cr based alloys are crucial for determining safe limits in the work environment.
+
+    In this section, in order to understand the effect of production bias on the various spatial profile of atom and defect concentrations, we used 5\%, 10\%, and 20\% production bias factors to produce a difference between interstitial and vacancy generation.
+
+    \subsubsection{Rate Theory model for RIS} \hspace{10pt}
+
+    This model considers the coupling of defects and atom fluxes through migration of interstitials and vacancies in a binary Ni-Cr alloy.
+
+    \begin{equation}
+        \begin{aligned}
+        &\frac{dC_i}{dt} = - \nabla\cdot J_i + K_0 - K_{iv}C_iC_v - S \\
+        &\frac{dC_v}{dt} = - \nabla\cdot J_v + K_0 - K_{iv}C_iC_v - S\\
+        &\frac{dC_{Cr}}{dt} = - \nabla\cdot J_{Cr} \\
+        \end{aligned}
+        \label{equation:RIS_equations}
+     \end{equation}\\
+    In the above, $\nabla\cdot J_i$ and $\nabla\cdot J_v$ are the divergences of the vacancy and interstitial fluxes at defect sinks, and $K_0$, $K_{iv}C_IC_V$, S terms are the local total rates of production, recombination of point defects per unit volume and sink absorption rate respectively.
+    Vacancy and interstitial concentrations were determined as the concentrations at thermal equilibrium for the initial conditions of system. Cr concentration is taken as the nominal value in the alloy composition. We assume that the alloy atoms are randomly distributed throughout the grain at the initial time. The equations were solved numerically with the initial and boundary conditions, and one-dimension calculations were performed.
+
+    \begin{table}[h!]
+  \centering
+  \caption{Input Parameters for RIS }
+  \label{table:Input_parameters_for_RIS}
+  \begin{tabular}{ ||p{7cm}|p{1cm}|p{2cm}||p{1cm}|p{1.5cm}||  }
+     % \hline
+     % \multicolumn{5}{|c|}{Material Properties} \\
+     \hline
+     Input Parameter & Symbol & Value & Units &  Reference\\
+     \hline\hline
+
+     Vacancy jump frequency for Ni & \omega_{Ni,v}  & 0 & s^{-1} &\\
+     Vacancy jump frequency for Cr & \omega_{Cr,v}  & 0 & s^{-1} &\\
+     Interstitial jump frequency for Ni & \omega_{Ni,,i}  & 0 & s^{-1} &\\
+     Interstitial jump frequency for Cr & \omega_{Cr,i}  & 0 & s^{-1} &\\
+     Vacancy migration energy for Ni & E_{Ni,v}^m  & 0 & eV & \\
+     Vacancy migration energy for Cr & E_{Cr,v}^m  & 0 & eV & \\
+     Interstitial migration energy for Ni & E_{Ni,i}^m  & 0 & eV & \\
+     Interstitial migration energy for Cr  & E_{Cr,i}^m  & 0 & eV & \\
+     Vacancy jump correlation factor for Ni  & f_vNi  & 0 & unitless & \\
+     Vacancy jump correlation factor for Cr  & f_vCr  & 0 & unitless & \\
+     Interstitial jump correlation factor for Ni   & f_iNi  & 0 & unitless & \\
+     Interstitial jump correlation factor for Cr  & f_iCr  & 0 & unitless & \\
+     \hline
+  \end{tabular}
+\end{table}
+
+    \begin{equation}
+        \begin{aligned}
+        d_{z}^{v,i}\ =\frac{1}{6}\lambda^2 \omega f exp(\frac{-E_{z-v,i}^m}{k_B T})
+        \end{aligned}
+        \label{equation:RIS_equations}
+    \end{equation}\\
+    $d_{a}^{v,i}$ represents diffusivity coefficient for the atom-defect pairs. For the chosen z atom, in this work z is Ni and Cr atoms, $\lambda$ is jump distance, $\omega$ is jump frequency and f is correlation factor. For vacancy and interstitial, $E_{z-v,i}^m$ is migration energy and $k_B$ is Boltzmann constant.
+
+
+        RIS behavior in the alloy with Ni-18Cr composition shows a vacancy-driven inverse Kirkendall mechanism. While chromium diffuses rapidly with vacancy flux, the concentration of chromium decreases at the grain boundaries, and the concentration of Nickel moving slower than Chromium increases at the grain boundary.
+
+  \newpage
+
+     The concentration profiles of defects and Cr atoms at various production biases and grain sizes are presented in Figure \ref{figure:RIS}. Results show that at 50 nm grain size, effect of 5\%, 10\%, and 20\% production bias on interstitials does not show reversal behavior. Yet, at the grain size of 500 nm, the production bias effect shows reversal behavior on interstitials concentration. This conclusion also influences the Cr concentration profile.\\
+     The most critical consequence of the reversal behavior and sink density is that fast interstitials find sinks before vacancies. As a result of the interstitials finding sinks faster than vacancies, vacancy concentration continues to increase. This competition between interstitial and vacancy results in interstitials disappearing at the sink and recombining with vacancies.
+
+
+      \begin{figure}[h!]  %
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{RIS_50nm_vacancy_concentraiton_bias.png}}
+        \subfloat{b)\includegraphics[scale=0.55]{RIS_500nm_vacancy_concentration_bias.png}}
+        \\
+        \subfloat{c)\includegraphics[scale=0.55]{RIS_50nm_interstitial_concentration_bias.png}}
+        \subfloat{d)\includegraphics[scale=0.55]{RIS_500nm_interstitial_concentration_bias.png}}
+        \\
+        \subfloat{e)\includegraphics[scale=0.55]{RIS_50nm_chromium_concentration_bias.png}}
+        \subfloat{f)\includegraphics[scale=0.55]{RIS_500nm_chromium_concentration_bias.png}}
+        \caption{Concentration profiles for high dose rate neutron with 0\%, 5\%, 10\%, and 20\% production bias a) 50 nm, vacancy concentration b) 500 nm, vacancy concentration c) 50 nm, interstitial concentration d) 500 nm, interstitial concentration e) 50 nm, chromium concentration f) 500 nm, chromium concentration }
+        \label{figure:RIS}
+      \end{figure}
+
+\clearpage
+
+    Fig.\ref{figure:RIS_Cr_concentration} shows the Cr concentration varying according to grain sizes and production bias. In Fig.\ref{figure:RIS_Cr_concentration}a, the vacancies and interstitials have the same generation rate. The change in Cr concentration profile between 50 and 1000 grain sizes is insignificant. We can say that as the grain size increases, the Cr segregation profile change is observed, but it is not marked clearly. With the purpose of effect of production bias, the production generation was re-analyzed with 20\% bias in the calculations. Fig.\ref{figure:RIS_Cr_concentration}b displays the Cr segregation profiles calculated with 20\% production bias in various grain sizes.  It has been recognized that the area of Cr segregation increases with the increase of production bias and grain size.
+
+    \begin{figure}[h!]  %
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{RIS_domainsize_all.png}}
+        \subfloat{b)\includegraphics[scale=0.55]{RIS_domainsize_all_20.png}}
+        \caption{Chromium concentration profiles with a) 0\% and b) 20\% production bias }
+        \label{figure:RIS_Cr_concentration}
+    \end{figure}
+
+
+        Trends in radiation-induced segregation in Ni-18Cr alloy occur with Cr depletion. The significance of the Cr segregation, related to the combination of production bias and domain size.\\
+
+
+
+
+\clearpage
+
+  \subsection{Discussion} \hspace{10pt}
+
+  What happens when switched from neutron irradiation to ion irradiation
+  \begin{enumerate}
+    \item Loosing symmetry/uniformity in concentration profiles
+    \item Reduction in average concentration
+    \item Reduction in supersaturation
+  \end{enumerate}
+
+\section{Conclusion} \hspace{10pt}
+
+The rate theory equations resolve the temporal and spatial concentration profiles of point defects. The behavior of concentration distributions are controlled by parameters given in equation, representing their reactions and diffusion in domain. According to the results obtained in this study, the combination of production bias, production dose rate, production profile and grain size determine whether the steady state point defect concentration profile is symmetrical, reversed or both. There is always a critical value for parameters that could change the defect concentration profile entirely.
+The dependence of radiation induced segregation (RIS) on production biases and grain sizes was reproduced. Results shows that a combination of production bias and grain size results in the change of Cr segregation area.
+
+% An online tool could be created to play with different parameters.
+% \begin{thebibliography}{00}
+% \bibitem{b2} Garry S. Was.
+% \end{thebibliography}
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{unsrt}
+\bibliography{references}
 
 \end{document}

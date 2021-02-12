@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{xcolor}
+\usepackage{gensymb}
 \usepackage[font=scriptsize]{caption}
 \pagenumbering{arabic}
 \graphicspath{ {./plots/} }
@@ -136,7 +137,7 @@ or
     To make a more detailed examination, for the neutron irradiation and ion irradiation case, Nickel is selected as a base material, and its properties are used in calculations.
 
 
-
+\color{red} Hoca, bu type neutron,ion kısım için neutron case de high dose rate için proton diyerek ekleyebiliriz bu kısmı tartışalım dedi. Apo'nun yazdığı kısmı etkileyecek hocam apo ile beraber tekrar tartışalım dedim. Bu kısmı sorarız tekrar.
 
 \begin{table}[h!]
   \centering
@@ -166,17 +167,17 @@ or
   \centering
   \caption{Simulation Parameters}
   \label{table:simulation_parameters}
-  \begin{tabular}{ ||p{2cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}||  }
+  \begin{tabular}{ ||p{3cm}|p{2cm}|p{3cm}|p{3cm}|p{3cm}||  }
      % \multicolumn{5}{|c|}{Simulation Parameters} \\
      \hline
-     Type & Dose Rate (dpa/s) & Defect Production & Temperature (K) & Sink Density (m^{-3})\\
+     Defect Production & Type & Dose Rate (dpa/s) & Temperature (K) & Sink Density (m^{-3})\\
      \hline
      \hline
-     Neutron  & 1e-3  & Uniform     & 773 & 1e18\\
-              & 1e-6  & Uniform     & 773 & 1e18\\
+     Uniform     & Neutron  & 1e-6  & 773 & 1e18\\
+                 & Proton   & 1e-3  & 773 & 1e18\\
      \hline
-     Ion      & 1e-3  & Distributed & 773 & 1e18\\
-              & 1e-6  & Distributed & 773 & 1e18\\
+     Distributed & Ion      & 1e-3  & 773 & 1e18\\
+     % Distributed &           & 1e-6  & 773 & 1e18\\
      \hline
   \end{tabular}
 \end{table}
@@ -282,9 +283,9 @@ less recombination, more vacancy more void more swelling//
 
     \begin{figure}[htb!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
       \centering
-      \subfloat{a)\includegraphics[scale=0.28]{data_neutron_250nm}}
+      \subfloat{a)\includegraphics[scale=0.25]{data_neutron_250nm}}
       \qquad
-      \subfloat{b)\includegraphics[scale=0.28]{data_neutron_1000nm}}
+      \subfloat{b)\includegraphics[scale=0.25]{data_neutron_1000nm}}
       \caption{Change of interstitial concentration profiles with production bias for low dose rate neutron in a grain of a) 250 $nm$ and b) 1000 $nm$ }
       \label{figure:3D_concentrations_neutron_1e-6}
     \end{figure}
@@ -412,13 +413,12 @@ linear dependence with production rate, non linear dependency with grain size an
       \end{tabular}
     \end{table}
     \newpage
-    Sink strength plots are presented in Fig. \ref{figure:sink_strengths_neutron_5_1e-6} and \ref{figure:sink_strengths_neutron_5_1e-3}. The effect of reversal behavior is not visible in the plot of grain boundary sink strength, ${Z^{gb}}$, but there is a significant change on total grain boundary sink strength, ${k^2_i}$ after critical grain size of ${\sim}$1000 nm. In case of high dose rate, the critical grain size drops to ${\sim}$250 nm (Fig.
+    Sink strength plots are presented in Fig. \ref{figure:sink_strengths_neutron_5_1e-6} and \ref{figure:sink_strengths_neutron_5_1e-3}. The effect of reversal behavior is not visible in the plot of grain boundary sink strength, ${Z^{gb}}$, but there is a significant change on total grain boundary sink strength, ${k^2_i}$ after critical grain size of ${\sim}$1000 nm. In case of high dose rate, the critical grain size drops to ${\sim}$250 nm (Fig. \ref{figure:sink_strengths_neutron_5_1e-6}b).
 
     //
     more comment on trends related to grain size, production bias, production rate//
-    critical grain size >>> critical size//
+    critical grain size $>$ critical size//
 
-    \ref{figure:sink_strengths_neutron_5_1e-6}b).
       \begin{figure}[h!]  %Sink Strength - Neutron 1e-6 dpa/s - 5% Bias rate
         \centering
         \subfloat{a)\includegraphics[scale=0.55]{sink_strength_moose_neutron_5_Z_scaled}}
@@ -537,9 +537,9 @@ linear dependence with production rate, non linear dependency with grain size an
 
       \begin{figure}[htb!]  %Neutron - 1e-6 dpa/s - %5 Bias rate
         \centering
-        \subfloat{a)\includegraphics[scale=0.28]{data_low_ion_250nm}}
+        \subfloat{a)\includegraphics[scale=0.25]{data_low_ion_250nm}}
         \qquad
-        \subfloat{b)\includegraphics[scale=0.28]{data_low_ion_1000nm}}
+        \subfloat{b)\includegraphics[scale=0.25]{data_low_ion_1000nm}}
         \caption{Change of interstitial concentration profiles with production bias for low dose rate ion in a grain of a) 250 $nm$ and b) 1000 $nm$ }
         \label{figure:3D_concentrations_ion_1e-6}
       \end{figure}
@@ -604,15 +604,16 @@ linear dependence with production rate, non linear dependency with grain size an
         \label{figure:sink_strengths_ion_5_1e-3}
       \end{figure}
 
-//plot 3D sink strengths on python
+      //
+      plot 3D sink strength plots on python
 
       \begin{figure}[h!]  %Sink Strength 3D - Ion 1e-6 dpa/s
         \centering
-        \subfloat{a)\includegraphics[scale=0.25]{data_low_ion_Zi}}
-        \subfloat{b)\includegraphics[scale=0.25]{data_low_ion_Zv}}
+        \subfloat{a)\includegraphics[scale=0.55]{data_ion_sink_strength_Zi}}
+        \subfloat{b)\includegraphics[scale=0.55]{data_ion_sink_strength_Zv}}
         \qquad
-        \subfloat{c)\includegraphics[scale=0.25]{data_low_ion_ki}}
-        \subfloat{d)\includegraphics[scale=0.25]{data_low_ion_kv}}
+        \subfloat{c)\includegraphics[scale=0.55]{data_ion_sink_strength_ki}}
+        \subfloat{d)\includegraphics[scale=0.55]{data_ion_sink_strength_kv}}
         \caption{Change of sink strengths with grain size and production bias for low dose rate ion in log scale, a)interstitial GB sink strength, b) vacancy GB sink strength, c) total interstitial GB sink strength, d) total vacancy GB sink strength}
         \label{figure:sink_strength_moose_ion_3D}
       \end{figure}
@@ -745,6 +746,18 @@ linear dependence with production rate, non linear dependency with grain size an
 
         Trends in radiation-induced segregation in Ni-18Cr alloy occur with Cr depletion. The significance of the Cr segregation, related to the combination of production bias and domain size.\\
 
+        To examine the segregation effect at low temperature and high temperature, low-temperature 200\degree C, high-temperature 800\degree C, and 500\degree C temperature were selected as parameters. For Ni-18Cr alloy, Cr depletion was seen in the range from 200\degree C to 800\degree C. However, the highest Cr depletion effect was 20\% bias at 500\degree C. In general, it was observed that Cr depletion at 200\degree C increased at 500\degree C and decreased again at 800\degree C. It was found that this effect continues to increase in direct proportion to the increase in the production bias effect.\\
+
+        20\% production bias at 500\degree C shows the most remarkable Cr depletion effect, followed by 10\%  production bias at the same temperature. At high temperatures, the amount of Cr depletion is effectively reduced in the grain boundary. This may be due to the fact that at high temperatures, the interstitial concentration began to dominate the vacancy concentration.
+
+    \begin{figure}[h!]  %
+        \centering
+        \subfloat{a)\includegraphics[scale=0.55]{apo_article/plots/RIS_1vs10vs20_473_773_1073_Cr_conc.png}}
+        \subfloat{b)\includegraphics[scale=0.55]{apo_article/plots/RIS_1vs10vs20_473_773_1073_interstitial_conc.png}}
+        \subfloat{c)\includegraphics[scale=0.55]{apo_article/plots/RIS_1vs10vs20_473_773_1073_vacancy_conc.png}}
+        \caption{Concentration profiles at different temperatures and with 1\%, 10\% and 20\% bias a) chromium b) vacancy and c) interstitial concentration}
+        \label{figure:RIS_temperature}
+    \end{figure}
 
 
 

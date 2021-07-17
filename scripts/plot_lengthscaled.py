@@ -285,7 +285,7 @@ ax.set_xlabel(xlbl)
 ax.set_ylabel(ylbl)
 
 # Add Legend and title
-plt.legend(loc=0, ncol=1,fontsize='medium')
+# plt.legend(loc=0, ncol=1,fontsize='medium')
 plt.title(filename)
 
 # plt.axis('equal')               # fix x and y axis

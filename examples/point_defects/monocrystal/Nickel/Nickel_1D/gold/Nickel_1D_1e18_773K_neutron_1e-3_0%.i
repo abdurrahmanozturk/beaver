@@ -29,28 +29,28 @@
   [./l]     #Length scale
     initial_condition = 1e-10
   [../]
-  [./Di]    #Interstitial Diffusion Coefficient {m^2/s}
+  [./Di]    #Interstitial Diffusion Coefficient
     initial_condition = 1
   [../]
-  [./Dv]    #Vacancy  Diffusion Coefficient {m^2/s}
+  [./Dv]    #Vacancy  Diffusion Coefficient
     initial_condition = 1.810e-04
   [../]
-  [./K0]     #Displacement damage rate  {dpa/s}
+  [./K0]     #Displacement damage rate
     initial_condition = 9.037e-15
   [../]
-  [./K0_dist] #distributed displacement damage rate  {dpa/s}
+  [./K0_dist] #distributed displacement damage rate
     initial_condition = 9.037e-15
   [../]
   [./bias]    #vacancy generation rate bias {1 = no bias}
     initial_condition = 1.000e+00
   [../]
-  [./Kiv]     #Recombination rate  {1/s}
+  [./Kiv]     #Recombination rate
     initial_condition = 36.68460966
   [../]
-  [./Kis]     #Sink Reaction rate  {1/s}
+  [./Kis]     #Sink Reaction rate
     initial_condition = 36.67796398
   [../]
-  [./Kvs]     #Sink Reaction rate  {1/s}
+  [./Kvs]     #Sink Reaction rate
     initial_condition = 0.006645681
   [../]
   [./xie]
